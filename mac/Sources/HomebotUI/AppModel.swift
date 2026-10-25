@@ -1299,6 +1299,14 @@ public final class AppModel {
     if let u = ShortcutsURL.open(name) { NSWorkspace.shared.open(u) }
   }
 
+  /// Opens the Shortcuts app on its library (All Shortcuts), where a Shortcut is deleted: Apple
+  /// offers no URL for the library or for deleting, and `shortcuts` has no delete (S26).
+  public func openShortcuts() {
+    let config = NSWorkspace.OpenConfiguration()
+    config.activates = true
+    NSWorkspace.shared.openApplication(at: URL(fileURLWithPath: "/System/Applications/Shortcuts.app"), configuration: config)
+  }
+
   /// Runs a Shortcut by name in the Shortcuts app (Apple's `shortcuts://run-shortcut`): on the Mac
   /// it asks to connect, then for the question.
   public func tryOnMac(_ name: String) {

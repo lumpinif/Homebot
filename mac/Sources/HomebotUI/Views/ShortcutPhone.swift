@@ -22,7 +22,7 @@ struct ShortcutStep: View {
   /// Shortcuts only. A Shortcut opened from the list keeps its own choice.
   @State private var conversation = true
   @State private var url = ""
-  /// nil: the default (replace the bot's working Shortcut); "": replace nothing.
+  /// The Shortcut the user asked to replace; nil or "": replace nothing (DECISIONS item 37).
   @State private var replaces: String?
   @State private var preview: (key: String, value: ShortcutPreview)?
   @State private var previewError: String?
@@ -578,7 +578,8 @@ struct MacInstall: View {
     let there = t?.answeredElsewhereAt != nil
     VStack(spacing: 12) {
       GroupBox {
-        StepRow(number: 1, done: added, current: !added, title: added ? T.installAdded : T.installAdd, note: addNote(add), warn: addWarns(add)) {
+        StepRow(number: 1, done: added, current: !added, title: added ? T.installAdded : T.installAdd, note: addNote(add), warn: addWarns(add),
+                hint: add == .nameTaken ? T.installDeleteHow : nil) {
           addAction(add)
         }
         StepRow(number: 2, done: here, current: added && !here, title: here ? T.installAnsweredHere : T.installTry, note: here ? nil : T.installTryNote) {
@@ -624,7 +625,9 @@ struct MacInstall: View {
     case .ready:
       Button(T.installAdd) { Task { await model.addOnMac(build.tokenId) } }.buttonStyle(.borderedProminent).controlSize(.regular)
     case .nameTaken:
-      Button(T.showInShortcuts) { model.showInShortcuts(build.name) }.controlSize(.regular)
+      // Deleting happens in the library, not in a Shortcut's editor (which "Show in Shortcuts"
+      // opens), and no URL selects a Shortcut there: open the app, the note says the rest.
+      Button(T.openShortcuts) { model.openShortcuts() }.controlSize(.regular)
     case .renamed(let copy):
       Button(T.showInShortcuts) { model.showInShortcuts(copy) }.controlSize(.regular)
     case .needsFile, .needsSigning:
@@ -655,6 +658,8 @@ struct StepRow<Accessory: View>: View {
   let title: String
   var note: String?
   var warn = false
+  /// A second, quiet line with **bold** menu names (e.g. Edit › Delete).
+  var hint: String?
   @ViewBuilder var accessory: Accessory
 
   var body: some View {
@@ -674,6 +679,10 @@ struct StepRow<Accessory: View>: View {
         Text(title).foregroundStyle(done || current ? Theme.foreground : Theme.muted).contentTransition(.opacity)
         if let note {
           Text(note).font(.system(size: 12)).foregroundStyle(warn ? Theme.warning : Theme.muted).fixedSize(horizontal: false, vertical: true)
+        }
+        if let hint {
+          Text((try? AttributedString(markdown: hint)) ?? AttributedString(hint))
+            .font(.system(size: 12)).foregroundStyle(Theme.muted).fixedSize(horizontal: false, vertical: true)
         }
       }
       Spacer(minLength: 8)
