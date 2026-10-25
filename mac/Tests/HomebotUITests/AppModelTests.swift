@@ -158,6 +158,11 @@ func makeModel(_ fake: FakeGrokBot, library: (@Sendable () async -> [String]?)? 
     #expect(m.snapshot.bots.first?.name == "Kitchen")
     #expect(await m.renameBot(key, to: String(repeating: "x", count: Bot.maxNameLength + 1)) == false)
     #expect(await m.renameBot("nope", to: "y") == false)
+    // Strict checking off is not one-way: one click turns it back on, the bot stays.
+    await m.setStrict(key, false)
+    #expect(m.snapshot.bots.first?.strictEcho == false)
+    await m.setStrict(key, true)
+    #expect(m.snapshot.bots.first?.strictEcho == true && m.snapshot.bots.first?.key == key)
     await m.removeBot(key)
     #expect(m.snapshot.bots.isEmpty)
   }

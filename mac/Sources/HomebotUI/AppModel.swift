@@ -941,6 +941,16 @@ public final class AppModel {
     return r == true
   }
 
+  /// Strict checking back on for a bot added without it: no need to remove the bot (which would
+  /// retire its Shortcuts) to undo that choice.
+  public func setStrict(_ key: String, _ on: Bool) async {
+    await run(done: tr.saved) {
+      guard try await host.lifecycle.setStrict(key, on) else { throw AppError("not-found") }
+      host.log(["event": "setup", "action": "bot-strict", "on": .bool(on)])
+    }
+    await refresh()
+  }
+
   public func removeBot(_ key: String) async {
     await run(done: tr.saved) {
       guard let r = try await host.lifecycle.remove(key) else { throw AppError("not-found") }

@@ -88,7 +88,11 @@ struct BotStep: View {
         Text(b.sessionId).font(.system(size: 11, design: .monospaced)).foregroundStyle(Theme.muted).lineLimit(1)
       }
       Spacer(minLength: 8)
-      if !b.strictEcho { Badge(text: T.strictOff, style: .warning, dot: true) }
+      if !b.strictEcho {
+        Badge(text: T.strictOff, style: .warning, dot: true)
+        // Turning it off is confirmed once; turning it back on is one click.
+        Button(T.turnOn) { Task { await model.setStrict(b.key, true) } }.secondaryAction().controlSize(.small)
+      }
       IconButton(symbol: "pencil", help: T.rename) {
         renameText = b.name
         renaming = b

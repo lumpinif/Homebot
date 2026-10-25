@@ -55,6 +55,18 @@ public struct BotLifecycle: Sendable {
     }
   }
 
+  /// Turn strict reply checking on or off for a bot (DESIGN §4.2). The key, session and Shortcuts
+  /// stay. Returns false if the bot is unknown.
+  @discardableResult
+  public func setStrict(_ key: String, _ on: Bool) async throws -> Bool {
+    try await locked {
+      guard var b = await config.bot(key) else { return false }
+      b.strictEcho = on
+      try await config.putBot(b)
+      return true
+    }
+  }
+
   /// Other names Siri may hear for a bot in the entry flow (DESIGN §20.5): the first one is the
   /// name spoken in the menu, e.g. a Mandarin name for a Latin-named bot on a Chinese HomePod.
   /// At most `Bot.maxAliases`, each 1-60 characters, no repeats. Returns false if the bot is unknown.
