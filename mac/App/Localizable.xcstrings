@@ -4622,67 +4622,67 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ask again right after each answer. Say “{word}” to end."
+            "value": "Ask again right after each answer. Say you’re done to end."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vuelve a preguntar justo después de cada respuesta. Di «{word}» para terminar."
+            "value": "Vuelve a preguntar justo después de cada respuesta. Di que ya terminaste para acabar."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reposez une question juste après chaque réponse. Dites « {word} » pour finir."
+            "value": "Reposez une question juste après chaque réponse. Dites que vous avez fini pour arrêter."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Frag direkt nach jeder Antwort weiter. Sag „{word}“, um aufzuhören."
+            "value": "Frag direkt nach jeder Antwort weiter. Sag, dass du fertig bist, um aufzuhören."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chiedi di nuovo subito dopo ogni risposta. Di’ “{word}” per finire."
+            "value": "Chiedi di nuovo subito dopo ogni risposta. Di’ che hai finito per chiudere."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pergunte de novo logo após cada resposta. Diga “{word}” para encerrar."
+            "value": "Pergunte de novo logo após cada resposta. Diga que terminou para encerrar."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Спрашивайте снова сразу после ответа. Скажите «{word}», чтобы закончить."
+            "value": "Спрашивайте снова сразу после ответа. Скажите, что закончили, чтобы завершить."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "答えのあとすぐに続けて質問できます。「{word}」で終わります。"
+            "value": "答えのあとすぐに続けて質問できます。終わりと伝えれば終了します。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "답을 들은 뒤 바로 다시 물어볼 수 있습니다. “{word}”라고 하면 끝납니다."
+            "value": "답을 들은 뒤 바로 다시 물어볼 수 있습니다. 끝났다고 말하면 종료됩니다."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "回答完可以马上接着问。说“{word}”结束。"
+            "value": "回答完可以马上接着问。说你问完了就结束。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "回答完可以馬上接著問。說「{word}」結束。"
+            "value": "回答完可以馬上接著問。說你問完了就結束。"
           }
         }
       }
@@ -20455,67 +20455,67 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Say “{word}” to stop"
+            "value": "Say you’re done to stop"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Di «{word}» para parar"
+            "value": "Di que ya terminaste"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dites « {word} » pour arrêter"
+            "value": "Dites que vous avez fini"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sag „{word}“ zum Beenden"
+            "value": "Sag, dass du fertig bist"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Di’ “{word}” per smettere"
+            "value": "Di’ che hai finito"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Diga “{word}” para parar"
+            "value": "Diga que terminou"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Скажите «{word}», чтобы закончить"
+            "value": "Скажите, что закончили"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "「{word}」で終了"
+            "value": "終わりと伝えて終了"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "“{word}”라고 하면 종료"
+            "value": "끝났다고 말하면 종료"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "说“{word}”停止"
+            "value": "说你问完了就停止"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "說「{word}」停止"
+            "value": "說你問完了就停止"
           }
         }
       }

@@ -236,66 +236,77 @@ extension Envelope {
       intro: "(Homebot: this was spoken to Siri on a HomePod/iPhone; your reply is read aloud in the room.",
       turn: { n in "This is turn \(n) of a voice conversation; the user can reply right away. End with a statement unless a question is needed. The room hears only your first message for this turn." },
       echo: { tag in "Start your reply with \(tag)." },
+      end: { tag in "If the user is clearly ending the conversation, start your reply with \(tag) [end], then say a short goodbye." },
       style: "Then answer in English, in 1-3 short spoken sentences, at most about 50 words. An English voice reads it aloud, so answer in English even if the question is in another language. No markdown, links, lists, code or emoji.)"
     ),
     .es: Style(
       intro: "(Homebot: esto se le dijo a Siri en un HomePod o iPhone; tu respuesta se leerá en voz alta en la habitación.",
       turn: { n in "Este es el turno \(n) de una conversación por voz; el usuario puede responder enseguida. Termina con una afirmación salvo que haga falta una pregunta. En la habitación solo se oye tu primer mensaje de este turno." },
       echo: { tag in "Empieza tu respuesta con \(tag)." },
+      end: { tag in "Si el usuario está claramente terminando la conversación, empieza tu respuesta con \(tag) [end] y despídete brevemente." },
       style: "Después responde en español, en 1 a 3 frases breves y habladas, como mucho unas 50 palabras. Una voz en español lo lee en voz alta, así que responde en español aunque la pregunta esté en otro idioma. Sin markdown, enlaces, listas, código ni emojis.)"
     ),
     .fr: Style(
       intro: "(Homebot : ceci a été dit à Siri sur un HomePod ou un iPhone ; ta réponse sera lue à voix haute dans la pièce.",
       turn: { n in "C’est le tour \(n) d’une conversation vocale ; l’utilisateur peut répondre tout de suite. Termine par une affirmation sauf si une question est nécessaire. La pièce n’entend que ton premier message de ce tour." },
       echo: { tag in "Commence ta réponse par \(tag)." },
+      end: { tag in "Si l’utilisateur met clairement fin à la conversation, commence ta réponse par \(tag) [end], puis dis au revoir brièvement." },
       style: "Ensuite, réponds en français, en 1 à 3 phrases courtes et parlées, environ 50 mots au plus. Une voix française la lit à voix haute, donc réponds en français même si la question est dans une autre langue. Pas de markdown, de liens, de listes, de code ni d’emoji.)"
     ),
     .de: Style(
       intro: "(Homebot: Das wurde zu Siri auf einem HomePod oder iPhone gesagt; deine Antwort wird im Raum vorgelesen.",
       turn: { n in "Das ist Runde \(n) eines Sprachgesprächs; der Nutzer kann sofort antworten. Ende mit einer Aussage, außer eine Frage ist nötig. Im Raum ist nur deine erste Nachricht dieser Runde zu hören." },
       echo: { tag in "Beginne deine Antwort mit \(tag)." },
+      end: { tag in "Wenn der Nutzer das Gespräch eindeutig beendet, beginne deine Antwort mit \(tag) [end] und verabschiede dich kurz." },
       style: "Antworte dann auf Deutsch, in 1 bis 3 kurzen, gesprochenen Sätzen, höchstens etwa 50 Wörter. Eine deutsche Stimme liest sie vor, also antworte auf Deutsch, auch wenn die Frage in einer anderen Sprache ist. Kein Markdown, keine Links, Listen, Code oder Emojis.)"
     ),
     .it: Style(
       intro: "(Homebot: questo è stato detto a Siri su un HomePod o un iPhone; la tua risposta verrà letta ad alta voce nella stanza.",
       turn: { n in "Questo è il turno \(n) di una conversazione vocale; l’utente può rispondere subito. Chiudi con un’affermazione, a meno che non serva una domanda. Nella stanza si sente solo il tuo primo messaggio di questo turno." },
       echo: { tag in "Inizia la risposta con \(tag)." },
+      end: { tag in "Se l’utente sta chiaramente chiudendo la conversazione, inizia la risposta con \(tag) [end], poi saluta brevemente." },
       style: "Poi rispondi in italiano, con 1-3 frasi brevi e parlate, al massimo circa 50 parole. Una voce italiana la legge ad alta voce, quindi rispondi in italiano anche se la domanda è in un’altra lingua. Niente markdown, link, elenchi, codice o emoji.)"
     ),
     .ptBR: Style(
       intro: "(Homebot: isto foi dito à Siri em um HomePod ou iPhone; sua resposta será lida em voz alta no ambiente.",
       turn: { n in "Esta é a rodada \(n) de uma conversa por voz; o usuário pode responder logo em seguida. Termine com uma afirmação, a menos que uma pergunta seja necessária. No ambiente só se ouve a sua primeira mensagem desta rodada." },
       echo: { tag in "Comece sua resposta com \(tag)." },
+      end: { tag in "Se o usuário estiver claramente encerrando a conversa, comece sua resposta com \(tag) [end] e depois se despeça em poucas palavras." },
       style: "Depois responda em português do Brasil, em 1 a 3 frases curtas e faladas, no máximo umas 50 palavras. Uma voz em português lê a resposta em voz alta, então responda em português mesmo que a pergunta esteja em outro idioma. Sem markdown, links, listas, código ou emoji.)"
     ),
     .ru: Style(
       intro: "(Homebot: это было сказано Siri на HomePod или iPhone; твой ответ прочитают вслух в комнате.",
       turn: { n in "Это ход \(n) голосового разговора; пользователь может сразу ответить. Заканчивай утверждением, если вопрос не нужен. В комнате слышно только твоё первое сообщение в этом ходе." },
       echo: { tag in "Начни ответ с \(tag)." },
+      end: { tag in "Если пользователь явно заканчивает разговор, начни ответ с \(tag) [end], а затем коротко попрощайся." },
       style: "Затем ответь по-русски, 1–3 короткими разговорными предложениями, не больше примерно 50 слов. Ответ читает вслух русский голос, поэтому отвечай по-русски, даже если вопрос задан на другом языке. Без markdown, ссылок, списков, кода и эмодзи.)"
     ),
     .ja: Style(
       intro: "（Homebot：これは HomePod または iPhone の Siri に話しかけた内容です。あなたの返事は部屋で読み上げられます。",
       turn: { n in "これは音声での会話の\(n)回目です。ユーザーはすぐに返事ができます。質問が必要な場合を除き、文で締めくくってください。部屋で聞こえるのは、この回のあなたの最初のメッセージだけです。" },
       echo: { tag in "返事は \(tag) で始めてください。" },
+      end: { tag in "ユーザーが明らかに会話を終えようとしている場合は、返信を \(tag) [end] で始め、短く別れのあいさつをしてください。" },
       style: "続けて、日本語の話し言葉の短い文1〜3つ、全部で80文字以内で答えてください。日本語の音声で読み上げるので、質問が別の言語でも日本語で答えてください。Markdown、リンク、箇条書き、コード、絵文字は使わないでください。）"
     ),
     .ko: Style(
       intro: "(Homebot: HomePod 또는 iPhone의 Siri에게 한 말입니다. 답은 방에서 소리 내어 읽힙니다.",
       turn: { n in "음성 대화의 \(n)번째 차례입니다. 사용자는 바로 이어서 말할 수 있습니다. 꼭 필요한 경우가 아니면 질문으로 끝내지 마세요. 방에서는 이번 차례의 첫 메시지만 들립니다." },
       echo: { tag in "답의 맨 앞에 \(tag) 표시를 그대로 쓰세요." },
+      end: { tag in "사용자가 분명히 대화를 끝내려는 경우, 답장을 \(tag) [end]로 시작하고 짧게 작별 인사를 하세요." },
       style: "그다음 한국어로, 짧은 구어체 문장 1~3개, 모두 합쳐 약 120자 이내로 답하세요. 한국어 음성이 소리 내어 읽으므로 질문이 다른 언어여도 한국어로 답하세요. 마크다운, 링크, 목록, 코드, 이모지는 쓰지 마세요.)"
     ),
     .zhCN: Style(
       intro: "（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。",
       turn: { n in "这是语音对话的第 \(n) 轮，用户听完可以马上接着说；除非必要，不要以问题结尾；房间里只会听到你这一轮的第一条消息。" },
       echo: { tag in "回复请以 \(tag) 开头。" },
+      end: { tag in "如果用户明显是想结束对话，回复请以 \(tag) [end] 开头，再简短道别。" },
       style: "然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
     ),
     .zhTW: Style(
       intro: "（Homebot：這是對 HomePod/iPhone 上的 Siri 說的話，你的回覆會在房間裡被朗讀出來。",
       turn: { n in "這是語音對話的第 \(n) 輪，使用者聽完可以馬上接著說；除非必要，不要以問題結尾；房間裡只會聽到你這一輪的第一則訊息。" },
       echo: { tag in "回覆請以 \(tag) 開頭。" },
+      end: { tag in "如果使用者明顯是想結束對話，回覆請以 \(tag) [end] 開頭，再簡短道別。" },
       style: "然後用繁體中文（台灣用語）回答，1 到 3 句簡短口語，總共不超過 80 個字；回覆由中文語音朗讀，所以即使提問用的是別的語言，也要用繁體中文回答。不要 markdown、連結、清單、程式碼或表情符號。）"
     ),
   ]
@@ -303,17 +314,17 @@ extension Envelope {
 
 extension Conversation {
   static let endWords: [ReplyLang: [String]] = [
-    .en: ["stop", "goodbye", "thats all", "thanks", "never mind"],
-    .es: ["para", "basta", "adiós", "eso es todo", "gracias", "nada más", "déjalo"],
-    .fr: ["stop", "au revoir", "cest tout", "merci", "laisse tomber", "rien"],
-    .de: ["stopp", "schluss", "tschüss", "das wars", "danke", "schon gut", "nichts mehr"],
-    .it: ["basta", "stop", "ciao", "arrivederci", "è tutto", "grazie", "non importa", "lascia stare"],
-    .ptBR: ["parar", "chega", "tchau", "é só isso", "era só isso", "obrigado", "obrigada", "deixa pra lá"],
-    .ru: ["стоп", "хватит", "пока", "это всё", "это все", "спасибо", "ничего", "не надо"],
-    .ja: ["終わり", "終了", "やめて", "さようなら", "ありがとう", "バイバイ", "もういい"],
-    .ko: ["그만", "종료", "끝", "안녕", "고마워", "감사합니다", "됐어"],
-    .zhCN: ["结束", "退出", "再见", "谢谢", "没事了", "不用了"],
-    .zhTW: ["結束", "退出", "再見", "謝謝", "沒事了", "不用了"],
+    .en: ["stop", "goodbye", "thats all", "thanks", "never mind", "thank you", "thats it", "im done", "done", "bye", "nothing", "nothing else", "no thanks", "no thank you", "end", "exit", "quit", "cancel", "no", "nope"],
+    .es: ["para", "basta", "adiós", "eso es todo", "gracias", "nada más", "déjalo", "nada", "no gracias", "ya está", "listo", "fin", "terminar", "chao", "no"],
+    .fr: ["stop", "au revoir", "cest tout", "merci", "laisse tomber", "rien", "non merci", "rien dautre", "cest fini", "fini", "terminé", "arrête", "non"],
+    .de: ["stopp", "schluss", "tschüss", "das wars", "danke", "schon gut", "nichts mehr", "nein danke", "nichts", "das ist alles", "fertig", "ende", "beenden", "nein"],
+    .it: ["basta", "stop", "ciao", "arrivederci", "è tutto", "grazie", "non importa", "lascia stare", "niente", "nientaltro", "no grazie", "finito", "ho finito", "no"],
+    .ptBR: ["parar", "chega", "tchau", "é só isso", "era só isso", "obrigado", "obrigada", "deixa pra lá", "nada", "só isso", "não obrigado", "não obrigada", "fim", "terminar", "pronto", "não", "nao"],
+    .ru: ["стоп", "хватит", "пока", "это всё", "это все", "спасибо", "ничего", "не надо", "нет спасибо", "всё", "больше ничего", "конец", "закончить", "нет"],
+    .ja: ["終わり", "終了", "やめて", "さようなら", "ありがとう", "バイバイ", "もういい", "大丈夫", "大丈夫です", "以上", "以上です", "ないです", "特にない", "結構です", "おしまい", "いいえ"],
+    .ko: ["그만", "종료", "끝", "안녕", "고마워", "감사합니다", "됐어", "없어", "없어요", "괜찮아", "괜찮아요", "그만할게", "이제 됐어", "아니", "아니요"],
+    .zhCN: ["结束", "退出", "再见", "谢谢", "没事了", "不用了", "没有了", "没了", "没有", "就这样", "就这样吧", "就这些", "没别的了", "不需要了", "拜拜", "不", "不了", "不要了"],
+    .zhTW: ["結束", "退出", "再見", "謝謝", "沒事了", "不用了", "沒有了", "沒了", "沒有", "就這樣", "就這樣吧", "就這些", "沒別的了", "不需要了", "掰掰", "拜拜", "不", "不了", "不要了"],
   ]
 }
 

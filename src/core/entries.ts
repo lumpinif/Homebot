@@ -1,6 +1,6 @@
 // Pure logic over BDK session entries: paging to the real end, and deciding whether a bot
 // reply provably belongs to our voice question (DESIGN §4.2, §5.3). No I/O here.
-import { echoTag, requestMarker } from "./envelope.ts";
+import { END_MARK, echoTag, requestMarker } from "./envelope.ts";
 
 export interface Entry {
   seq: string | number;
@@ -71,7 +71,7 @@ export async function syncToEnd(
 
 export type Decision =
   | { status: "waiting" }
-  | { status: "accept"; text: string; userSeq: string; replySeq: string }
+  | { status: "accept"; text: string; userSeq: string; replySeq: string; ended?: boolean }
   | { status: "refuse"; reason: "O2" | "O3" | "O5"; userSeq?: string; replySeq?: string };
 
 /**
@@ -119,5 +119,15 @@ export function decideReply(seen: Entry[], { baseMaxSeq, requestId, strictEcho }
     const i = text.indexOf(echoTag(requestId));
     if (i < 0 || i > 40) return { status: "refuse", reason: "O5", ...ids };
   }
-  return { status: "accept", text: text.split(echoTag(requestId)).join(" ").trim(), ...ids };
+  const ended = strictEcho && endMarked(text, echoTag(requestId));
+  return { status: "accept", text: text.split(echoTag(requestId)).join(" ").trim(), ...ids, ...(ended ? { ended } : {}) };
+}
+
+/**
+ * The bot ends a conversation (S25): the text starts with our echo tag and `[end]` comes right
+ * after it. `[end]` anywhere else, or after another tag, ends nothing.
+ */
+export function endMarked(text: string, tag: string): boolean {
+  const t = text.trimStart();
+  return t.startsWith(tag) && t.slice(tag.length).trimStart().startsWith(END_MARK);
 }

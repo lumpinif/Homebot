@@ -112,7 +112,7 @@ struct ShortcutStep: View {
               RowIcon(symbol: "bubble.left.and.bubble.right")
               VStack(alignment: .leading, spacing: 2) {
                 Text(T.conversation)
-                Text(T.fmt(T.conversationNote, ["word": Conversation.endWord(Langs.replyLang(lang ?? s.siriLang))]))
+                Text(T.conversationNote)
                   .font(.system(size: 12)).foregroundStyle(Theme.muted).fixedSize(horizontal: false, vertical: true)
               }
               Spacer(minLength: 8)

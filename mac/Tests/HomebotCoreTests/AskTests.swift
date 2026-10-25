@@ -470,6 +470,23 @@ struct AskTests {
     for (s, lang, ok) in cases { #expect(Speech.readable(s, by: lang) == ok, "\(lang): \(s)") }
   }
 
+  @Test("S25: the bot's end mark is read, never spoken; a bare mark gets Homebot's goodbye")
+  func endMark() async throws {
+    let h = try await askHarness()
+    h.fake.autoReply(SID, text: "[end] 好的，回头见。")
+    let r = await h.ask("先这样吧")
+    #expect(r.outcome == "answered" && r.ended && r.text == "好的，回头见。")
+    h.fake.autoReply(SID, text: "[end]")
+    let bare = await h.ask("先这样吧")
+    #expect(bare.outcome == "answered" && bare.ended && bare.text == Messages.of(.zhCN).goodbye)
+    h.fake.autoReply(SID, text: "好的 [end] 回头见。")
+    let mid = await h.ask("先这样吧")
+    #expect(mid.outcome == "answered" && !mid.ended && mid.text == "好的 回头见。", "mid-text: not an end, and not spoken")
+    h.fake.autoReply(SID, text: "[end] bye", echo: false)
+    let untagged = await h.ask("先这样吧")
+    #expect(!untagged.ended && untagged.outcome != "answered", "no tag: refused as before, never an end")
+  }
+
   @Test("a reply that is only protocol text is unspeakable")
   func onlyProtocol() async throws {
     let h = try await askHarness()

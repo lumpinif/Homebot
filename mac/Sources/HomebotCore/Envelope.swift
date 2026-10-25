@@ -9,6 +9,7 @@ public enum Envelope {
     let intro: String
     let turn: @Sendable (Int) -> String
     let echo: @Sendable (String) -> String
+    let end: @Sendable (String) -> String
     let style: String
   }
 
@@ -16,6 +17,8 @@ public enum Envelope {
   public static func newRequestId() -> String { Random.hex(bytes: 6) }
   public static func requestMarker(_ id: String) -> String { "hb:\(id)" }
   public static func echoTag(_ id: String) -> String { "[hb:\(id)]" }
+  /// Written by the bot right after its echo tag when the user is ending a conversation (S25).
+  public static let endMark = "[end]"
 
   /// Languages written without spaces between sentences.
   static let unspaced: Set<ReplyLang> = [.zhCN, .zhTW, .ja]
@@ -31,7 +34,9 @@ public enum Envelope {
     case .none: styleText = ""
     case .custom(let c): styleText = c
     }
-    let parts = [s.intro, turn.flatMap { $0 != 0 ? s.turn($0) : nil } ?? "", strictEcho ? s.echo(echoTag(id)) : "", styleText]
+    // A conversation turn may end the run: `[end]` counts only right after the echo tag (S25).
+    let inTurn = turn.map { $0 != 0 } ?? false
+    let parts = [s.intro, inTurn ? s.turn(turn!) : "", strictEcho ? s.echo(echoTag(id)) : "", inTurn && strictEcho ? s.end(echoTag(id)) : "", styleText]
     let hint = parts.filter { !$0.isEmpty }.joined(separator: unspaced.contains(lang) ? "" : " ")
     return "\(head)\n\(text)\n\n\(hint)"
   }

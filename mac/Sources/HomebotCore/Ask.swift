@@ -137,7 +137,7 @@ public actor AskService {
     let m = Messages.of(req.lang)
     let question = req.text.trimmingCharacters(in: jsWhitespace)
     let log = self.log
-    func done(_ outcome: String, _ say: String, reason: String? = nil, requestId: String? = nil, timings: [String: Int] = [:], turns: String = "", delivery: Int? = nil, interim: Int? = nil, extra: LogEvent = [:]) -> AskResult {
+    func done(_ outcome: String, _ say: String, reason: String? = nil, requestId: String? = nil, timings: [String: Int] = [:], turns: String = "", delivery: Int? = nil, interim: Int? = nil, ended: Bool = false, extra: LogEvent = [:]) -> AskResult {
       var t = timings
       t["total_ms"] = Int(Date().timeIntervalSince(t0) * 1000)
       var e: LogEvent = ["event": "ask", "bot": .string(req.botKey), "outcome": .string(outcome), "q_len": .int(question.count)]
@@ -149,7 +149,7 @@ public actor AskService {
       for (k, v) in t { e[k] = .int(v) }
       for (k, v) in extra { e[k] = v }
       log(e)
-      return AskResult(text: say, outcome: outcome, reason: reason, timings: t, requestId: requestId, delivery: delivery, interim: interim)
+      return AskResult(text: say, outcome: outcome, reason: reason, timings: t, requestId: requestId, delivery: delivery, interim: interim, ended: ended)
     }
 
     // The authorized session must still be this bot's conversation; a cursor tagged with another
@@ -179,8 +179,8 @@ public actor AskService {
     let sawUser = Flag()
 
     let work = Task<AskResult, Never> {
-      func finish(_ outcome: String, _ say: String, reason: String? = nil, delivery: Int? = nil, interim: Int? = nil, extra: LogEvent = [:]) -> AskResult {
-        done(outcome, say, reason: reason, requestId: requestId, timings: run.timings, turns: turnsBox.value, delivery: delivery, interim: interim, extra: extra)
+      func finish(_ outcome: String, _ say: String, reason: String? = nil, delivery: Int? = nil, interim: Int? = nil, ended: Bool = false, extra: LogEvent = [:]) -> AskResult {
+        done(outcome, say, reason: reason, requestId: requestId, timings: run.timings, turns: turnsBox.value, delivery: delivery, interim: interim, ended: ended, extra: extra)
       }
       guard let session else { return finish("auth-failed", m.authFailed, extra: ["phase": "before-send"]) }
       let client = session.client
@@ -253,16 +253,18 @@ public actor AskService {
             // polls in a row, so a delivery written just before the turn went idle is still read.
             if complete && idlePolls >= 2 { return finish("refused", m.refused, reason: Refusal.O5.rawValue, interim: n, extra: ["end": "idle"]) }
           }
-          if case .accept(let text, _, _, let skipped) = d, complete {
+          if case .accept(let text, _, _, let skipped, let ended) = d, complete {
             run.mark("reply_ms")
             let cleaned = ProtocolFilter.clean(text, requestId: requestId, secrets: secrets)
-            let say = Speech.speakable(cleaned, settings.maxSpoken(req.lang.rawValue))
+            let spoken = Speech.speakable(cleaned, settings.maxSpoken(req.lang.rawValue))
+            // A bot that ends the conversation without a goodbye gets Homebot's (S25).
+            let say = spoken.isEmpty && ended ? m.goodbye : spoken
             if say.isEmpty { return finish("unspeakable", m.unspeakable) }
             // The Shortcut's voice can't read this script: say so rather than speak noise (S25).
             if !Speech.readable(say, by: req.lang) { return finish("unspeakable", m.unspeakable, reason: "script") }
             // Revoked while the bot answered: the answer is not returned (T3).
             if let still = req.stillGranted, !(await still()) { return finish("revoked", m.botNotConfigured, extra: ["phase": "after-reply"]) }
-            return finish("answered", say, delivery: skipped + 1, interim: skipped, extra: ["a_len": .int(say.count)])
+            return finish("answered", say, delivery: skipped + 1, interim: skipped, ended: ended, extra: ended ? ["a_len": .int(say.count), "ended": .bool(true)] : ["a_len": .int(say.count)])
           }
           let wait = run.elapsedMs > 10_000 ? settings.pollMs * 2 : settings.pollMs
           try await Task.sleep(nanoseconds: UInt64(max(wait, 0)) * 1_000_000)

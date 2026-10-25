@@ -59,8 +59,11 @@ public struct AskResult: Sendable, Equatable {
   /// deliveries were skipped (DESIGN §4.2). Counts only, never text.
   public var delivery: Int?
   public var interim: Int?
+  /// The bot marked the user's turn as the end of the conversation (S25).
+  public var ended = false
 
-  public init(text: String, outcome: String, reason: String? = nil, timings: [String: Int] = [:], requestId: String? = nil, delivery: Int? = nil, interim: Int? = nil) {
+  public init(text: String, outcome: String, reason: String? = nil, timings: [String: Int] = [:], requestId: String? = nil, delivery: Int? = nil, interim: Int? = nil, ended: Bool = false) {
+    self.ended = ended
     self.text = text
     self.outcome = outcome
     self.reason = reason
@@ -85,9 +88,13 @@ public enum Conversation {
       .trimmingCharacters(in: jsWhitespace)
   }
 
-  /// Whole utterances that end a run (DESIGN §18.2, Q18-2).
-  public static func isEndWord(_ text: String, _ lang: ReplyLang) -> Bool {
-    (endWords[lang] ?? []).contains(norm(text))
+  /// Every language's end words, normalized: all count on every Shortcut (S25).
+  static let allEndWords = Set(endWords.values.flatMap { $0 }.map(norm))
+
+  /// A whole utterance from any language's list (DESIGN §18.2, Q18-2). Never a substring:
+  /// "怎么结束这个项目" is a question.
+  public static func isEndWord(_ text: String) -> Bool {
+    allEndWords.contains(norm(text))
   }
 
   /// The end word to tell the user about: the first of the language's list.
@@ -272,7 +279,7 @@ public actor ConversationService {
       let pinned = (state.botKey, state.botName)
       // Silence and end words end the run; nothing reaches the bot.
       if Conversation.norm(text).isEmpty { return await stop(m.goodbye, "silence", bot: pinned) }
-      if Conversation.isEndWord(text, state.lang) { return await stop(m.goodbye, "end-word", bot: pinned) }
+      if Conversation.isEndWord(text) { return await stop(m.goodbye, "end-word", bot: pinned) }
       guard let key = state.botKey else { return await stop(m.restart, "restart") }
       let turn = state.turns + 1
       await runs.update(run) {
@@ -288,10 +295,13 @@ public actor ConversationService {
       }
       let answered = r.outcome == "answered"
       await runs.update(run) { $0.answered = answered }
-      // Only a proved answer keeps listening; every refusal, error or timeout ends the run.
-      let end = !answered || step >= state.last
+      // Only a proved answer keeps listening; every refusal, error or timeout ends the run, and so
+      // does a bot that marked the user's turn as the end (S25).
+      let end = !answered || r.ended || step >= state.last
       if end { await runs.finish(run) }
-      log(["event": "conversation", "run": .string(String(run.prefix(6))), "step": .int(step), "turn": .int(turn), "outcome": .string(r.outcome), "next": .string(end ? "end" : "listen")])
+      var e: LogEvent = ["event": "conversation", "run": .string(String(run.prefix(6))), "step": .int(step), "turn": .int(turn), "outcome": .string(r.outcome), "next": .string(end ? "end" : "listen")]
+      if r.ended { e["bot_end"] = .bool(true) }
+      log(e)
       return StepReply(
         response: LoopResponse(say: r.text, ask: m.more, mode: .v1, next: end ? .end : .listen, run: run),
         activity: StepActivity(outcome: r.outcome, step: step, botKey: key, botName: state.botName, question: text, ask: r))
@@ -417,7 +427,9 @@ public actor ConversationService {
       await runs.update(run) { $0.phase = .choosing(snapshot: menu, misses: misses + 1) }
       return await reply(t.menu(menu), "no-match")
     }
-    if Conversation.isEndWord(text, lang) && state.phase != .pinned { return await reply(m.goodbye, "end-word", end: true) }
+    // While Siri asks "Did you mean …?", a yes or no answers it, even one that is also an end word.
+    let answersQuestion: Bool = { if case .confirming = state.phase { Chooser.isYes(text, lang) || Chooser.isNo(text, lang) } else { false } }()
+    if Conversation.isEndWord(text) && state.phase != .pinned && !answersQuestion { return await reply(m.goodbye, "end-word", end: true) }
     switch state.phase {
     case .pinned:
       // Right after an exact choice: a whole-utterance "no" goes back to the menu, once.

@@ -171,7 +171,7 @@ public enum Chooser {
     let t = ChooserText.of(lang)
     var r = words(t.yes).union(words(t.no)).union(words(t.numbers.flatMap { $0 }))
     r.formUnion((1...9).map(String.init))
-    r.formUnion(words(Conversation.endWords[lang] ?? []))
+    r.formUnion(words(Conversation.endWords.values.flatMap { $0 }))
     return r
   }
 

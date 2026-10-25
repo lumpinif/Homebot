@@ -3,13 +3,13 @@
     "chai": {
       "cursor": "1007",
       "maxSeq": "1007",
-      "syncedAt": 1792941777679,
+      "syncedAt": 1792942320405,
       "sessionId": "14752726"
     },
     "kitchen": {
       "cursor": "1009",
       "maxSeq": "1009",
-      "syncedAt": 1792941777713,
+      "syncedAt": 1792942320437,
       "sessionId": "555"
     }
   }

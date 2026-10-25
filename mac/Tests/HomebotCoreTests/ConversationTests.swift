@@ -6,7 +6,8 @@ import Testing
 
 @testable import HomebotCore
 
-/// A fake ask service: answers from `outcomes` in order and records each request.
+/// A fake ask service: answers from `outcomes` in order and records each request. "ended" is an
+/// answer the bot marked as the end of the conversation.
 final class FakeAsk: @unchecked Sendable {
   private let lock = NSLock()
   private var outcomes: [String]
@@ -20,6 +21,7 @@ final class FakeAsk: @unchecked Sendable {
       self.lock.withLock {
         self._calls.append(r)
         let outcome = self.outcomes.isEmpty ? "answered" : self.outcomes.removeFirst()
+        if outcome == "ended" { return AskResult(text: "bye \(self._calls.count)", outcome: "answered", ended: true) }
         return AskResult(text: outcome == "answered" ? "answer \(self._calls.count)" : "refusal \(outcome)", outcome: outcome)
       }
     }
@@ -68,6 +70,39 @@ struct ConversationTests {
     #expect(r3.next == .end)
     #expect(r3.say.contains("重新开始"))
     #expect(c.ask.calls.count == 2, "nothing is sent after the run ended")
+  }
+
+  @Test("S25: a whole end phrase in any language ends the run, whatever the Shortcut's language",
+        arguments: ["没有了", "结束。", "没了", "不用了", "就这样吧", "Stop!", "No.", "That's all.", "I'm done", "No thanks", "C’est tout !", "Nein danke", "ничего", "以上です", "없어요", "沒有了"])
+  func endPhrasesAnyLanguage(said: String) async {
+    let c = Conv()
+    let s0 = await c.step("", 0)
+    let r = await c.step(s0.run, 1, said)
+    #expect(r.next == .end && r.say == Messages.of(.zhCN).goodbye, "\(said)")
+    #expect(c.ask.calls.isEmpty)
+    #expect(Conversation.isEndWord(said))
+  }
+
+  @Test("S25: an end word inside a sentence is a question for the bot",
+        arguments: ["怎么结束这个项目", "没有了吗？那明天呢", "stop the music", "no idea what to cook", "done yet?", "结束以后做什么", "Thanks for the weather, what about tomorrow?"])
+  func endWordInSentence(said: String) async {
+    let c = Conv()
+    let s0 = await c.step("", 0)
+    let r = await c.step(s0.run, 1, said)
+    #expect(r.next == .listen && r.say == "answer 1", "\(said)")
+    #expect(!Conversation.isEndWord(said))
+  }
+
+  @Test("S25: the bot's end mark ends the run; its goodbye is spoken")
+  func botEnds() async {
+    let c = Conv(["answered", "ended"])
+    let s0 = await c.step("", 0)
+    #expect(await c.step(s0.run, 1, "明天天气怎么样").next == .listen)
+    let r2 = await c.step(s0.run, 2, "先这样吧，回头聊")
+    #expect([r2.say, r2.next.rawValue] == ["bye 2", "end"])
+    #expect(c.logs.events.contains { $0["bot_end"] == .bool(true) })
+    #expect(await c.step(s0.run, 3, "还在吗").next == .end)
+    #expect(c.ask.calls.count == 2, "nothing is sent after the bot ended the run")
   }
 
   @Test("end words and silence end the run without reaching the bot", arguments: ["谢谢。", " 再见 ", "", "  "])
@@ -246,6 +281,16 @@ struct ConversationTests {
       #expect(e.contains(ask[l]!), "\(l)")
       #expect(e.hasPrefix("[Homebot voice · hb:abc · \(l.rawValue)]"), "the head names the reply language")
     }
+  }
+
+  @Test("S25: only a conversation turn with strict echo tells the bot how to end the run")
+  func envelopeEnd() {
+    let turn = Envelope.build(id: "abc", text: "先这样吧", lang: .zhCN, strictEcho: true, turn: 2)
+    #expect(turn.contains("回复请以 [hb:abc] [end] 开头"))
+    #expect(Envelope.build(id: "abc", text: "Bye", lang: .en, strictEcho: true, turn: 1).contains("start your reply with [hb:abc] [end], then say a short goodbye."))
+    #expect(!Envelope.build(id: "abc", text: "hi", lang: .en, strictEcho: true).contains("[end]"), "a one-shot question can't end anything")
+    #expect(!Envelope.build(id: "abc", text: "hi", lang: .en, strictEcho: false, turn: 2).contains("[end]"), "without the tag, no end mark")
+    #expect(ProtocolFilter.clean("好的。" + Envelope.styles[.zhCN]!.end("[hb:abc]"), requestId: "abc") == "好的。", "a quoted instruction is never spoken")
   }
 
   @Test("envelope: a conversation turn tells the bot the turn and that only its first message is heard")

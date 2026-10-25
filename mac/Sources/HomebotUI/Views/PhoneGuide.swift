@@ -15,7 +15,7 @@ struct PhoneGuide: View {
     let P = model.phoneTr
     let T = model.tr
     // A conversation Shortcut keeps listening: its last caption says how to end it.
-    let last = build.endWord.map { P.fmt(P.phEndCap, ["word": $0]) } ?? P.phAskCap
+    let last = build.endWord != nil ? P.phEndCap : P.phAskCap
     let captions = [P.phAddCap, P.phLockCap, P.phRunCap, last]
     GuidePlayer(captions: captions,
                 stageHeight: 340, previous: T.guidePrev, next: T.guideNext,

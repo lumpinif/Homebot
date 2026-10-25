@@ -2,7 +2,7 @@
 // Authentication/authorization happen in the server before this is called.
 import { setTimeout as sleep } from "node:timers/promises";
 import { syncToEnd, decideReply, HistoryTooLongError, type Entry, type Turn } from "./entries.ts";
-import { buildEnvelope, newRequestId } from "./envelope.ts";
+import { END_MARK, buildEnvelope, newRequestId } from "./envelope.ts";
 import { readableBy, speakable } from "./speech.ts";
 import { messages } from "./i18n.ts";
 import { BdkError, type BdkClient } from "./bdk.ts";
@@ -22,6 +22,8 @@ export interface AskResult {
   requestId?: string;
   reason?: string;
   timings: Record<string, number>;
+  /** The bot marked the user's turn as the end of the conversation (S25). */
+  ended?: boolean;
 }
 
 /** What AskService needs from the config store (ConfigStore satisfies it). */
@@ -185,12 +187,15 @@ export class AskService {
         if (d.status === "refuse") return done("refused", m.refused(), { requestId, reason: d.reason });
         if (d.status === "accept" && complete) {
           mark("reply_ms");
-          const say = speakable(d.text, settings.maxSpokenChars[lang] ?? 600);
+          // Only Homebot reads `[end]`; it is never spoken. A bot that ends the conversation
+          // without a goodbye gets Homebot's (S25).
+          const spoken = speakable(d.text.split(END_MARK).join(" "), settings.maxSpokenChars[lang] ?? 600);
+          const say = !spoken && d.ended ? m.goodbye() : spoken;
           if (!say) return done("unspeakable", m.unspeakable(), { requestId });
           // The Shortcut's voice can't read this script: say so rather than speak noise (S25).
           if (!readableBy(say, lang)) return done("unspeakable", m.unspeakable(), { requestId, reason: "script" });
           if (this.traceIdle.maxMs > 0) this.#traceTail(bot, requestId, pos);
-          return done("answered", say, { requestId, a_len: say.length });
+          return done("answered", say, { requestId, a_len: say.length, ...(d.ended ? { ended: true } : {}) });
         }
         await sleep(Date.now() - t0 > 10_000 ? settings.pollMs * 2 : settings.pollMs, undefined, { signal: sig });
         try {

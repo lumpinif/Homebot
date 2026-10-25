@@ -107,13 +107,26 @@ struct DecideTests {
     return nil
   }
   func text(_ d: Decision) -> String? {
-    if case .accept(let t, _, _, _) = d { return t }
+    if case .accept(let t, _, _, _, _) = d { return t }
     return nil
   }
 
   @Test("accepts the first echoed reply after our message and strips the tag")
   func accept() throws {
     #expect(try decide([ours(101), bot(102, "\(tag) 现在三点。")]) == .accept(text: "现在三点。", userSeq: "101", replySeq: "102"))
+  }
+
+  @Test("S25: [end] counts only right after our own tag at the start; it is never left in the text")
+  func endMark() throws {
+    #expect(try decide([ours(101), bot(102, "\(tag) [end] 好的，回头见。")]) == .accept(text: "[end] 好的，回头见。", userSeq: "101", replySeq: "102", ended: true))
+    #expect(try decide([ours(101), bot(102, "  \(tag)[end]")]) == .accept(text: "[end]", userSeq: "101", replySeq: "102", ended: true))
+    #expect(try decide([ours(101), bot(102, "\(tag) 好的。")]) == .accept(text: "好的。", userSeq: "101", replySeq: "102"), "missing: not an end")
+    #expect(try decide([ours(101), bot(102, "\(tag) 好的 [end] 回头见")]) == .accept(text: "好的 [end] 回头见", userSeq: "101", replySeq: "102"), "mid-text: not an end")
+    if case .accept(_, _, _, _, let ended) = try decide([ours(101), bot(102, "[end] \(tag) 好的")]) { #expect(!ended, "before the tag: not an end") } else { Issue.record("not accepted") }
+    #expect(!endMarked("[hb:000000000000] [end] bye", tag), "another request's tag")
+    #expect(!endMarked("[hb:\(Self.id) [end]", tag), "a broken tag")
+    #expect(!endMarked("\(tag) [END]", tag), "exact spelling only")
+    #expect(try decide([ours(101), bot(102, "\(tag) [end] bye")], strict: false) == .accept(text: "[end] bye", userSeq: "101", replySeq: "102"), "never without strict echo")
   }
 
   @Test("waits until our entry and a text reply exist")

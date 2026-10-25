@@ -32,12 +32,15 @@ public enum ProtocolFilter {
     if let requestId {
       for st in Envelope.styles.values {
         t = t.replacingOccurrences(of: st.echo(Envelope.echoTag(requestId)), with: "")
+        t = t.replacingOccurrences(of: st.end(Envelope.echoTag(requestId)), with: "")
       }
     }
     for f in fixed { t = t.replacingOccurrences(of: f, with: "") }
     for re in [head, tag, marker] {
       t = re.stringByReplacingMatches(in: t, range: NSRange(t.startIndex..., in: t), withTemplate: "")
     }
+    // Only Homebot reads `[end]` (S25); it is never spoken, wherever it is.
+    t = t.replacingOccurrences(of: Envelope.endMark, with: "")
     return t
   }
 }

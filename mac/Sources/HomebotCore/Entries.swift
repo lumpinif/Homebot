@@ -167,7 +167,8 @@ public enum Decision: Sendable, Equatable {
   /// the deadline (DESIGN §4.2).
   case unproved(interim: Int, userSeq: String)
   /// `interim`: untagged deliveries skipped before the accepted one (counts only, never text).
-  case accept(text: String, userSeq: String, replySeq: String, interim: Int = 0)
+  /// `ended`: the reply starts with our echo tag followed by `[end]` (strict mode only, S25).
+  case accept(text: String, userSeq: String, replySeq: String, interim: Int = 0, ended: Bool = false)
   case refuse(Refusal, userSeq: String? = nil, replySeq: String? = nil)
 }
 
@@ -230,7 +231,7 @@ public func decideReply(_ seen: [Entry], baseMaxSeq: String, requestId: String, 
   for s in replies {
     let text = vs(s).filter(hasText).last?.text ?? ""
     if echoed(text, tag) {
-      return .accept(text: answer(text), userSeq: userSeq.description, replySeq: s.description, interim: interim)
+      return .accept(text: answer(text), userSeq: userSeq.description, replySeq: s.description, interim: interim, ended: endMarked(text, tag))
     }
     interim += 1
   }
@@ -243,6 +244,14 @@ let echoWindow = 40
 func echoed(_ text: String, _ tag: String) -> Bool {
   guard let r = text.range(of: tag, options: .literal) else { return false }
   return text.utf16.distance(from: text.utf16.startIndex, to: r.lowerBound) <= echoWindow
+}
+
+/// The bot ends a conversation (S25): the text starts with our echo tag and `[end]` comes right
+/// after it. `[end]` anywhere else, or after another tag, ends nothing.
+func endMarked(_ text: String, _ tag: String) -> Bool {
+  let t = text.drop { $0.isWhitespace }
+  guard t.hasPrefix(tag) else { return false }
+  return t.dropFirst(tag.count).drop { $0.isWhitespace }.hasPrefix(Envelope.endMark)
 }
 
 /// True when the first complete `[hb:…]` tag anywhere in the text is another request's: that

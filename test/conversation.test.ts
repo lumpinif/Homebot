@@ -9,11 +9,11 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type http from "node:http";
 import type { AddressInfo } from "node:net";
-import { ConversationService, CONVERSATION_STEPS } from "../src/core/conversation.ts";
+import { ConversationService, CONVERSATION_STEPS, isEndWord } from "../src/core/conversation.ts";
 import { AskService, type AskRequest, type AskResult } from "../src/core/ask.ts";
 import { buildEnvelope, echoTag } from "../src/core/envelope.ts";
 import { DEFAULT_SETTINGS, type Bot } from "../src/core/store.ts";
-import type { Entry, Turn } from "../src/core/entries.ts";
+import { endMarked, type Entry, type Turn } from "../src/core/entries.ts";
 import type { LoopResponse } from "../src/core/runs.ts";
 import { createVoiceServer, type VoiceConfig } from "../src/server/voice.ts";
 import type { TokenKind, TokenRecord, VerifyResult } from "../src/core/tokens.ts";
@@ -32,6 +32,7 @@ function fakeAsk(outcomes: string[] = []) {
     async ask(r: AskRequest): Promise<AskResult> {
       calls.push(r);
       const outcome = outcomes.shift() ?? "answered";
+      if (outcome === "ended") return { text: `bye ${calls.length}`, outcome: "answered", timings: {}, ended: true };
       return { text: outcome === "answered" ? `answer ${calls.length}` : `refusal ${outcome}`, outcome, timings: {} };
     },
   };
@@ -81,6 +82,58 @@ test("conversation: end words and silence end the run without reaching the bot",
   const s0 = await step("", 0);
   assert.equal((await step(s0.run, 1, "谢谢你帮我查天气")).next, "listen", "only the whole utterance is an end word");
   assert.equal(ask.calls.length, 1);
+});
+
+test("S25: a whole end phrase in any language ends the run; inside a sentence it is a question", async () => {
+  const ends = ["没有了", "结束。", "没了", "不用了", "就这样吧", "Stop!", "No.", "That's all.", "I'm done", "No thanks", "C’est tout !", "Nein danke", "ничего", "以上です", "없어요", "沒有了"];
+  for (const said of ends) {
+    const { step, ask } = conv();
+    const s0 = await step("", 0);
+    const r = await step(s0.run, 1, said);
+    assert.deepEqual([r.say, r.next], ["好的。", "end"], said);
+    assert.equal(ask.calls.length, 0);
+  }
+  for (const said of ["怎么结束这个项目", "没有了吗？那明天呢", "stop the music", "no idea what to cook", "done yet?", "结束以后做什么"]) {
+    assert.equal(isEndWord(said), false, said);
+    const { step } = conv();
+    const s0 = await step("", 0);
+    assert.equal((await step(s0.run, 1, said)).next, "listen", said);
+  }
+});
+
+test("S25: the bot's end mark ends the run; its goodbye is spoken", async () => {
+  const { step, ask } = conv(["answered", "ended"]);
+  const s0 = await step("", 0);
+  assert.equal((await step(s0.run, 1, "明天天气怎么样")).next, "listen");
+  const r2 = await step(s0.run, 2, "先这样吧");
+  assert.deepEqual([r2.say, r2.next], ["bye 2", "end"]);
+  assert.equal((await step(s0.run, 3, "还在吗")).next, "end");
+  assert.equal(ask.calls.length, 2);
+});
+
+test("S25: [end] counts only right after our own tag at the start", () => {
+  const tag = echoTag("abcdefabcdef");
+  assert.equal(endMarked(`${tag} [end] 好的，回头见。`, tag), true);
+  assert.equal(endMarked(`  ${tag}[end]`, tag), true);
+  assert.equal(endMarked(`${tag} 好的。`, tag), false, "missing");
+  assert.equal(endMarked(`${tag} 好的 [end] 回头见`, tag), false, "mid-text");
+  assert.equal(endMarked(`[end] ${tag} 好的`, tag), false, "before the tag");
+  assert.equal(endMarked(`[hb:000000000000] [end] bye`, tag), false, "another request's tag");
+  assert.equal(endMarked(`${tag} [END]`, tag), false, "exact spelling only");
+  const turn = buildEnvelope({ id: "abc", text: "Bye", lang: "en", strictEcho: true, turn: 1 });
+  assert.match(turn, /start your reply with \[hb:abc\] \[end\], then say a short goodbye\./);
+  assert.doesNotMatch(buildEnvelope({ id: "abc", text: "hi", lang: "en", strictEcho: true }), /\[end\]/, "a one-shot question can't end anything");
+  assert.doesNotMatch(buildEnvelope({ id: "abc", text: "hi", lang: "en", strictEcho: false, turn: 2 }), /\[end\]/);
+});
+
+test("S25: over AskService, a marked reply is ended and the mark is never spoken", async () => {
+  const marked = waiting([], (s) => [page([ours(110, s), reply(111, `${echoTag(s.messageId)} [end] 好的，回头见。`)]), page([])]);
+  const r = await marked.ask(0);
+  assert.deepEqual([r.outcome, r.text, r.ended], ["answered", "好的，回头见。", true]);
+  const bare = await waiting([], (s) => [page([ours(110, s), reply(111, `${echoTag(s.messageId)} [end]`)]), page([])]).ask(0);
+  assert.deepEqual([bare.text, bare.ended], ["好的。", true], "a bare mark gets Homebot's goodbye");
+  const mid = await waiting([], (s) => [page([ours(110, s), reply(111, `${echoTag(s.messageId)} 好的 [end] 回头见。`)]), page([])]).ask(0);
+  assert.deepEqual([mid.text, mid.ended], ["好的 回头见。", undefined]);
 });
 
 test("conversation: the last step's answer ends the run, so it is spoken (DESIGN §18.2)", async () => {

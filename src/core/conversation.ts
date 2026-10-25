@@ -12,24 +12,32 @@ import type { Log } from "./log.ts";
 /** Steps per run, fixed in the Shortcut: the gateway can end a run earlier, never later. */
 export const CONVERSATION_STEPS = 10;
 
-/** Whole utterances that end a run (punctuation and spaces ignored; DESIGN §18.2, Q18-2). */
+/**
+ * Whole utterances that end a run (punctuation and spaces ignored; DESIGN §18.2, Q18-2). Every
+ * language's list counts on every Shortcut: Siri may write a phrase in the user's language
+ * whatever the Shortcut's (S25: "没有了" and "结束" on an English Shortcut). Never a substring:
+ * "怎么结束这个项目" is a question. While the entry chooser asks a yes/no question, its own yes/no
+ * words win (Conversation.swift).
+ */
 export const END_WORDS: Record<ReplyLang, string[]> = {
-  "zh-CN": ["结束", "退出", "再见", "谢谢", "没事了", "不用了"],
-  en: ["stop", "goodbye", "thats all", "thanks", "never mind"],
-  es: ["para", "basta", "adiós", "eso es todo", "gracias", "nada más", "déjalo"],
-  fr: ["stop", "au revoir", "cest tout", "merci", "laisse tomber", "rien"],
-  de: ["stopp", "schluss", "tschüss", "das wars", "danke", "schon gut", "nichts mehr"],
-  it: ["basta", "stop", "ciao", "arrivederci", "è tutto", "grazie", "non importa", "lascia stare"],
-  "pt-BR": ["parar", "chega", "tchau", "é só isso", "era só isso", "obrigado", "obrigada", "deixa pra lá"],
+  "zh-CN": ["结束", "退出", "再见", "谢谢", "没事了", "不用了", "没有了", "没了", "没有", "就这样", "就这样吧", "就这些", "没别的了", "不需要了", "拜拜", "不", "不了", "不要了"],
+  en: ["stop", "goodbye", "thats all", "thanks", "never mind", "thank you", "thats it", "im done", "done", "bye", "nothing", "nothing else", "no thanks", "no thank you", "end", "exit", "quit", "cancel", "no", "nope"],
+  es: ["para", "basta", "adiós", "eso es todo", "gracias", "nada más", "déjalo", "nada", "no gracias", "ya está", "listo", "fin", "terminar", "chao", "no"],
+  fr: ["stop", "au revoir", "cest tout", "merci", "laisse tomber", "rien", "non merci", "rien dautre", "cest fini", "fini", "terminé", "arrête", "non"],
+  de: ["stopp", "schluss", "tschüss", "das wars", "danke", "schon gut", "nichts mehr", "nein danke", "nichts", "das ist alles", "fertig", "ende", "beenden", "nein"],
+  it: ["basta", "stop", "ciao", "arrivederci", "è tutto", "grazie", "non importa", "lascia stare", "niente", "nientaltro", "no grazie", "finito", "ho finito", "no"],
+  "pt-BR": ["parar", "chega", "tchau", "é só isso", "era só isso", "obrigado", "obrigada", "deixa pra lá", "nada", "só isso", "não obrigado", "não obrigada", "fim", "terminar", "pronto", "não", "nao"],
   // A recognizer may write ё as е, so both spellings are listed.
-  ru: ["стоп", "хватит", "пока", "это всё", "это все", "спасибо", "ничего", "не надо"],
-  ja: ["終わり", "終了", "やめて", "さようなら", "ありがとう", "バイバイ", "もういい"],
-  ko: ["그만", "종료", "끝", "안녕", "고마워", "감사합니다", "됐어"],
-  "zh-TW": ["結束", "退出", "再見", "謝謝", "沒事了", "不用了"],
+  ru: ["стоп", "хватит", "пока", "это всё", "это все", "спасибо", "ничего", "не надо", "нет спасибо", "всё", "больше ничего", "конец", "закончить", "нет"],
+  ja: ["終わり", "終了", "やめて", "さようなら", "ありがとう", "バイバイ", "もういい", "大丈夫", "大丈夫です", "以上", "以上です", "ないです", "特にない", "結構です", "おしまい", "いいえ"],
+  ko: ["그만", "종료", "끝", "안녕", "고마워", "감사합니다", "됐어", "없어", "없어요", "괜찮아", "괜찮아요", "그만할게", "이제 됐어", "아니", "아니요"],
+  "zh-TW": ["結束", "退出", "再見", "謝謝", "沒事了", "不用了", "沒有了", "沒了", "沒有", "就這樣", "就這樣吧", "就這些", "沒別的了", "不需要了", "掰掰", "拜拜", "不", "不了", "不要了"],
 };
 
 const norm = (s: string): string => s.normalize("NFKC").toLowerCase().replace(/[\p{P}\p{S}]/gu, "").replace(/\s+/g, " ").trim();
-const isEndWord = (text: string, lang: ReplyLang): boolean => END_WORDS[lang].includes(norm(text));
+const ALL_END_WORDS = new Set(Object.values(END_WORDS).flat().map(norm));
+/** A whole utterance from any language's list ends the run. */
+export const isEndWord = (text: string): boolean => ALL_END_WORDS.has(norm(text));
 
 interface RunState {
   botKey: string;
@@ -109,7 +117,7 @@ export class ConversationService {
       };
       // Silence and end words end the run; nothing reaches the bot.
       if (!norm(text)) return stop(m.goodbye(), "empty");
-      if (isEndWord(text, lang)) return stop(m.goodbye(), "end-word");
+      if (isEndWord(text)) return stop(m.goodbye(), "end-word");
       const wait = s.answered ? Math.min(Math.max(this.followupIdleMs() || 0, 0), 10_000) : 0;
       s.turns++;
       let r: AskResult;
@@ -120,8 +128,9 @@ export class ConversationService {
         return stop(m.internalError(), "error");
       }
       s.answered = r.outcome === "answered";
-      // Only a proved answer keeps listening; every refusal, error or timeout ends the run.
-      const end = !s.answered || step >= s.last;
+      // Only a proved answer keeps listening; every refusal, error or timeout ends the run, and so
+      // does a bot that marked the user's turn as the end (S25).
+      const end = !s.answered || r.ended === true || step >= s.last;
       if (end) this.runs.finish(run);
       this.log({ event: "conversation", run: run.slice(0, 6), step, turn: s.turns, outcome: r.outcome, next: end ? "end" : "listen" });
       return { say: r.text, ask: m.more(), mode: "v1", next: end ? "end" : "listen", run };

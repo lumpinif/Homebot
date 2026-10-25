@@ -71,6 +71,7 @@ for (const lang of LANGS) {
   L.push(`      intro: ${lit(s.intro)},`);
   L.push(`      turn: { n in ${lit(s.turn(N), [[String(N), "n"]])} },`);
   L.push(`      echo: { tag in ${lit(s.echo(S1), [[S1, "tag"]])} },`);
+  L.push(`      end: { tag in ${lit(s.end(S1), [[S1, "tag"]])} },`);
   L.push(`      style: ${lit(s.style)}`);
   L.push("    ),");
 }
