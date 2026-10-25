@@ -787,8 +787,9 @@ struct SignConsentNote: View {
     }
     .font(.system(size: 12))
     .foregroundStyle(Theme.muted)
+    // The column's full width, and clear of the button above it (S25).
     .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(.horizontal, Theme.inset)
+    .padding(.top, 6)
   }
 }
 

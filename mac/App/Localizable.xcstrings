@@ -26206,67 +26206,67 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple signs it so iPhone can add it. Apple gets its phrase, your Mac’s address and its own access code."
+            "value": "Apple signs it for iPhone and sees its phrase, your Mac’s address and an access code."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple lo firma para que el iPhone pueda añadirlo. Apple recibe su frase, la dirección de tu Mac y su propio código de acceso."
+            "value": "Apple lo firma para el iPhone y ve su frase, la dirección de tu Mac y un código de acceso."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple le signe pour que l’iPhone puisse l’ajouter. Apple reçoit sa phrase, l’adresse de votre Mac et son propre code d’accès."
+            "value": "Apple le signe pour l’iPhone et voit sa phrase, l’adresse de votre Mac et un code d’accès."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple signiert ihn, damit das iPhone ihn hinzufügen kann. Apple erhält seinen Satz, die Adresse deines Mac und seinen eigenen Zugangscode."
+            "value": "Apple signiert ihn fürs iPhone und sieht seinen Satz, die Adresse deines Mac und einen Zugangscode."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple lo firma perché l’iPhone possa aggiungerlo. Apple riceve la sua frase, l’indirizzo del tuo Mac e il suo codice di accesso."
+            "value": "Apple lo firma per l’iPhone e vede la frase, l’indirizzo del tuo Mac e un codice di accesso."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "A Apple o assina para que o iPhone possa adicioná-lo. A Apple recebe a frase, o endereço do seu Mac e o código de acesso próprio do atalho."
+            "value": "A Apple o assina para o iPhone e vê a frase, o endereço do seu Mac e um código de acesso."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple подписывает команду, чтобы iPhone мог её добавить. Apple получает её фразу, адрес вашего Mac и её собственный код доступа."
+            "value": "Apple подписывает команду для iPhone и видит её фразу, адрес вашего Mac и код доступа."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "iPhone に追加できるよう、Apple が署名します。Apple にはフレーズ、Mac のアドレス、専用のアクセスコードが送られます。"
+            "value": "iPhone 用に Apple が署名します。Apple にはフレーズ、Mac のアドレス、アクセスコードが届きます。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "iPhone에 추가할 수 있도록 Apple이 서명해요. Apple은 문구, Mac 주소, 전용 접근 코드를 받아요."
+            "value": "iPhone용으로 Apple이 서명해요. Apple은 문구, Mac 주소, 접근 코드를 받아요."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple 为它签名后，iPhone 才能添加。Apple 会收到它的短语、你 Mac 的地址和它自己的访问码。"
+            "value": "由 Apple 签名，iPhone 才能添加；Apple 会看到短语、Mac 地址和访问码。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple 為它簽名後，iPhone 才能加入。Apple 會收到它的短語、你 Mac 的位址和它自己的存取碼。"
+            "value": "由 Apple 簽名，iPhone 才能加入；Apple 會看到短語、Mac 位址和存取碼。"
           }
         }
       }
