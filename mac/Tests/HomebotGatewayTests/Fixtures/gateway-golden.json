@@ -3,24 +3,24 @@
   "key": "test-key-not-a-secret",
   "tokens": {
     "zh": {
-      "id": "07995c89fc5b",
-      "token": "0FF7WG44lt1Lr8EllH2AcQ4BLymTDBR0SmC3EbtcwZ8"
+      "id": "94d7335999aa",
+      "token": "FJ2BUZmPibuudnteyjY_RU_vBS1yrMNGdUUmopCaFck"
     },
     "en": {
-      "id": "e52c51786d59",
-      "token": "_BesOPUapWXWyhW5BKSGICcjUVzPR_wFWhZ9OSZCv40"
+      "id": "42c5f384b1ab",
+      "token": "-rZrh7OzGpeihi8yRtA7QegI21loX13q3XBFMvk4IAg"
     },
     "kitchen": {
-      "id": "d522d88b0d18",
-      "token": "QtAxtKGn3ufKpJ4tCnvDy48kcE-HFIuV8hyBOqSSlI8"
+      "id": "9c6fd900fee3",
+      "token": "WHMeMh70z048X7ZbvsXdcVo8YNxZCteVi4df0HWUluQ"
     },
     "revoked": {
-      "id": "dd3e4de1c167",
-      "token": "OUDWCwJZ7CtSSal7Bf9os71_9RhvjLVTNf792lTpWIY"
+      "id": "61defad4ee38",
+      "token": "aaJWGCseCcsPjnp593yi8gwa7Tz-SFhPdSXMTJOwdL8"
     },
     "pending": {
-      "id": "0c7f1708ba54",
-      "token": "8BiL1XKVb8rq9V2l7_5vAhM7S0Dmyz7Htpf20mLr2_I"
+      "id": "93d74264a2cc",
+      "token": "8exy_fZfbg31NsakeP6PyasJHlGeiFQ2TlrF0lGZkOk"
     }
   },
   "transcripts": {
@@ -28,7 +28,7 @@
       {
         "seq": "1004",
         "updatedSeq": "1004",
-        "createdAtMs": 1792942316325,
+        "createdAtMs": 1792942847032,
         "kind": "message",
         "role": "user",
         "text": "old question"
@@ -36,37 +36,37 @@
       {
         "seq": "1005",
         "updatedSeq": "1005",
-        "createdAtMs": 1792942316325,
+        "createdAtMs": 1792942847032,
         "kind": "send-message",
         "text": "old answer"
       },
       {
         "seq": "1008",
         "updatedSeq": "1008",
-        "createdAtMs": 1792942320406,
+        "createdAtMs": 1792942851253,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:eafefaf759da · zh-CN]\n你好\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
+        "text": "[Homebot voice · hb:04fd3391ba73 · zh-CN]\n你好\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
       },
       {
         "seq": "1009",
         "updatedSeq": "1009",
-        "createdAtMs": 1792942320427,
+        "createdAtMs": 1792942851273,
         "kind": "send-message",
-        "text": "[hb:eafefaf759da] 好。"
+        "text": "[hb:04fd3391ba73] 好。"
       },
       {
         "seq": "1018",
         "updatedSeq": "1018",
-        "createdAtMs": 1792942320976,
+        "createdAtMs": 1792942851856,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:214604aac13e · zh-CN]\n冰箱里有什么\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
+        "text": "[Homebot voice · hb:b107b328dc94 · zh-CN]\n冰箱里有什么\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
       },
       {
         "seq": "1019",
         "updatedSeq": "1019",
-        "createdAtMs": 1792942320998,
+        "createdAtMs": 1792942851877,
         "kind": "send-message",
         "text": "冰箱里有牛奶。"
       }
@@ -75,136 +75,136 @@
       {
         "seq": "1001",
         "updatedSeq": "1001",
-        "createdAtMs": 1792942316325,
+        "createdAtMs": 1792942847032,
         "kind": "send-message",
         "text": "old 0"
       },
       {
         "seq": "1002",
         "updatedSeq": "1002",
-        "createdAtMs": 1792942316325,
+        "createdAtMs": 1792942847032,
         "kind": "send-message",
         "text": "old 1"
       },
       {
         "seq": "1003",
         "updatedSeq": "1003",
-        "createdAtMs": 1792942316325,
+        "createdAtMs": 1792942847032,
         "kind": "send-message",
         "text": "old 2"
       },
       {
         "seq": "1006",
         "updatedSeq": "1006",
-        "createdAtMs": 1792942316400,
+        "createdAtMs": 1792942847237,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:bf00dc448640 · zh-CN]\n你好\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:bf00dc448640] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
+        "text": "[Homebot voice · hb:43eb108089d7 · zh-CN]\n你好\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:43eb108089d7] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
       },
       {
         "seq": "1007",
         "updatedSeq": "1007",
-        "createdAtMs": 1792942318404,
+        "createdAtMs": 1792942849247,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:9a7b05861bb5 · en]\n你好\n\n(Homebot: this was spoken to Siri on a HomePod/iPhone; your reply is read aloud in the room. Start your reply with [hb:9a7b05861bb5]. Then answer in English, in 1-3 short spoken sentences, at most about 50 words. An English voice reads it aloud, so answer in English even if the question is in another language. No markdown, links, lists, code or emoji.)"
+        "text": "[Homebot voice · hb:47acc287dcc7 · en]\n你好\n\n(Homebot: this was spoken to Siri on a HomePod/iPhone; your reply is read aloud in the room. Start your reply with [hb:47acc287dcc7]. Then answer in English, in 1-3 short spoken sentences, at most about 50 words. An English voice reads it aloud, so answer in English even if the question is in another language. No markdown, links, lists, code or emoji.)"
       },
       {
         "seq": "1010",
         "updatedSeq": "1010",
-        "createdAtMs": 1792942320543,
+        "createdAtMs": 1792942851399,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:637ce50e3912 · zh-CN]\n几点了\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:637ce50e3912] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
+        "text": "[Homebot voice · hb:8e6e4d461cad · zh-CN]\n几点了\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:8e6e4d461cad] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
       },
       {
         "seq": "1011",
         "updatedSeq": "1011",
-        "createdAtMs": 1792942320563,
+        "createdAtMs": 1792942851420,
         "kind": "send-message",
-        "text": "[hb:637ce50e3912] 现在**三点**。"
+        "text": "[hb:8e6e4d461cad] 现在**三点**。"
       },
       {
         "seq": "1012",
         "updatedSeq": "1012",
-        "createdAtMs": 1792942320650,
+        "createdAtMs": 1792942851516,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:e60d9da58f5e · zh-CN]\n讲个故事\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:e60d9da58f5e] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
+        "text": "[Homebot voice · hb:34abcfb8e732 · zh-CN]\n讲个故事\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:34abcfb8e732] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
       },
       {
         "seq": "1013",
         "updatedSeq": "1013",
-        "createdAtMs": 1792942320671,
+        "createdAtMs": 1792942851537,
         "kind": "send-message",
-        "text": "[hb:e60d9da58f5e] 这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。"
+        "text": "[hb:34abcfb8e732] 这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。"
       },
       {
         "seq": "1014",
         "updatedSeq": "1014",
-        "createdAtMs": 1792942320759,
+        "createdAtMs": 1792942851633,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:affca215d15a · en]\nwhat time is it\n\n(Homebot: this was spoken to Siri on a HomePod/iPhone; your reply is read aloud in the room. Start your reply with [hb:affca215d15a]. Then answer in English, in 1-3 short spoken sentences, at most about 50 words. An English voice reads it aloud, so answer in English even if the question is in another language. No markdown, links, lists, code or emoji.)"
+        "text": "[Homebot voice · hb:8dfbe8a59ed5 · en]\nwhat time is it\n\n(Homebot: this was spoken to Siri on a HomePod/iPhone; your reply is read aloud in the room. Start your reply with [hb:8dfbe8a59ed5]. Then answer in English, in 1-3 short spoken sentences, at most about 50 words. An English voice reads it aloud, so answer in English even if the question is in another language. No markdown, links, lists, code or emoji.)"
       },
       {
         "seq": "1015",
         "updatedSeq": "1015",
-        "createdAtMs": 1792942320780,
+        "createdAtMs": 1792942851653,
         "kind": "send-message",
-        "text": "[hb:affca215d15a] It is **three**."
+        "text": "[hb:8dfbe8a59ed5] It is **three**."
       },
       {
         "seq": "1016",
         "updatedSeq": "1016",
-        "createdAtMs": 1792942320869,
+        "createdAtMs": 1792942851748,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:00fe15141722 · zh-CN]\n几点了\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:00fe15141722] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
+        "text": "[Homebot voice · hb:138abb567134 · zh-CN]\n几点了\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:138abb567134] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
       },
       {
         "seq": "1017",
         "updatedSeq": "1017",
-        "createdAtMs": 1792942320890,
+        "createdAtMs": 1792942851769,
         "kind": "send-message",
         "text": "我没有标签"
       },
       {
         "seq": "1020",
         "updatedSeq": "1020",
-        "createdAtMs": 1792942321081,
+        "createdAtMs": 1792942851966,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:e54f9aa48e9b · zh-CN]\n分两段说\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:e54f9aa48e9b] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
+        "text": "[Homebot voice · hb:702f6b390db8 · zh-CN]\n分两段说\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:702f6b390db8] 开头。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
       },
       {
         "seq": "1021",
         "updatedSeq": "1021",
-        "createdAtMs": 1792942321102,
+        "createdAtMs": 1792942851987,
         "kind": "send-message",
-        "text": "[hb:e54f9aa48e9b] 第一部分。"
+        "text": "[hb:702f6b390db8] 第一部分。"
       },
       {
         "seq": "1022",
         "updatedSeq": "1022",
-        "createdAtMs": 1792942321123,
+        "createdAtMs": 1792942852006,
         "kind": "send-message",
         "text": "第二部分。"
       },
       {
         "seq": "1023",
         "updatedSeq": "1023",
-        "createdAtMs": 1792942322271,
+        "createdAtMs": 1792942853150,
         "kind": "message",
         "role": "user",
-        "text": "[Homebot voice · hb:440275fcd0d0 · zh-CN]\n再说一点\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。这是语音对话的第 1 轮，用户听完可以马上接着说；除非必要，不要以问题结尾；房间里只会听到你这一轮的第一条消息。回复请以 [hb:440275fcd0d0] 开头。如果用户明显是想结束对话，回复请以 [hb:440275fcd0d0] [end] 开头，再简短道别。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
+        "text": "[Homebot voice · hb:eeaeb77c7453 · zh-CN]\n再说一点\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。这是语音对话的第 1 轮，用户听完可以马上接着说；除非必要，不要以问题结尾；房间里只会听到你这一轮的第一条消息。回复请以 [hb:eeaeb77c7453] 开头。如果用户明显是想结束对话，回复请以 [hb:eeaeb77c7453] [end] 开头，再简短道别。然后用中文回答，1 到 3 句简短口语，总共不超过 80 个字；回复由中文语音朗读，所以即使提问用的是别的语言，也要用中文回答。不要 markdown、链接、列表、代码或表情。）"
       },
       {
         "seq": "1024",
         "updatedSeq": "1024",
-        "createdAtMs": 1792942322293,
+        "createdAtMs": 1792942853170,
         "kind": "send-message",
-        "text": "[hb:440275fcd0d0] 好的，**继续**。"
+        "text": "[hb:eeaeb77c7453] 好的，**继续**。"
       }
     ]
   },

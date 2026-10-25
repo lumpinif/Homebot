@@ -358,7 +358,7 @@ extension PhraseRow {
     .es: PhraseRow(
       script: "^\\p{Script=Latin}+(?:[ '’-]\\p{Script=Latin}+)*$",
       spaced: true,
-      products: ["mayordomo", "ama de llaves", "asistente del hogar"],
+      products: ["Grok Bot", "mi Grok Bot", "mayordomo", "ama de llaves"],
       badStarts: [.init("pregunta"), .init("pregúntale"), .init("llama"), .init("pon"), .init("reproduce"), .init("abre"), .init("busca"), .init("envía"), .init("qué"), .init("activa"), .init("enciende"), .init("apaga"), .init("dime")],
       promptWithBot: { bot in "¿Qué quieres preguntarle a \(bot)?" },
       promptWithoutBot: "¿Qué quieres preguntar?",
@@ -368,7 +368,7 @@ extension PhraseRow {
     .fr: PhraseRow(
       script: "^\\p{Script=Latin}+(?:[ '’-]\\p{Script=Latin}+)*$",
       spaced: true,
-      products: ["majordome", "intendant", "assistant du foyer"],
+      products: ["Grok Bot", "mon Grok Bot", "majordome", "intendant"],
       badStarts: [.init("demande"), .init("appelle"), .init("joue"), .init("mets"), .init("ouvre"), .init("cherche"), .init("envoie"), .init("quel"), .init("quelle"), .init("allume"), .init("éteins")],
       promptWithBot: { bot in "Que voulez-vous demander à \(bot) ?" },
       promptWithoutBot: "Que voulez-vous demander ?",
@@ -378,7 +378,7 @@ extension PhraseRow {
     .de: PhraseRow(
       script: "^\\p{Script=Latin}+(?:[ '’-]\\p{Script=Latin}+)*$",
       spaced: true,
-      products: ["Hausgeist", "Haushelfer", "Hausdiener"],
+      products: ["Grok Bot", "mein Grok Bot", "Hausgeist", "Haushelfer"],
       badStarts: [.init("frag"), .init("frage"), .init("ruf"), .init("spiel"), .init("öffne"), .init("such"), .init("suche"), .init("schick"), .init("was"), .init("schalte"), .init("stell")],
       promptWithBot: { bot in "Was möchtest du \(bot) fragen?" },
       promptWithoutBot: "Was möchtest du fragen?",
@@ -388,7 +388,7 @@ extension PhraseRow {
     .it: PhraseRow(
       script: "^\\p{Script=Latin}+(?:[ '’-]\\p{Script=Latin}+)*$",
       spaced: true,
-      products: ["maggiordomo", "factotum", "aiutante di casa"],
+      products: ["Grok Bot", "il mio Grok Bot", "maggiordomo", "factotum"],
       badStarts: [.init("chiedi"), .init("chiama"), .init("riproduci"), .init("metti"), .init("apri"), .init("cerca"), .init("invia"), .init("che"), .init("cosa"), .init("accendi"), .init("spegni"), .init("imposta"), .init("dimmi")],
       promptWithBot: { bot in "Cosa vuoi chiedere a \(bot)?" },
       promptWithoutBot: "Cosa vuoi chiedere?",
@@ -398,7 +398,7 @@ extension PhraseRow {
     .ptBR: PhraseRow(
       script: "^\\p{Script=Latin}+(?:[ '’-]\\p{Script=Latin}+)*$",
       spaced: true,
-      products: ["mordomo", "assistente do lar", "ajudante do lar"],
+      products: ["Grok Bot", "meu Grok Bot", "mordomo", "assistente do lar"],
       badStarts: [.init("pergunte"), .init("ligue"), .init("toque"), .init("abra"), .init("procure"), .init("busque"), .init("envie"), .init("mande"), .init("qual"), .init("o que"), .init("desligue"), .init("defina"), .init("diga")],
       promptWithBot: { bot in "O que você quer perguntar para \(bot)?" },
       promptWithoutBot: "O que você quer perguntar?",
@@ -408,7 +408,7 @@ extension PhraseRow {
     .ru: PhraseRow(
       script: "^\\p{Script=Cyrillic}+(?:[ -]\\p{Script=Cyrillic}+)*$",
       spaced: true,
-      products: ["домовой", "дворецкий", "домашний помощник"],
+      products: ["Grok Bot", "мой Grok Bot", "домовой", "дворецкий"],
       badStarts: [.init("спроси"), .init("позвони"), .init("включи"), .init("выключи"), .init("открой"), .init("найди"), .init("отправь"), .init("напиши"), .init("что"), .init("поставь"), .init("скажи")],
       promptWithBot: { bot in "\(bot) слушает. Что вы хотите спросить?" },
       promptWithoutBot: "Что вы хотите спросить?",
@@ -418,7 +418,7 @@ extension PhraseRow {
     .ja: PhraseRow(
       script: "^[\\p{Script=Hiragana}\\p{Script=Katakana}\\p{Script=Han}ー]+$",
       spaced: false,
-      products: ["うち助手", "家事助手", "わが家の執事"],
+      products: ["Grok Bot", "うちの Grok Bot", "うち助手", "家事助手"],
       badStarts: [.init("聞いて"), .init("電話"), .init("再生"), .init("開いて"), .init("検索"), .init("送って"), .init("何"), .init("つけて"), .init("消して"), .init("教えて"), .init("設定")],
       promptWithBot: { bot in "\(bot)に何を聞きますか？" },
       promptWithoutBot: "何を聞きますか？",
@@ -428,7 +428,7 @@ extension PhraseRow {
     .ko: PhraseRow(
       script: "^\\p{Script=Hangul}+(?: \\p{Script=Hangul}+)*$",
       spaced: true,
-      products: ["집비서", "집도우미", "우리집 비서"],
+      products: ["Grok Bot", "우리 Grok Bot", "집비서", "집도우미"],
       badStarts: [.init("물어봐"), .init("전화"), .init("재생"), .init("열어"), .init("검색"), .init("보내"), .init("뭐"), .init("켜"), .init("꺼"), .init("틀어"), .init("찾아"), .init("문자"), .init("설정")],
       promptWithBot: { bot in "\(bot)에게 무엇을 물어볼까요?" },
       promptWithoutBot: "무엇을 물어볼까요?",
@@ -438,7 +438,7 @@ extension PhraseRow {
     .zhCN: PhraseRow(
       script: "^\\p{Script=Han}+$",
       spaced: false,
-      products: ["家庭助手", "我家助手", "居家助手"],
+      products: ["Grok Bot", "我的 Grok Bot", "家庭助手", "我家助手"],
       badStarts: [.init("问", strong: true), .init("查"), .init("播放"), .init("打开"), .init("设置"), .init("什么"), .init("呼叫"), .init("打电话")],
       promptWithBot: { bot in "想问\(bot)什么？" },
       promptWithoutBot: "想问什么？",
@@ -448,7 +448,7 @@ extension PhraseRow {
     .zhTW: PhraseRow(
       script: "^\\p{Script=Han}+$",
       spaced: false,
-      products: ["居家助理", "家裡助理", "我家助理"],
+      products: ["Grok Bot", "我的 Grok Bot", "居家助理", "我家助理"],
       badStarts: [.init("問", strong: true), .init("查"), .init("播放"), .init("打開"), .init("設定"), .init("什麼"), .init("打電話"), .init("撥打"), .init("呼叫"), .init("傳訊息")],
       promptWithBot: { bot in "想問\(bot)什麼？" },
       promptWithoutBot: "想問什麼？",

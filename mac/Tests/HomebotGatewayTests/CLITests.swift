@@ -399,7 +399,7 @@ struct CLITests {
     p.phoneLang = "zh-Hans"
     try await Stores(h.home).config.putSettings(p)
     let zh = await h.cli("shortcut", "build", "chai")
-    #expect(zh.text.contains(#"Built "家庭助手""#), "\(zh.text)")
+    #expect(zh.text.contains(#"Built "我的 Grok Bot""#), "the English one still holds Grok Bot: \(zh.text)")
     #expect(zh.text.contains("锁定时允许运行"))
   }
 
@@ -457,9 +457,11 @@ struct CLITests {
     for name in ["../../evil:/name", ".hidden"] {
       #expect(await h.cli("shortcut", "build", "chai", "--name", name).code == 1, "\(name)")
     }
-    let mixed = await h.cli("shortcut", "build", "chai", "--siri-lang", "zh-CN", "--name", "Grok Bot助手")
+    let mixed = await h.cli("shortcut", "build", "chai", "--siri-lang", "zh-CN", "--name", "homebot助手")
     #expect(mixed.code == 0, "\(mixed.text)")
-    #expect(mixed.text.contains(#"Note: Siri in this language may not hear "Grok Bot助手""#))
+    #expect(mixed.text.contains(#"Note: Siri in this language may not hear "homebot助手""#))
+    let brand = await h.cli("shortcut", "build", "chai", "--siri-lang", "zh-CN", "--name", "Grok Bot助手")
+    #expect(brand.code == 0 && !brand.text.contains("Note:"), "the brand is fine in a Chinese phrase (DECISIONS item 33): \(brand.text)")
     #expect(await h.cli("shortcut", "build", "chai", "--url", "file:///invalid").code == 1)
     #expect(await h.cli("shortcut", "build", "chai", "--conversation", "--lab").code == 1)
   }
@@ -538,14 +540,14 @@ struct CLITests {
     #expect(await h.cli("shortcut", "build", "--entry", "--bots", "chai,nope").code == 1)
     let r = await h.cli("shortcut", "build", "--entry", "--bots", "chai,kitchen", "--siri-lang", "zh-CN")
     #expect(r.code == 0, "\(r.text)")
-    #expect(r.text.contains(#"Built "家庭助手" for bots chai, kitchen (Siri zh-CN"#), "\(r.text)")
+    #expect(r.text.contains(#"Built "Grok Bot" for bots chai, kitchen (Siri zh-CN"#), "\(r.text)")
     #expect(r.text.contains("Siri: 问哪个机器人？1 拆解师，2 厨房。 / You: 拆解师 / Siri: 拆解师。想问什么？"), "\(r.text)")
     #expect(r.text.contains("not been tried on a HomePod"))
     let id = try #require(group(/Token ([0-9a-f]{12}) is pending/, r.text))
     let file = try #require(group(/File: (.+?\.shortcut) \(/, r.text))
     #expect(!(try String(contentsOfFile: file, encoding: .utf8)).contains("<string>bot</string>"))
     let listed = await h.cli("token", "list")
-    #expect(listed.text.contains("\(id)\tchai,kitchen\tpending\t家庭助手"), "\(listed.text)")
+    #expect(listed.text.contains("\(id)\tchai,kitchen\tpending\tGrok Bot"), "\(listed.text)")
     // A second bot with the same sound as an existing one can only be chosen by number.
     h.fake.add("888", kind: "send-message", text: "old")
     #expect(await h.cli("bot", "add-id", "888", "--key", "chu", "--name", "出房").code == 0)
@@ -562,7 +564,7 @@ struct CLITests {
     #expect(await h.cli("bot", "alias", "nope", "x").code == 1)
     // Default: every bot (at most 9); the next unused product phrase.
     let all = await h.cli("shortcut", "build", "--entry", "--siri-lang", "zh-CN")
-    #expect(all.text.contains(#"Built "我家助手" for bots chai, chu, kitchen"#), "\(all.text)")
+    #expect(all.text.contains(#"Built "我的 Grok Bot" for bots chai, chu, kitchen"#), "\(all.text)")
   }
 
   @Test("reset: says what goes without --yes, refuses while a gateway runs, then a used Shortcut stops working")

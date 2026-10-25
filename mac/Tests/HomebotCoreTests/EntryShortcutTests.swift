@@ -50,14 +50,14 @@ struct EntryShortcutTests {
     #expect(conv["WFWorkflowActions"]?.arrayValue?.map { $0["WFWorkflowActionIdentifier"] } == actions.map { $0["WFWorkflowActionIdentifier"] })
   }
 
-  @Test("phrase: the product phrase of the Siri language, never a bot name, never Latin for Chinese")
+  @Test("phrase: Grok Bot in every language, never a bot name (DECISIONS item 33)")
   func phrase() throws {
-    #expect(try Profile.entry(siriLang: "zh-CN").name == "家庭助手")
+    #expect(try Profile.entry(siriLang: "zh-CN").name == "Grok Bot")
     #expect(try Profile.entry(siriLang: "zh-CN").prompt == "想问什么？")
-    #expect(try Profile.entry(siriLang: "zh-TW").name == "居家助理")
-    #expect(try Profile.entry(siriLang: "ja-JP").name == "うち助手")
+    #expect(try Profile.entry(siriLang: "zh-TW").name == "Grok Bot")
+    #expect(try Profile.entry(siriLang: "ja-JP").name == "Grok Bot")
     #expect(try Profile.entry(siriLang: "en-US").name == "Grok Bot")
-    #expect(try Profile.entry(siriLang: "zh-CN", taken: ["家庭助手"]).name == "我家助手", "the next unused product phrase")
+    #expect(try Profile.entry(siriLang: "zh-CN", taken: ["Grok Bot"]).name == "我的 Grok Bot", "the next unused product phrase")
     let latin = try Profile.entry(siriLang: "zh-CN", name: "Homebot")
     #expect(latin.problems.contains { $0.code == .wrongScript && !$0.blocking }, "a Chinese HomePod may not hear a Latin name (§16.1): advice")
     #expect(try Profile.entry(siriLang: "en-US", name: "Homebot").problems.isEmpty, "English allows Homebot as a phrase")
@@ -74,7 +74,7 @@ struct EntryShortcutTests {
     let kitchen = Bot(key: "kitchen", name: "厨房", sessionId: "555", strictEcho: true)
     try await e.stores.lifecycle.add(kitchen, cursor: "1", maxSeq: "1")
     let made = try await ShortcutMaker.make(tokens: e.tokens, lifecycle: e.stores.lifecycle, bots: [chai, kitchen], profile: try Profile.entry(siriLang: "zh-CN"), baseUrl: "http://mac.local:8787", kind: .entry)
-    #expect(made.name == "家庭助手")
+    #expect(made.name == "Grok Bot")
     let rec = try #require(await e.tokens.list().first { $0.id == made.tokenId })
     #expect(rec.mode == .entry && rec.state == .pending && (rec.kind ?? .ask) == .ask)
     #expect(rec.bots.map(\.key) == ["chai", "kitchen"])

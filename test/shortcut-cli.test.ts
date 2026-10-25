@@ -83,12 +83,12 @@ test("Felix's setup: iPhone English, Siri Chinese", async () => {
   const { cli } = await harness();
   const r = await cli(["shortcut", "build", "chai", "--siri-lang", "zh-CN", "--phone-lang", "en", "--url", "http://192.168.1.5:8787"]);
   assert.equal(r.code, 0, r.text);
-  assert.match(r.text, /Built "家庭助手"/, "a Latin bot name never enters a Chinese phrase (DESIGN §16)");
+  assert.match(r.text, /Built "Grok Bot"/, "the default in every language (DECISIONS item 33)");
   assert.match(r.text, /Allow Running When Locked/, "steps in the iPhone's language");
   assert.match(r.text, /allow it to connect to 192\.168\.1\.5:8787/);
   const xml = await readFile(fileOf(r.text), "utf8");
   assert.match(xml, /<key>WFSpeakTextLanguage<\/key>\s*<string>zh-CN<\/string>/);
-  assert.match(xml, /想问家庭助手什么？/);
+  assert.match(xml, /想问Grok Bot什么？/);
 });
 
 test("language defaults come from settings (the user's setup answers)", async () => {
@@ -97,7 +97,7 @@ test("language defaults come from settings (the user's setup answers)", async ()
   c.data.settings = { siriLang: "zh-CN", phoneLang: "zh-Hans" };
   await c.save();
   const r = await cli(["shortcut", "build", "chai"]);
-  assert.match(r.text, /Built "家庭助手"/);
+  assert.match(r.text, /Built "Grok Bot"/);
   assert.match(r.text, /锁定时允许运行/);
 });
 
@@ -184,9 +184,9 @@ test("names iOS would change are refused before a token exists; script and leadi
   }
   assert.equal((await cli(["token", "list"])).text, "", "no token issued");
   await assert.rejects(access(join(env.HOMEBOT_HOME, "evil")));
-  const zh = await cli(["shortcut", "build", "chai", "--siri-lang", "zh-CN", "--name", "Grok Bot"]);
+  const zh = await cli(["shortcut", "build", "chai", "--siri-lang", "zh-CN", "--name", "homebot 你好"]);
   assert.equal(zh.code, 0, zh.text);
-  assert.match(zh.text, /Note: Siri in this language may not hear "Grok Bot"/);
+  assert.match(zh.text, /Note: Siri in this language may not hear "homebot 你好"/);
   const ask = await cli(["shortcut", "build", "chai", "--siri-lang", "zh-CN", "--name", "问拆解师"]);
   assert.equal(ask.code, 0, "a leading 问 is strong advice (DECISIONS items 12, 29)");
   assert.match(ask.text, /Note: On a Chinese HomePod, Siri took a phrase starting with "问" as a web search/);

@@ -56,10 +56,10 @@ struct MakeTests {
   func felix() async throws {
     let e = try await MakeEnv.make()
     let m = try await e.build(try Profile.make(botName: chai.name, siriLang: "zh-CN", phoneLang: "en"), baseUrl: "http://192.168.1.5:8787")
-    #expect(m.name == "家庭助手")
+    #expect(m.name == "Grok Bot")
     let xml = try String(contentsOf: m.file, encoding: .utf8)
     #expect(xml.contains("<key>WFSpeakTextLanguage</key>\n\t\t\t\t<string>zh-CN</string>") || xml.contains("zh-CN"))
-    #expect(xml.contains("想问家庭助手什么？"))
+    #expect(xml.contains("想问Grok Bot什么？"))
     #expect(xml.contains("http://192.168.1.5:8787/v1/ask"))
   }
 
@@ -107,7 +107,7 @@ struct MakeTests {
   @Test("script and leading words are advice: a mixed or 问 phrase is built under its own name (DECISIONS item 29)")
   func leadingWords() async throws {
     let e = try await MakeEnv.make()
-    for name in ["问拆解师", "Grok Bot", "问问Grok Bot"] {
+    for name in ["问拆解师", "homebot 你好", "问问Grok Bot"] {
       let p = try Profile.make(botName: chai.name, siriLang: "zh-CN", name: name)
       #expect(!p.problems.isEmpty && !p.problems.contains(where: \.blocking), "\(name)")
       #expect(try await e.build(p).name == name)

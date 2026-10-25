@@ -7,8 +7,9 @@ import { safeFileName } from "./make.ts";
 /**
  * One row per reply language (DESIGN §16). The script and the leading words are advice
  * (DECISIONS item 29): on a Chinese HomePod "homebot 你好" was not recognized while "家庭助手" was
- * (item 18), but tapping a Shortcut works whatever its name. Defaults use only the row's script,
- * without digits (Siri may say a number in several ways).
+ * (item 18), but tapping a Shortcut works whatever its name. The default is "Grok Bot" in every
+ * language (DECISIONS item 33: Felix's Chinese Siri ran it); the brand never counts against the
+ * script. No digits (Siri may say a number in several ways).
  */
 interface PhraseRow {
   /** Whole-phrase check: only this language's characters (advice; defaults must pass). */
@@ -37,7 +38,8 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
     spaced: true,
     // Q16-1 (decided 2026-10-24, DECISIONS item 28): the phrase names the real target, the
     // user's Grok Bot. "Ask Grok Bot" is left out: "ask" is a leading command word (advice), and
-    // a default never carries advice. "Homebot" stays out: it can be heard as "HomePod".
+    // a default never carries advice. "Homebot" stays out: it can be heard as "HomePod". Every
+    // row starts with "Grok Bot" (DECISIONS item 33).
     products: ["Grok Bot", "My Grok Bot", "Our Grok Bot"],
     badStarts: ["ask", "call", "play", "set", "open", "turn", "text", "what", "tell", "search"].map((word) => ({ word })),
     prompt: (bot) => (bot ? `What would you like to ask ${bot}?` : "What would you like to ask?"),
@@ -47,7 +49,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
   "zh-CN": {
     script: /^\p{Script=Han}+$/u,
     spaced: false,
-    products: ["家庭助手", "我家助手", "居家助手"],
+    products: ["Grok Bot", "我的 Grok Bot", "家庭助手", "我家助手"],
     badStarts: [{ word: "问", strong: true }, ...["查", "播放", "打开", "设置", "什么", "呼叫", "打电话"].map((word) => ({ word }))],
     prompt: (bot) => (bot ? `想问${bot}什么？` : "想问什么？"),
     probeName: "家庭等待测试",
@@ -58,7 +60,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
   es: {
     script: LATIN,
     spaced: true,
-    products: ["mayordomo", "ama de llaves", "asistente del hogar"],
+    products: ["Grok Bot", "mi Grok Bot", "mayordomo", "ama de llaves"],
     badStarts: ["pregunta", "pregúntale", "llama", "pon", "reproduce", "abre", "busca", "envía", "qué", "activa", "enciende", "apaga", "dime"].map((word) => ({ word })),
     prompt: (bot) => (bot ? `¿Qué quieres preguntarle a ${bot}?` : "¿Qué quieres preguntar?"),
     probeName: "prueba de espera",
@@ -67,7 +69,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
   fr: {
     script: LATIN,
     spaced: true,
-    products: ["majordome", "intendant", "assistant du foyer"],
+    products: ["Grok Bot", "mon Grok Bot", "majordome", "intendant"],
     badStarts: ["demande", "appelle", "joue", "mets", "ouvre", "cherche", "envoie", "quel", "quelle", "allume", "éteins"].map((word) => ({ word })),
     prompt: (bot) => (bot ? `Que voulez-vous demander à ${bot} ?` : "Que voulez-vous demander ?"),
     probeName: "test d'attente",
@@ -76,7 +78,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
   de: {
     script: LATIN,
     spaced: true,
-    products: ["Hausgeist", "Haushelfer", "Hausdiener"],
+    products: ["Grok Bot", "mein Grok Bot", "Hausgeist", "Haushelfer"],
     badStarts: ["frag", "frage", "ruf", "spiel", "öffne", "such", "suche", "schick", "was", "schalte", "stell"].map((word) => ({ word })),
     prompt: (bot) => (bot ? `Was möchtest du ${bot} fragen?` : "Was möchtest du fragen?"),
     probeName: "Wartetest",
@@ -85,7 +87,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
   it: {
     script: LATIN,
     spaced: true,
-    products: ["maggiordomo", "factotum", "aiutante di casa"],
+    products: ["Grok Bot", "il mio Grok Bot", "maggiordomo", "factotum"],
     badStarts: ["chiedi", "chiama", "riproduci", "metti", "apri", "cerca", "invia", "che", "cosa", "accendi", "spegni", "imposta", "dimmi"].map((word) => ({ word })),
     prompt: (bot) => (bot ? `Cosa vuoi chiedere a ${bot}?` : "Cosa vuoi chiedere?"),
     probeName: "prova di attesa",
@@ -94,7 +96,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
   "pt-BR": {
     script: LATIN,
     spaced: true,
-    products: ["mordomo", "assistente do lar", "ajudante do lar"],
+    products: ["Grok Bot", "meu Grok Bot", "mordomo", "assistente do lar"],
     badStarts: ["pergunte", "ligue", "toque", "abra", "procure", "busque", "envie", "mande", "qual", "o que", "desligue", "defina", "diga"].map((word) => ({ word })),
     prompt: (bot) => (bot ? `O que você quer perguntar para ${bot}?` : "O que você quer perguntar?"),
     probeName: "teste de espera",
@@ -103,7 +105,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
   ru: {
     script: /^\p{Script=Cyrillic}+(?:[ -]\p{Script=Cyrillic}+)*$/u,
     spaced: true,
-    products: ["домовой", "дворецкий", "домашний помощник"],
+    products: ["Grok Bot", "мой Grok Bot", "домовой", "дворецкий"],
     badStarts: ["спроси", "позвони", "включи", "выключи", "открой", "найди", "отправь", "напиши", "что", "поставь", "скажи"].map((word) => ({ word })),
     // The bot's name leads, so it is never declined (Russian would inflect it after "у").
     prompt: (bot) => (bot ? `${bot} слушает. Что вы хотите спросить?` : "Что вы хотите спросить?"),
@@ -114,7 +116,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
     // Hiragana, katakana, kanji and the long-vowel mark ー (which Unicode files as Common).
     script: /^[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}ー]+$/u,
     spaced: false,
-    products: ["うち助手", "家事助手", "わが家の執事"],
+    products: ["Grok Bot", "うちの Grok Bot", "うち助手", "家事助手"],
     badStarts: ["聞いて", "電話", "再生", "開いて", "検索", "送って", "何", "つけて", "消して", "教えて", "設定"].map((word) => ({ word })),
     prompt: (bot) => (bot ? `${bot}に何を聞きますか？` : "何を聞きますか？"),
     probeName: "待ち時間テスト",
@@ -123,7 +125,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
   ko: {
     script: /^\p{Script=Hangul}+(?: \p{Script=Hangul}+)*$/u,
     spaced: true,
-    products: ["집비서", "집도우미", "우리집 비서"],
+    products: ["Grok Bot", "우리 Grok Bot", "집비서", "집도우미"],
     badStarts: ["물어봐", "전화", "재생", "열어", "검색", "보내", "뭐", "켜", "꺼", "틀어", "찾아", "문자", "설정"].map((word) => ({ word })),
     prompt: (bot) => (bot ? `${bot}에게 무엇을 물어볼까요?` : "무엇을 물어볼까요?"),
     probeName: "대기 테스트",
@@ -132,7 +134,7 @@ export const PHRASES: Record<ReplyLang, PhraseRow> = {
   "zh-TW": {
     script: /^\p{Script=Han}+$/u,
     spaced: false,
-    products: ["居家助理", "家裡助理", "我家助理"],
+    products: ["Grok Bot", "我的 Grok Bot", "居家助理", "我家助理"],
     // 問 is 问: the same strong advice (DECISIONS item 12), though only 问 was tried.
     badStarts: [{ word: "問", strong: true }, ...["查", "播放", "打開", "設定", "什麼", "打電話", "撥打", "呼叫", "傳訊息"].map((word) => ({ word }))],
     prompt: (bot) => (bot ? `想問${bot}什麼？` : "想問什麼？"),
@@ -151,14 +153,12 @@ export function takenPhrases(tokens: { id: string; label: string; state: string 
 }
 
 /**
- * The phrase a replacement keeps: the old Shortcut's, when it was made for the same reply
- * language. A Shortcut for another language gets that language's default instead: the script
- * rule is advice now, so it no longer drops a phrase from another language.
+ * The phrase a replacement keeps: the old Shortcut's, in any language. The default is the same
+ * in every language (DECISIONS item 33), so a language change never renames a Shortcut.
  */
 export function keptPhrase(old: { label: string; siriLang?: string | undefined } | undefined, siriLang: string = DEFAULT_SIRI_LANG): string | undefined {
   if (!old || !isSiriLang(siriLang)) return undefined; // an unknown language fails later, in shortcutProfile
-  const oldLang = old.siriLang && isSiriLang(old.siriLang) ? old.siriLang : DEFAULT_SIRI_LANG;
-  return replyLang(oldLang) === replyLang(siriLang) ? old.label : undefined;
+  return old.label;
 }
 
 export interface PhraseProblem {
@@ -171,6 +171,15 @@ export interface PhraseProblem {
 /** Comparison form: Unicode NFC, trimmed, single spaces, lower case. */
 const norm = labelKey;
 
+/** The brand every language's default carries (DECISIONS item 33). */
+export const BRAND = "Grok Bot";
+
+/** The phrase without the brand, for the script check: "我的 Grok Bot" is judged as "我的". */
+const withoutBrand = (name: string): string => name.replace(/grok bot/giu, " ").replace(/\s+/gu, " ").trim();
+
+/** A bot named like the app ("homebot") reads as Homebot itself, so it is never suggested (S25). */
+const soundsLikeApp = (bot: string): boolean => norm(bot).replace(/[\s-]+/gu, "") === "homebot";
+
 /**
  * Only correctness blocks (DECISIONS item 29): a name iOS would change on import, and a name
  * another Homebot Shortcut uses. How likely Siri is to hear the name is advice: tapping the
@@ -178,7 +187,8 @@ const norm = labelKey;
  */
 function phraseProblems(name: string, row: PhraseRow, taken: string[]): PhraseProblem[] {
   const p: PhraseProblem[] = [];
-  if (!row.script.test(name.normalize("NFC"))) {
+  const rest = withoutBrand(name.normalize("NFC"));
+  if (rest && !row.script.test(rest)) {
     p.push({ code: "wrong-script", blocking: false, message: `Siri in this language may not hear "${name}" (other scripts, digits or symbols), so saying it may not start the Shortcut. Tapping it always works.` });
   }
   const lower = norm(name);
@@ -321,7 +331,7 @@ export function shortcutProfile({ botName, siriLang = DEFAULT_SIRI_LANG, phoneLa
   const reply = replyLang(siriLang);
   const row = PHRASES[reply];
   const bot = botName.trim();
-  const botFits = phraseProblems(bot, row, []).length === 0;
+  const botFits = !soundsLikeApp(bot) && phraseProblems(bot, row, []).length === 0;
   // Product phrases first (one is proved on a device), then the bot's own name if it fits.
   const usable = [...row.products, ...(botFits ? [bot] : [])].filter((c, i, all) => all.indexOf(c) === i && !phraseProblems(c, row, taken).length);
   // Only blocking problems disqualify the old phrase; advice alone never changes a phrase Siri

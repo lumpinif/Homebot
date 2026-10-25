@@ -74,7 +74,7 @@ struct EntryFlowTests {
     let h = try await HostHarness.start(bots: [chai])
     h.fake.autoReply(chai.sessionId, text: "现在三点。", reportsBusy: false)
     let x = try await h.entry([chai], answers: ["几点了", "谢谢"])
-    #expect(x.made.name == "家庭助手", "the entry phrase is the product phrase, never a bot name")
+    #expect(x.made.name == "Grok Bot", "the entry phrase is the product phrase, never a bot name")
     #expect(x.siri == ["拆解师。想问什么？", "现在三点。", zh.more, zh.goodbye])
     #expect(x.lines.last == .speaks(zh.goodbye, lang: "zh-CN"), "spoken in the Siri language's voice")
     #expect(x.runner.requests.allSatisfy { $0.json["bot"] == nil }, "the entry Shortcut never names a bot")

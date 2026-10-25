@@ -33,8 +33,12 @@ struct PhraseRow: Sendable {
 
   func prompt(_ bot: String?) -> String { bot.map(promptWithBot) ?? promptWithoutBot }
 
+  /// The brand never counts against the script (DECISIONS item 33): "我的 Grok Bot" is judged
+  /// as "我的", and "Grok Bot" alone passes in every language.
   func scriptMatches(_ s: String) -> Bool {
-    s.range(of: script, options: .regularExpression) != nil
+    let rest = s.replacingOccurrences(of: "grok bot", with: " ", options: .caseInsensitive)
+      .replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression).trimmingCharacters(in: .whitespaces)
+    return rest.isEmpty || rest.range(of: script, options: .regularExpression) != nil
   }
 }
 
@@ -84,12 +88,15 @@ public enum Profile {
   /// Only correctness blocks (DECISIONS item 29): a name iOS would change on import, and a name
   /// another Homebot Shortcut uses. How likely Siri is to hear the name is advice: tapping the
   /// Shortcut works whatever its name.
-  /// The phrase a replacement keeps: the old Shortcut's, when it was made for the same reply
-  /// language. A Shortcut for another language gets that language's default instead: the
-  /// script rule is advice now, so it no longer drops a phrase from another language.
+  /// The phrase a replacement keeps: the old Shortcut's, in any language. The default is the
+  /// same in every language (DECISIONS item 33), so a language change never renames a Shortcut.
   public static func keptPhrase(_ old: TokenInfo?, siriLang: String) -> String? {
-    guard let old, Langs.replyLang(old.siriLang ?? Langs.defaultSiriLang) == Langs.replyLang(siriLang) else { return nil }
-    return old.label
+    old?.label
+  }
+
+  /// A bot named like the app ("homebot") reads as Homebot itself, so it is never suggested (S25).
+  static func soundsLikeApp(_ bot: String) -> Bool {
+    labelKey(bot).replacingOccurrences(of: #"[\s-]+"#, with: "", options: .regularExpression) == "homebot"
   }
 
   static func problems(_ name: String, _ row: PhraseRow, taken: [String]) -> [PhraseProblem] {
@@ -137,7 +144,7 @@ public enum Profile {
     let reply = Langs.replyLang(siriLang)
     let row = PhraseRow.rows[reply]!
     let bot = botName.trimmingCharacters(in: jsWhitespace)
-    let botFits = problems(bot, row, taken: []).isEmpty
+    let botFits = !soundsLikeApp(bot) && problems(bot, row, taken: []).isEmpty
     // Product phrases first (one is proved on a device), then the bot's own name if it fits.
     var candidates: [String] = []
     for c in row.products + (botFits ? [bot] : []) where !candidates.contains(c) { candidates.append(c) }

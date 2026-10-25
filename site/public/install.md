@@ -55,7 +55,7 @@ In the **Shortcut** step:
 
 - Pick a bot, or **All my bots**: one phrase, and Siri asks which bot (not yet tried on a HomePod).
 - Pick the language their **HomePod's Siri** speaks (Home app › HomePod › Settings › Language).
-- Check the phrase Siri will listen for, for example "Grok Bot".
+- Check the phrase Siri will listen for. The default is "Grok Bot" in every Siri language.
 - iPhones only install signed Shortcuts. **Sign with Apple** sends the Shortcut file, which carries its token, to Apple's signing service. It starts off. They turn it on only if they agree.
 - Click **Make**.
 

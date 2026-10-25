@@ -1,6 +1,6 @@
 # Homebot
 
-Talk to your Grok Bots through Siri on HomePod and iPhone. Say "Hey Siri, Grok Bot" (in Chinese: "嘿 Siri，家庭助手"). Siri asks what you'd like to know, Homebot passes your question to your bot, and Siri reads the answer aloud.
+Talk to your Grok Bots through Siri on HomePod and iPhone. Say "Hey Siri, Grok Bot", in any Siri language. Siri asks what you'd like to know, Homebot passes your question to your bot, and Siri reads the answer aloud.
 
 Homebot is a Mac app. It runs on a Mac at home, on the same Wi-Fi as your iPhone, and answers the Siri Shortcut it makes for you. Setup is clicking in its window: no Terminal.
 
