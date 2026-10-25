@@ -3,7 +3,8 @@
 # ad-hoc signed inside out (the CLI first, then the bundle; never --deep), packed with
 # `ditto -c -k --keepParent`, then checked from the zip as a user would get it.
 #   scripts/release.sh   -> build/Homebot-<version>.zip and build/Homebot-<version>.txt
-# The version is mac/VERSION, the build number the commit count of HEAD. A tree with changes
+# The version is mac/VERSION, the build number 287 plus the commit count of HEAD (the public
+# history restarted at one commit after build 287, and build numbers must keep growing). A tree with changes
 # under mac/ is refused (ALLOW_DIRTY=1 builds anyway and says so in the manifest). File times in
 # the zip are set to the commit's time, so the same commit and toolchain give the same zip when
 # the compiler output is the same (the manifest records the hashes to compare).
@@ -13,7 +14,7 @@ cd "$(dirname "$0")/.."
 version="$(tr -d ' \n' < VERSION)"
 case "$version" in '' | *[!0-9.]*) echo "VERSION must look like 1.2.3, not '$version'" >&2; exit 1 ;; esac
 commit="$(git rev-parse HEAD)"
-number="$(git rev-list --count HEAD)"
+number="$((287 + $(git rev-list --count HEAD)))"
 dirty=no
 if [ -n "$(git status --porcelain -- .)" ]; then
   [ "${ALLOW_DIRTY:-0}" = 1 ] || { echo "uncommitted changes under mac/; commit first (or ALLOW_DIRTY=1)" >&2; exit 1; }

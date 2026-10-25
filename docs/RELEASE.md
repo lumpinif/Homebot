@@ -9,7 +9,7 @@ cd mac
 scripts/release.sh   # build/Homebot-<version>.zip and build/Homebot-<version>.txt
 ```
 
-Run it in a clean checkout (it refuses changes under `mac/`). The version is `mac/VERSION`; the build number is the commit count.
+Run it in a clean checkout (it refuses changes under `mac/`). The version is `mac/VERSION`; the build number is 287 plus the commit count (the public history restarted after build 287).
 
 ## Checks (done by an agent)
 
