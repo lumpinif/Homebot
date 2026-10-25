@@ -282,14 +282,14 @@ test("S4: English Shortcut -> English envelope and messages; Chinese stays Chine
   const r = await svc.ask({ botKey: "chai", text: "What time is it?", lang: "en" });
   assert.equal(r.text, "It is three.");
   assert.match(must(fake.posts[0]).text, /^\[Homebot voice · hb:[0-9a-f]{12} · en\]\nWhat time is it\?\n/);
-  assert.match(must(fake.posts[0]).text, /Then answer in English, .* answer in English even if the question is in another language\./);
+  assert.match(must(fake.posts[0]).text, /Answer in English, short and spoken\./);
 });
 
 test("every envelope asks for the token's language, whatever the question's: its voice reads the answer (DECISIONS item 31)", async () => {
   const { STYLE } = await import("../src/core/envelope.ts");
   const ask: Record<string, RegExp> = {
-    en: /answer in English even if/, es: /responde en español aunque/, fr: /réponds en français même si/, de: /antworte auf Deutsch, auch wenn/, it: /rispondi in italiano anche se/,
-    "pt-BR": /responda em português mesmo que/, ru: /отвечай по-русски, даже если/, ja: /質問が別の言語でも日本語で/, ko: /다른 언어여도 한국어로/, "zh-CN": /也要用中文回答/, "zh-TW": /也要用繁體中文回答/,
+    en: /Answer in English/, es: /Responde en español/, fr: /Réponds en français/, de: /Antworte auf Deutsch/, it: /Rispondi in italiano/,
+    "pt-BR": /Responda em português/, ru: /Отвечай по-русски/, ja: /日本語の短い話し言葉で答えて/, ko: /한국어로 짧게/, "zh-CN": /用中文简短口语回答/, "zh-TW": /用繁體中文/,
   };
   assert.deepEqual(Object.keys(STYLE).sort(), Object.keys(ask).sort());
   for (const [lang, s] of Object.entries(STYLE)) assert.match(s.style, must(ask[lang]), lang);

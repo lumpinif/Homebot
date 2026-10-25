@@ -269,11 +269,11 @@ struct ConversationTests {
     #expect(c.ask.calls.count == 1 && c2.ask.calls.isEmpty)
   }
 
-  @Test("envelope: every language asks for the token's language, whatever the question's (DECISIONS item 31)")
+  @Test("envelope: every language asks for the token's language, whatever the question's (DECISIONS items 31, 35)")
   func envelopeReplyLanguage() {
     let ask: [ReplyLang: String] = [
-      .en: "answer in English even if", .es: "responde en español aunque", .fr: "réponds en français même si", .de: "antworte auf Deutsch, auch wenn", .it: "rispondi in italiano anche se",
-      .ptBR: "responda em português mesmo que", .ru: "отвечай по-русски, даже если", .ja: "質問が別の言語でも日本語で", .ko: "다른 언어여도 한국어로", .zhCN: "也要用中文回答", .zhTW: "也要用繁體中文回答",
+      .en: "Answer in English", .es: "Responde en español", .fr: "Réponds en français", .de: "Antworte auf Deutsch", .it: "Rispondi in italiano",
+      .ptBR: "Responda em português", .ru: "Отвечай по-русски", .ja: "日本語の短い話し言葉で答えて", .ko: "한국어로 짧게", .zhCN: "用中文简短口语回答", .zhTW: "用繁體中文",
     ]
     #expect(Set(ask.keys) == Set(ReplyLang.allCases))
     for l in ReplyLang.allCases {
@@ -286,20 +286,36 @@ struct ConversationTests {
   @Test("S25: only a conversation turn with strict echo tells the bot how to end the run")
   func envelopeEnd() {
     let turn = Envelope.build(id: "abc", text: "先这样吧", lang: .zhCN, strictEcho: true, turn: 2)
-    #expect(turn.contains("回复请以 [hb:abc] [end] 开头"))
-    #expect(Envelope.build(id: "abc", text: "Bye", lang: .en, strictEcho: true, turn: 1).contains("start your reply with [hb:abc] [end], then say a short goodbye."))
+    #expect(turn.contains("就以 [hb:abc] [end] 开头"))
+    #expect(Envelope.build(id: "abc", text: "Bye", lang: .en, strictEcho: true, turn: 1).contains("start with [hb:abc] [end], then say a short goodbye."))
     #expect(!Envelope.build(id: "abc", text: "hi", lang: .en, strictEcho: true).contains("[end]"), "a one-shot question can't end anything")
     #expect(!Envelope.build(id: "abc", text: "hi", lang: .en, strictEcho: false, turn: 2).contains("[end]"), "without the tag, no end mark")
     #expect(ProtocolFilter.clean("好的。" + Envelope.styles[.zhCN]!.end("[hb:abc]"), requestId: "abc") == "好的。", "a quoted instruction is never spoken")
   }
 
-  @Test("envelope: a conversation turn tells the bot the turn and that only its first message is heard")
+  @Test("envelope: only load-bearing guidance; a turn may end with [end], a one-shot question ends on a statement (DECISIONS item 35)")
   func envelopeTurn() {
-    let zh = Envelope.build(id: "abc", text: "那后天呢", lang: .zhCN, strictEcho: true, turn: 2)
-    #expect(zh.contains("第 2 轮"))
-    #expect(zh.contains("只会听到你这一轮的第一条消息"))
-    #expect(Envelope.build(id: "abc", text: "and after", lang: .en, strictEcho: true, turn: 3).contains("turn 3 of a voice conversation"))
-    #expect(!Envelope.build(id: "abc", text: "x", lang: .en, strictEcho: true).contains("conversation"))
+    #expect(Envelope.build(id: "abc", text: "那后天呢", lang: .zhCN, strictEcho: true, turn: 2)
+      == "[Homebot voice · hb:abc · zh-CN]\n那后天呢\n\n（Homebot：用户在 HomePod/iPhone 上对 Siri 说了这句话，你的回复会由 Siri 用中文朗读出来。回复请以 [hb:abc] 开头。用中文简短口语回答，不用 markdown 和表情。如果用户想结束对话，就以 [hb:abc] [end] 开头，再简短道别。）")
+    #expect(Envelope.build(id: "abc", text: "what time is it", lang: .en, strictEcho: true)
+      == "[Homebot voice · hb:abc · en]\nwhat time is it\n\n(Homebot: the user said this to Siri on a HomePod or iPhone, and Siri reads your reply aloud in English. Start your reply with [hb:abc]. Answer in English, short and spoken. No markdown or emoji. End with a statement, not a question.)")
+    for l in ReplyLang.allCases {
+      let st = Envelope.styles[l]!
+      #expect(Envelope.build(id: "abc", text: "x", lang: l, strictEcho: true).contains(st.statement), "a one-shot question ends on a statement: \(l)")
+      #expect(!Envelope.build(id: "abc", text: "x", lang: l, strictEcho: true, turn: 2).contains(st.statement), "a turn can end on a question: \(l)")
+    }
+    #expect(Envelope.build(id: "abc", text: "x", lang: .en, strictEcho: false, turn: 3).hasSuffix("spoken. No markdown or emoji.)"), "no tag, no [end]")
+  }
+
+  @Test("filter: a bot that quotes the hint back speaks only its own words, in every language and mode")
+  func filterQuotedHint() {
+    for l in ReplyLang.allCases {
+      for turn in [nil, 2] as [Int?] {
+        let hint = Envelope.build(id: "abc123abc123", text: "q", lang: l, strictEcho: true, turn: turn).components(separatedBy: "\n\n").last!
+        let cleaned = ProtocolFilter.clean("OK. " + hint, requestId: "abc123abc123").trimmingCharacters(in: .whitespaces)
+        #expect(cleaned == "OK.", "\(l) turn \(String(describing: turn)): \(cleaned)")
+      }
+    }
   }
 
   @Test("conversation Shortcut: the loop posts to /v1/ask with v 2, the bot and the first question")

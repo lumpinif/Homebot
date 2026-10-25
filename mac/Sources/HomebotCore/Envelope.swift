@@ -7,10 +7,11 @@ import Foundation
 public enum Envelope {
   struct Style: Sendable {
     let intro: String
-    let turn: @Sendable (Int) -> String
     let echo: @Sendable (String) -> String
-    let end: @Sendable (String) -> String
     let style: String
+    let end: @Sendable (String) -> String
+    let statement: String
+    let close: String
   }
 
   /// 12 hex characters from 6 random bytes.
@@ -34,10 +35,12 @@ public enum Envelope {
     case .none: styleText = ""
     case .custom(let c): styleText = c
     }
-    // A conversation turn may end the run: `[end]` counts only right after the echo tag (S25).
+    // A conversation turn may end the run: `[end]` counts only right after the echo tag (S25). A
+    // one-shot question can't be answered back, so it ends on a statement.
     let inTurn = turn.map { $0 != 0 } ?? false
-    let parts = [s.intro, inTurn ? s.turn(turn!) : "", strictEcho ? s.echo(echoTag(id)) : "", inTurn && strictEcho ? s.end(echoTag(id)) : "", styleText]
+    let ending = inTurn ? (strictEcho ? s.end(echoTag(id)) : "") : s.statement
+    let parts = [s.intro, strictEcho ? s.echo(echoTag(id)) : "", styleText, ending]
     let hint = parts.filter { !$0.isEmpty }.joined(separator: unspaced.contains(lang) ? "" : " ")
-    return "\(head)\n\(text)\n\n\(hint)"
+    return "\(head)\n\(text)\n\n\(hint)\(s.close)"
   }
 }

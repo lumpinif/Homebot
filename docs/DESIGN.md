@@ -197,12 +197,13 @@ Detection (5) can be switched off (`HOMEBOT_DETECT_CREDENTIALS=0` / setting). **
 [Homebot voice · hb:7f3a2c9d1e04 · en]
 <transcribed question>
 
-(Homebot: this was spoken to Siri on a HomePod/iPhone; your reply is read aloud in the room.
-Start your reply with [hb:7f3a2c9d1e04]. Then answer in 1-3 short spoken sentences, at most about
-50 words, in English. No markdown, links, lists, code or emoji.)
+(Homebot: the user said this to Siri on a HomePod or iPhone, and Siri reads your reply aloud in
+English. Start your reply with [hb:7f3a2c9d1e04]. Answer in English, short and spoken. No markdown
+or emoji. End with a statement, not a question.)
 ```
-The language tag and instructions follow the Shortcut's Siri language (`en` or `zh-CN`).
+The language tag and instructions follow the Shortcut's Siri language (11 languages).
 
+- **Only load-bearing guidance (DECISIONS item 35); the rest of the voice is the bot's own.** One context sentence (where the words came from, and that Siri reads the reply in the token's language); the echo tag (strict ownership, §4.2); the answer language, short and spoken (the Speak Text voice reads only that language, item 31); no markdown or emoji. A one-shot question adds "End with a statement, not a question" (the user can't answer back); a conversation turn adds the `[end]` instruction instead (§18.4). No sentence or length counts: the gateway's `maxSpokenChars` cap still cuts at a sentence boundary.
 - Line 1 is a stable, machine-parseable marker. Bot owners can add rules for `[Homebot voice`.
 - `hb:<id>` = 12 hex chars from a random request id (enough to never collide within one session).
 - The style text is per language and per bot configurable. The echo instruction is always present when strict mode is on.
@@ -742,7 +743,7 @@ Today's log shows the turn flags stay **busy while the reply arrives** (`turns` 
 - **`followupIdleMs`** comes from the turn-tail diagnostic (built): after an answer, the gateway polls the session with GETs (≤ 30 s, one observer per session, stopped by the next request for that session and at shutdown; it never moves the persisted cursor or touches tokens) and logs `idle_after_ms`, or `timeout` when idle was not observed, plus counts of other user entries and deliveries seen meanwhile. It measures the *session*, not our turn; runs with other activity are read separately. The lab (§19) can't measure this, because it has no bot.
 
 ### 18.4 Envelope
-The envelope tells the bot "voice conversation, turn N; the user can reply right away; keep answers short and end with a statement unless a question is necessary; the room heard only your first message for this turn" (Homebot speaks one proved delivery, §4.2, so the bot must not assume the user heard a later part). Since v9.7 the proved delivery is the first *tagged* one, so the line is not exact when the bot sends an untagged progress message first; it still steers the bot toward one complete answer, and is left unchanged until the device test. That also serves requirement 6 (the bot knows it is called through Homebot).
+A conversation turn uses the same short hint as a one-shot question (§5.4), without "end with a statement" (the user can answer right away) and, with strict echo, with "If the user wants to end the conversation, start with [hb:<id>] [end], then say a short goodbye." (§18.2). Until DECISIONS item 35 it also named the turn number, said the user could reply right away and that the room heard only the bot's first message; that last line was not exact after v9.7 (the spoken delivery is the first *tagged* one), and none of it was load-bearing. The ProtocolFilter strips the fixed sentences and the request's echo and end instructions if a bot quotes them back.
 
 ### 18.5 Risks
 - **Room speech is picked up** (TV, other people) while Siri listens after an answer, and sent to the bot. Strict ownership protects what is *spoken*, not what is *sent*. Limits: the step cap, end on errors, end words. The setup page says plainly that conversation mode listens again after each answer.

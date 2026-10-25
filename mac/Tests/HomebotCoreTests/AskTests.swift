@@ -341,7 +341,7 @@ struct AskTests {
     let r = await h.ask("What time is it?", lang: .en)
     #expect(r.text == "It is three.")
     #expect(h.fake.posts[0].text.firstMatch(of: /^\[Homebot voice · hb:[0-9a-f]{12} · en\]\nWhat time is it\?\n/) != nil)
-    #expect(h.fake.posts[0].text.contains("Then answer in English,") && h.fake.posts[0].text.contains("answer in English even if the question is in another language."))
+    #expect(h.fake.posts[0].text.contains("Answer in English, short and spoken."))
   }
 
   @Test("busy rule: idle=false, inFlight=true or queued>0 each count as busy")

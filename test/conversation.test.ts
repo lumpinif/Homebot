@@ -121,7 +121,7 @@ test("S25: [end] counts only right after our own tag at the start", () => {
   assert.equal(endMarked(`[hb:000000000000] [end] bye`, tag), false, "another request's tag");
   assert.equal(endMarked(`${tag} [END]`, tag), false, "exact spelling only");
   const turn = buildEnvelope({ id: "abc", text: "Bye", lang: "en", strictEcho: true, turn: 1 });
-  assert.match(turn, /start your reply with \[hb:abc\] \[end\], then say a short goodbye\./);
+  assert.match(turn, /start with \[hb:abc\] \[end\], then say a short goodbye\./);
   assert.doesNotMatch(buildEnvelope({ id: "abc", text: "hi", lang: "en", strictEcho: true }), /\[end\]/, "a one-shot question can't end anything");
   assert.doesNotMatch(buildEnvelope({ id: "abc", text: "hi", lang: "en", strictEcho: false, turn: 2 }), /\[end\]/);
 });
@@ -237,13 +237,19 @@ test("follow-up wait: no wait (0) or a turn that stays busy answers busy and sen
   assert.equal(bdk.sent, 0);
 });
 
-test("envelope: a conversation turn tells the bot the turn and that only its first message is heard", () => {
-  const zh = buildEnvelope({ id: "abc", text: "那后天呢", lang: "zh-CN", strictEcho: true, turn: 2 });
-  assert.match(zh, /第 2 轮/);
-  assert.match(zh, /只会听到你这一轮的第一条消息/);
-  const en = buildEnvelope({ id: "abc", text: "and after", lang: "en", strictEcho: true, turn: 3 });
-  assert.match(en, /turn 3 of a voice conversation/);
-  assert.doesNotMatch(buildEnvelope({ id: "abc", text: "x", lang: "en", strictEcho: true }), /conversation/);
+test("envelope: only load-bearing guidance; a turn may end with [end], a one-shot question ends on a statement (DECISIONS item 35)", () => {
+  assert.equal(
+    buildEnvelope({ id: "abc", text: "那后天呢", lang: "zh-CN", strictEcho: true, turn: 2 }),
+    "[Homebot voice · hb:abc · zh-CN]\n那后天呢\n\n（Homebot：用户在 HomePod/iPhone 上对 Siri 说了这句话，你的回复会由 Siri 用中文朗读出来。回复请以 [hb:abc] 开头。用中文简短口语回答，不用 markdown 和表情。如果用户想结束对话，就以 [hb:abc] [end] 开头，再简短道别。）",
+  );
+  assert.equal(
+    buildEnvelope({ id: "abc", text: "what time is it", lang: "en", strictEcho: true }),
+    "[Homebot voice · hb:abc · en]\nwhat time is it\n\n(Homebot: the user said this to Siri on a HomePod or iPhone, and Siri reads your reply aloud in English. Start your reply with [hb:abc]. Answer in English, short and spoken. No markdown or emoji. End with a statement, not a question.)",
+  );
+  const turn = buildEnvelope({ id: "abc", text: "and after", lang: "en", strictEcho: true, turn: 3 });
+  assert.doesNotMatch(turn, /statement|turn 3|first message|words/);
+  assert.match(buildEnvelope({ id: "abc", text: "x", lang: "en", strictEcho: false, turn: 3 }), /spoken\. No markdown or emoji\.\)$/, "no tag, no [end]");
+  assert.match(buildEnvelope({ id: "abc", text: "x", lang: "en", strictEcho: true, style: null }), /\[hb:abc\]\. End with a statement, not a question\.\)$/, "style off keeps the rest");
 });
 
 // HTTP: v2 on /v1/ask answers JSON in every case; v1 is unchanged.

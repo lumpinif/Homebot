@@ -10,14 +10,16 @@ public enum ProtocolFilter {
   static let tag = try! NSRegularExpression(pattern: #"\[hb:[0-9a-f]{12}\]"#)
   static let marker = try! NSRegularExpression(pattern: #"\bhb:[0-9a-f]{12}\b"#)
 
-  /// The envelope's fixed sentences in every language, longest first (turn lines for the turns a
-  /// run can have).
+  /// The envelope's fixed sentences in every language, longest first (the last ones also with the
+  /// closing parenthesis, so a quoted hint leaves none behind).
   static let fixed: [String] = {
     var s: Set<String> = []
     for st in Envelope.styles.values {
       s.insert(st.intro)
-      s.insert(st.style)
-      for n in 1...Conversation.steps { s.insert(st.turn(n)) }
+      for last in [st.style, st.statement] {
+        s.insert(last + st.close)
+        s.insert(last)
+      }
     }
     return s.filter { !$0.isEmpty }.sorted { $0.count > $1.count }
   }()
@@ -32,6 +34,7 @@ public enum ProtocolFilter {
     if let requestId {
       for st in Envelope.styles.values {
         t = t.replacingOccurrences(of: st.echo(Envelope.echoTag(requestId)), with: "")
+        t = t.replacingOccurrences(of: st.end(Envelope.echoTag(requestId)) + st.close, with: "")
         t = t.replacingOccurrences(of: st.end(Envelope.echoTag(requestId)), with: "")
       }
     }
