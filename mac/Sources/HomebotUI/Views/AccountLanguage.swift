@@ -35,6 +35,7 @@ struct AccountStep: View {
       }
       .animation(.easeOut(duration: 0.22), value: editing)
       .animation(.easeOut(duration: 0.22), value: c == nil)
+      .animation(.easeOut(duration: 0.22), value: model.canUndoRemoveKey)
     }
     // Read-only, never a message: says whether Grok Bot accepts the key as soon as a bot exists.
     .task { await model.checkKeyIfUnchecked() }
@@ -50,6 +51,20 @@ struct AccountStep: View {
   func form(_ c: CredentialView?) -> some View {
     let T = model.tr
     return VStack(spacing: Theme.rowGap) {
+      // Right after Remove, where the key row was: the same key back with one click.
+      if c == nil && model.canUndoRemoveKey {
+        GroupBox {
+          Row {
+            RowIcon(symbol: "key")
+            Text(T.keyRemoved).foregroundStyle(Theme.muted).lineLimit(1)
+            Spacer(minLength: 8)
+            Button(T.undo) { Task { await model.undoRemoveKey() } }
+              .buttonStyle(.borderless)
+              .font(.system(size: 12))
+          }
+        }
+        .transition(.opacity)
+      }
       if c == nil, let why = loginNote { Callout(text: why, style: .info) }
       GroupBox {
         Field(label: T.apiKey, text: $key, placeholder: T.apiKeyPlaceholder, symbol: "key", secure: true, state: phase == .failed ? .error : .normal, maxLength: 512, onSubmit: save)
@@ -104,6 +119,11 @@ struct AccountStep: View {
             StatusDot(text: c.access == .ok ? T.accessOk : T.accessRejected, ok: c.access == .ok)
               .transition(.opacity)
           }
+          // The saved key's Remove sits with its status, quiet; the alert still guards it.
+          if c.source == .saved {
+            if c.access != .unchecked { Text("·").font(.system(size: 12)).foregroundStyle(Theme.muted) }
+            DangerLink(title: T.removeKey) { confirmRemove = true }
+          }
         }
         .animation(.easeOut, value: c.access)
       }
@@ -115,7 +135,6 @@ struct AccountStep: View {
         }
         Spacer()
         if c.source == .saved {
-          Button(T.removeKey) { confirmRemove = true }.buttonStyle(.borderless).controlSize(.large)
           Button(T.replaceKey) { editing = true }.secondaryAction()
         }
         Button(action: done) { Text(T.next).frame(minWidth: 88) }.primaryAction()

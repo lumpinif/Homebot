@@ -62,6 +62,49 @@ func makeModel(_ fake: FakeGrokBot, library: (@Sendable () async -> [String]?)? 
     #expect(m.snapshot.credential == nil)
   }
 
+  // Undo after Remove: the same key comes back from memory, with nothing pasted.
+  @Test func undoRestoresTheRemovedKey() async throws {
+    let fake = FakeGrokBot()
+    let m = try await makeModel(fake)
+    defer { Task { await m.shutdown() } }
+    #expect(m.canUndoRemoveKey == false)
+    #expect(await m.saveKey(FakeGrokBot.key))
+    await m.removeKey()
+    #expect(m.snapshot.credential == nil)
+    #expect(m.canUndoRemoveKey)
+    #expect(await m.undoRemoveKey())
+    #expect(m.snapshot.credential?.source == .saved)
+    #expect(try m.host.credentials.savedKey() == FakeGrokBot.key)
+    #expect(m.canUndoRemoveKey == false, "one undo")
+    #expect(await m.undoRemoveKey() == false)
+  }
+
+  @Test func undoIsGoneOnceAnotherKeyIsSaved() async throws {
+    let fake = FakeGrokBot()
+    let m = try await makeModel(fake)
+    defer { Task { await m.shutdown() } }
+    #expect(await m.saveKey("another-test-key-0000"))
+    await m.removeKey()
+    #expect(m.canUndoRemoveKey)
+    #expect(await m.saveKey(FakeGrokBot.key))
+    #expect(m.canUndoRemoveKey == false)
+    #expect(await m.undoRemoveKey() == false)
+    #expect(try m.host.credentials.savedKey() == FakeGrokBot.key, "the new key is never replaced")
+  }
+
+  @Test func undoNeverReplacesAKeySavedElsewhere() async throws {
+    let fake = FakeGrokBot()
+    let m = try await makeModel(fake)
+    defer { Task { await m.shutdown() } }
+    #expect(await m.saveKey("another-test-key-0000"))
+    await m.removeKey()
+    // The CLI saves a key meanwhile, past the model.
+    try m.host.credentials.save(key: FakeGrokBot.key)
+    #expect(await m.undoRemoveKey() == false)
+    #expect(try m.host.credentials.savedKey() == FakeGrokBot.key)
+    #expect(m.canUndoRemoveKey == false)
+  }
+
   @Test func addByNameNeedsTheSameNameTwiceAndAnExistingBot() async throws {
     let fake = FakeGrokBot()
     fake.addNamed("House Butler", sid: "14752726")

@@ -671,6 +671,25 @@ struct MoreMenu<Items: View>: View {
 }
 
 /// A link-styled button in the accent colour; hover underlines it (colour and line only).
+/// A small destructive text action inside a row: secondary until hovered, then red. Only the
+/// colour changes, so nothing moves.
+struct DangerLink: View {
+  let title: String
+  let action: () -> Void
+  @State private var hover = false
+  var body: some View {
+    Button(action: action) {
+      Text(title)
+        .font(.system(size: 12))
+        .foregroundStyle(hover ? Theme.destructive : Theme.muted)
+        .contentShape(Rectangle())
+    }
+    .buttonStyle(.plain)
+    .fixedSize()
+    .onHover { hover = $0 }
+  }
+}
+
 struct QuietLink: View {
   let title: String
   var symbol: String?

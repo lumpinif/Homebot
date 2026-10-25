@@ -189,6 +189,10 @@ public final class AppModel {
   public private(set) var importing = false
   /// Reset everything is running (Settings).
   public private(set) var resetting = false
+  /// The key the Account step's Remove deleted, for its Undo. Only in this process: never
+  /// written, never logged; gone once a key is saved or Reset everything runs.
+  private var removedKey: String?
+  public var canUndoRemoveKey: Bool { removedKey != nil }
   /// Watches the app's effective appearance for the Automatic icon (`followAppearance`).
   @ObservationIgnored private var appearanceWatch: NSKeyValueObservation?
 
@@ -667,6 +671,7 @@ public final class AppModel {
     guard !resetting, !importing else { return false }
     resetting = true
     defer { resetting = false }
+    removedKey = nil
     await host.stop()
     let result: Result<Reset.Report, Error>
     do {
@@ -733,18 +738,38 @@ public final class AppModel {
       host.log(["event": "setup", "action": "credential-saved"])
       return true
     }
+    if saved == true { removedKey = nil }
     await refresh()
     if saved == true { await checkKey() }
     return saved == true
   }
 
-  /// No toast: the step itself shows what is used now (the login, or the empty form).
+  /// No toast: the step itself shows what is used now (the login, or the empty form). The key
+  /// stays in memory for `undoRemoveKey`.
   public func removeKey() async {
-    await run(done: nil) {
+    let old = try? host.credentials.savedKey()
+    let removed = await run(done: nil) { () -> Bool in
       try host.credentials.removeSaved()
       host.log(["event": "setup", "action": "credential-removed"])
+      return true
     }
+    if removed == true, let old { removedKey = old }
     await refresh()
+  }
+
+  /// Saves the removed key again, unless another key was saved meanwhile (never replaced).
+  @discardableResult
+  public func undoRemoveKey() async -> Bool {
+    guard let key = removedKey else { return false }
+    let restored = await run { () -> Bool in
+      guard try host.credentials.saveIfAbsent(key: key) else { return false }
+      host.log(["event": "setup", "action": "credential-restored"])
+      return true
+    }
+    removedKey = nil
+    await refresh()
+    if restored == true { await checkKey() }
+    return restored == true
   }
 
   /// A read-only call with the key in use, when a bot exists to read (the CLI's account check):

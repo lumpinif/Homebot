@@ -56,4 +56,16 @@ import HomebotTestSupport
     #expect(m.page == .account)
     #expect(Flow.startPage(m.snapshot) == .account)
   }
+
+  @Test func resetDropsTheUndoOfARemovedKey() async throws {
+    let fake = FakeGrokBot()
+    let m = try await setUp(fake)
+    defer { Task { await m.shutdown() } }
+    await m.removeKey()
+    #expect(m.canUndoRemoveKey)
+    #expect(await m.resetEverything(removeKey: false))
+    #expect(m.canUndoRemoveKey == false)
+    #expect(await m.undoRemoveKey() == false)
+    #expect(m.snapshot.credential == nil)
+  }
 }

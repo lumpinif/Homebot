@@ -367,16 +367,28 @@ struct InstallStep: View {
     let T = model.tr
     // Made on an earlier visit and not installed yet: install it; else make one first.
     let waiting = ShortcutList.visible(model.snapshot.tokens).first { $0.kind == .ask && $0.state == .pending }
-    return VStack(spacing: Theme.gap) {
-      StepHeader(symbol: "square.and.arrow.down", tint: Tint.phone, title: T.install)
+    let header = StepHeader(symbol: "square.and.arrow.down", tint: Tint.phone, title: T.install)
+    return Group {
       if let w = waiting {
-        Button { Task { await model.install(w) } } label: { Text(T.fmt(T.installTitle, ["name": w.label])).frame(minWidth: 88) }.primaryAction()
-      } else {
-        // The line and its button as one pair, spaced like the Shortcuts page's empty state.
-        VStack(spacing: 12) {
-          Text(T.installNone).font(.system(size: 13)).foregroundStyle(Theme.muted).multilineTextAlignment(.center)
-          Button(action: make) { Text(T.makeOne).frame(minWidth: 88) }.primaryAction()
+        VStack(spacing: Theme.gap) {
+          header
+          Button { Task { await model.install(w) } } label: { Text(T.fmt(T.installTitle, ["name": w.label])).frame(minWidth: 88) }.primaryAction()
         }
+      } else {
+        // The header stays where every step has it; the line and its button, one pair spaced
+        // like the Shortcuts page's empty state, sit in the page's middle. A hidden copy of the
+        // header below balances the one above, so the pair centres on the page, not the rest.
+        VStack(spacing: 0) {
+          header
+          Spacer(minLength: Theme.gap)
+          VStack(spacing: 12) {
+            Text(T.installNone).font(.system(size: 13)).foregroundStyle(Theme.muted).multilineTextAlignment(.center)
+            Button(action: make) { Text(T.makeOne).frame(minWidth: 88) }.primaryAction()
+          }
+          Spacer(minLength: Theme.gap)
+          header.hidden().accessibilityHidden(true)
+        }
+        .frame(maxHeight: .infinity)
       }
     }
     .padding(.bottom, 12)
