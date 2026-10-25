@@ -4,7 +4,7 @@ Talk to your Grok Bots through Siri on HomePod and iPhone. Say "Hey Siri, Grok B
 
 Homebot is a Mac app. It runs on a Mac at home, on the same Wi-Fi as your iPhone, and answers the Siri Shortcut it makes for you. Setup is clicking in its window: no Terminal.
 
-> **Status: release candidate, not yet confirmed on a device.** Homebot.app (the native Mac app in `mac/`) is tested offline: over 500 automated tests against a stand-in for Grok Bot, and a release zip that passes `codesign --verify --strict`. The earlier TypeScript version worked end to end on 2026-10-22 on an iPhone and a Chinese HomePod ("家庭助手"). The native app has not yet been confirmed answering a real Siri request. Steps not yet checked on a device are marked *(unverified)*. Details: [docs/STATUS.md](docs/STATUS.md).
+> **Status: first release (0.1.0).** Homebot.app (the native Mac app in `mac/`) answers real Siri requests on the maintainer's iPhone and Mac, in English and Chinese, and passes over 500 automated tests. The earlier TypeScript version also worked on a Chinese HomePod ("家庭助手"). Languages other than English and Chinese are drafts. Steps not yet checked on a device are marked *(unverified)*. Details: [docs/STATUS.md](docs/STATUS.md).
 
 ## What you need
 
@@ -99,7 +99,7 @@ Rules for you, the agent:
 - Don't click "Sign with Apple and make" for me, and don't create, remove or revoke bots or Shortcuts,
   or import my old setup, without asking me first.
 - Don't open port 8787 to the internet or change my router.
-- Homebot is a release candidate, not yet confirmed on a device. Don't promise every step works.
+- Homebot is a first release, checked on one person's devices. Don't promise every step works.
 
 Steps:
 1. YOU: download https://homebot.fun/download/latest?from=agent (the newest
