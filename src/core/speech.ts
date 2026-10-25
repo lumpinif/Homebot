@@ -50,3 +50,49 @@ export const unreadablePattern = (lang: string): string =>
 
 /** True when the voice of `lang` can read every letter of `s`. */
 export const readableBy = (s: string, lang: string): boolean => !new RegExp(unreadablePattern(lang), "u").test(s);
+
+/**
+ * The most a reply may hold in scripts its voice can't read and still be spoken without them
+ * (DECISIONS item 39), as a share of its letters, each Han, kana or Hangul letter weighing 3: an
+ * English word is about 5 letters and a Chinese word about 1.7 characters, so one such letter
+ * carries about as much as 3 Latin ones, and the share is one of the reply's words, not its
+ * characters. Felix's reply that quoted "家庭助手" in English is 6%.
+ */
+export const MAX_FOREIGN_SHARE = 0.2;
+const DENSE = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u;
+
+/** What a run drop leaves behind: empty quotes and brackets, doubled spaces and punctuation. */
+export function tidy(s: string): string {
+  let t = s;
+  for (let prev = ""; prev !== t; ) {
+    prev = t;
+    t = t.replace(/(?:"\s*"|“\s*”|'\s*'|‘\s*’|「\s*」|『\s*』|\(\s*\)|（\s*）|\[\s*\]|《\s*》|«\s*»)/g, "");
+  }
+  return t
+    .replace(/\s+([,.;:!?，。！？；：、])/g, "$1")
+    .replace(/([,，、;；:：])(?:\s*[,，、;；:：])+/g, "$1")
+    .replace(/[,，、;；:：]\s*([.。!！?？])/g, "$1")
+    .replace(/^[\s,，、;；:：.。]+/, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * The text the voice of `lang` reads: `s` itself when it can read every letter; without the runs
+ * it can't read, tidied, when they are a small share (`partial`); undefined when they are not, or
+ * nothing readable is left.
+ */
+export function forVoice(s: string, lang: string): { text: string; partial: boolean } | undefined {
+  const foreign = new RegExp(unreadablePattern(lang), "u");
+  let total = 0;
+  let other = 0;
+  for (const c of s.match(/\p{L}/gu) ?? []) {
+    const w = DENSE.test(c) ? 3 : 1;
+    total += w;
+    if (foreign.test(c)) other += w;
+  }
+  if (other === 0) return { text: s, partial: false };
+  if (other / total > MAX_FOREIGN_SHARE) return undefined;
+  const text = tidy(s.replace(new RegExp(`(?:${unreadablePattern(lang)}\\p{M}*)+`, "gu"), ""));
+  return /[\p{L}\p{N}]/u.test(text) ? { text, partial: true } : undefined;
+}

@@ -455,9 +455,31 @@ struct AskTests {
     h.fake.autoReply(SID, text: "我是 homebot，陪你琢磨软件点子的工程师朋友。")
     let en = await h.ask("你是谁", lang: .en)
     #expect(en.outcome == "unspeakable" && en.reason == "script")
-    #expect(en.text == Messages.of(.en).unspeakable)
+    #expect(en.text == Messages.of(.en).wrongScript, "a language it can't read, not \"no text\"")
     h.fake.autoReply(SID, text: "我是 homebot。")
     #expect(await h.ask("你是谁", lang: .zhCN).text == "我是 homebot。", "a Chinese voice reads it, Latin words included")
+  }
+
+  @Test("item 39: a few words in another script are left out, not the whole reply (Felix, build 311)")
+  func partialScript() async throws {
+    let h = try await askHarness()
+    h.fake.autoReply(SID, text: "The full chain works: say \"家庭助手\" to your HomePod and it reaches me. Multi-turn chat and per-language replies look like they're in progress too, but I haven't checked the repo myself, so ask Fable for the latest.")
+    let r = await h.ask("我们HomePod开发怎么样了", lang: .en)
+    #expect(r.outcome == "answered" && r.reason == "script-partial")
+    #expect(r.text == "The full chain works: say to your HomePod and it reaches me. Multi-turn chat and per-language replies look like they're in progress too, but I haven't checked the repo myself, so ask Fable for the latest.")
+    h.fake.autoReply(SID, text: "现在是下午三点，外面在下雨。It is 3 PM.")
+    let mostly = await h.ask("几点了", lang: .en)
+    #expect(mostly.outcome == "unspeakable" && mostly.reason == "script" && mostly.text == Messages.of(.en).wrongScript)
+  }
+
+  @Test("item 39: the share rule and the cleanup")
+  func forVoiceRules() {
+    #expect(Speech.forVoice("It is three.", .en)! == ("It is three.", false))
+    #expect(Speech.forVoice("好的，我们说ありがとう吧。", .zhCN) == nil, "mostly kana in a Chinese voice")
+    #expect(Speech.forVoice("日语的谢谢（ありがとう）用得很多，几乎每天都会听到，朋友之间、店里和电话里都很常见。", .zhCN)! == ("日语的谢谢用得很多，几乎每天都会听到，朋友之间、店里和电话里都很常见。", true))
+    #expect(Speech.forVoice("「家庭助手」", .en) == nil, "nothing readable left")
+    #expect(Speech.tidy(#"Say "" or “ ” or 「」 now , ok ,, fine , ."#) == "Say or or now, ok, fine.")
+    #expect(Speech.tidy("（）好的，，。") == "好的。")
   }
 
   @Test("S25: which letters each voice can read")

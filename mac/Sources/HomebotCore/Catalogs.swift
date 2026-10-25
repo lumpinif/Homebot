@@ -12,6 +12,8 @@ public struct Messages: Sendable {
   public let noReplyInTime: @Sendable (String) -> String
   public let refused: String
   public let unspeakable: String
+  /// The reply is (mostly) in a script the Shortcut's voice can't read (DECISIONS item 39).
+  public let wrongScript: String
   public let emptyQuestion: String
   public let tooLong: String
   public let badToken: String

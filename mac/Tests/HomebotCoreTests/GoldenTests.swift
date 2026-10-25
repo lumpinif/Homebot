@@ -35,7 +35,7 @@ struct GoldenTests {
   static func messageDict(_ m: Messages, bot: String) -> [String: String] {
     [
       "busy": m.busy(bot), "inFlight": m.inFlight(bot), "notSent": m.notSent, "noReplyInTime": m.noReplyInTime(bot), "refused": m.refused,
-      "unspeakable": m.unspeakable, "emptyQuestion": m.emptyQuestion, "tooLong": m.tooLong, "badToken": m.badToken, "forbiddenBot": m.forbiddenBot,
+      "unspeakable": m.unspeakable, "wrongScript": m.wrongScript, "emptyQuestion": m.emptyQuestion, "tooLong": m.tooLong, "badToken": m.badToken, "forbiddenBot": m.forbiddenBot,
       "botNotConfigured": m.botNotConfigured, "authFailed": m.authFailed, "upstreamDown": m.upstreamDown, "rateLimited": m.rateLimited,
       "internalError": m.internalError, "more": m.more, "goodbye": m.goodbye, "restart": m.restart,
     ]

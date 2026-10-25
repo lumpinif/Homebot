@@ -260,11 +260,13 @@ public actor AskService {
             // A bot that ends the conversation without a goodbye gets Homebot's (S25).
             let say = spoken.isEmpty && ended ? m.goodbye : spoken
             if say.isEmpty { return finish("unspeakable", m.unspeakable) }
-            // The Shortcut's voice can't read this script: say so rather than speak noise (S25).
-            if !Speech.readable(say, by: req.lang) { return finish("unspeakable", m.unspeakable, reason: "script") }
+            // The Shortcut's voice can't read this script: say so rather than speak noise (S25). A
+            // few words in another script are left out instead (DECISIONS item 39).
+            guard let voice = Speech.forVoice(say, req.lang) else { return finish("unspeakable", m.wrongScript, reason: "script") }
             // Revoked while the bot answered: the answer is not returned (T3).
             if let still = req.stillGranted, !(await still()) { return finish("revoked", m.botNotConfigured, extra: ["phase": "after-reply"]) }
-            return finish("answered", say, delivery: skipped + 1, interim: skipped, ended: ended, extra: ended ? ["a_len": .int(say.count), "ended": .bool(true)] : ["a_len": .int(say.count)])
+            return finish("answered", voice.text, reason: voice.partial ? "script-partial" : nil, delivery: skipped + 1, interim: skipped, ended: ended,
+                          extra: ended ? ["a_len": .int(voice.text.count), "ended": .bool(true)] : ["a_len": .int(voice.text.count)])
           }
           let wait = run.elapsedMs > 10_000 ? settings.pollMs * 2 : settings.pollMs
           try await Task.sleep(nanoseconds: UInt64(max(wait, 0)) * 1_000_000)

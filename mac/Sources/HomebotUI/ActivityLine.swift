@@ -16,6 +16,9 @@ struct ActivityLine: Equatable {
   var note: String?
   /// The spoken text, unless `note` replaces it.
   var spoken: String?
+  /// Under the spoken text: a few words in a script the voice can't read were left out
+  /// (`script-partial`, DECISIONS item 39).
+  var partial: String?
 
   init(_ r: ActivityRecord, T: Tr, manyBots: Bool, now: Date = Date(), calendar: Calendar = .current) {
     let at = Date(timeIntervalSince1970: r.at / 1000)
@@ -38,6 +41,7 @@ struct ActivityLine: Equatable {
     showsOutcome = r.outcome != "answered"
     note = ActivityOutcome.stopped(r.outcome) ? (ActivityOutcome.sent(r.outcome) ? T.stoppedSent : T.stoppedNotSent) : nil
     spoken = note == nil ? r.spoken : nil
+    partial = spoken != nil && r.reason == "script-partial" ? T.scriptPartial : nil
   }
 
   /// Today: the time. Yesterday: "Yesterday" in the app's language. Earlier: a short date, with

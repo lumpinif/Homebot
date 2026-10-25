@@ -302,7 +302,7 @@ test("S25: a reply its voice can't read is never spoken; the token's language sa
   const en = await svc.ask({ botKey: "chai", text: "你是谁", lang: "en" });
   assert.equal(en.outcome, "unspeakable");
   assert.equal(en.reason, "script");
-  assert.equal(en.text, messages("en").unspeakable());
+  assert.equal(en.text, messages("en").wrongScript(), "a language it can't read, not \"no text\"");
   fake.autoReply(SID, { text: "我是 homebot。" });
   assert.equal((await svc.ask({ botKey: "chai", text: "你是谁", lang: "zh-CN" })).text, "我是 homebot。", "a Chinese voice reads it, Latin words included");
 });
@@ -315,6 +315,29 @@ test("S25: which letters each voice can read", async () => {
     ["Привет, OK", "ru", true], ["Привет", "de", false], ["", "en", true],
   ];
   for (const [s, lang, ok] of cases) assert.equal(readableBy(s, lang), ok, `${lang}: ${s}`);
+});
+
+test("item 39: a few words in another script are left out, not the whole reply (Felix, build 311)", async () => {
+  const { svc } = await setup();
+  fake.setIdle(SID, true);
+  fake.autoReply(SID, { text: "The full chain works: say \"家庭助手\" to your HomePod and it reaches me. Multi-turn chat and per-language replies look like they're in progress too, but I haven't checked the repo myself, so ask Fable for the latest." });
+  const r = await svc.ask({ botKey: "chai", text: "我们HomePod开发怎么样了", lang: "en" });
+  assert.equal(r.outcome, "answered");
+  assert.equal(r.reason, "script-partial");
+  assert.equal(r.text, "The full chain works: say to your HomePod and it reaches me. Multi-turn chat and per-language replies look like they're in progress too, but I haven't checked the repo myself, so ask Fable for the latest.");
+  fake.autoReply(SID, { text: "现在是下午三点，外面在下雨。It is 3 PM." });
+  const mostly = await svc.ask({ botKey: "chai", text: "几点了", lang: "en" });
+  assert.deepEqual([mostly.outcome, mostly.reason, mostly.text], ["unspeakable", "script", messages("en").wrongScript()]);
+});
+
+test("item 39: the share rule and the cleanup", async () => {
+  const { forVoice, tidy } = await import("../src/core/speech.ts");
+  assert.deepEqual(forVoice("It is three.", "en"), { text: "It is three.", partial: false });
+  assert.equal(forVoice("好的，我们说ありがとう吧。", "zh-CN"), undefined, "mostly kana in a Chinese voice");
+  assert.deepEqual(forVoice("日语的谢谢（ありがとう）用得很多，几乎每天都会听到，朋友之间、店里和电话里都很常见。", "zh-CN"), { text: "日语的谢谢用得很多，几乎每天都会听到，朋友之间、店里和电话里都很常见。", partial: true });
+  assert.equal(forVoice("「家庭助手」", "en"), undefined, "nothing readable left");
+  assert.equal(tidy('Say "" or “ ” or 「」 now , ok ,, fine , .'), "Say or or now, ok, fine.");
+  assert.equal(tidy("（）好的，，。"), "好的。");
 });
 
 test("busy rule: idle=false, inFlight=true or queued>0 each count as busy", async () => {

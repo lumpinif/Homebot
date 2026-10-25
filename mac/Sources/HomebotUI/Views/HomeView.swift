@@ -315,6 +315,7 @@ struct ActivityRow: View {
         Text(n).font(.system(size: 13)).foregroundStyle(Theme.muted).fixedSize(horizontal: false, vertical: true)
       } else if let a = line.spoken {
         answer(a, T)
+        if let p = line.partial { Text(p).font(.system(size: 12)).foregroundStyle(Theme.muted).fixedSize(horizontal: false, vertical: true) }
       }
       Text(line.meta)
         .font(.system(size: 11)).monospacedDigit().foregroundStyle(.tertiary)

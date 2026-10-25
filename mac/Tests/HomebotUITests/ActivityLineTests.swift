@@ -86,4 +86,15 @@ import HomebotCore
     #expect(T.outcomeLabel("no-reply:deadline") == T.outcomeLabel("no-reply"))
     #expect(HomeStatus.outcomeStyle("no-reply:deadline") == .warning)
   }
+
+  /// A few words in a script the voice can't read were left out: the answer, answered, with a
+  /// short note under it (DECISIONS item 39).
+  @Test func partlyReadAnswerSaysSo() {
+    let T = tr(.en)
+    var r = record(at: now)
+    r.reason = "script-partial"
+    let line = ActivityLine(r, T: T, manyBots: false, now: now, calendar: cal)
+    #expect(!line.showsOutcome && line.spoken == "…" && line.partial == T.scriptPartial)
+    #expect(ActivityLine(record(at: now), T: T, manyBots: false, now: now, calendar: cal).partial == nil)
+  }
 }

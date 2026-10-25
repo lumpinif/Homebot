@@ -73,6 +73,56 @@ public enum Speech {
     unreadable[lang]!.firstMatch(in: s, range: NSRange(s.startIndex..., in: s)) == nil
   }
 
+  /// The most a reply may hold in scripts its voice can't read and still be spoken without them
+  /// (DECISIONS item 39), as a share of its letters, each Han, kana or Hangul letter weighing 3:
+  /// an English word is about 5 letters and a Chinese word about 1.7 characters, so one such
+  /// letter carries about as much as 3 Latin ones, and the share is one of the reply's words, not
+  /// its characters. Felix's reply that quoted "家庭助手" in English is 6%.
+  public static let maxForeignShare = 0.2
+  static let dense = try! NSRegularExpression(pattern: #"[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]"#)
+  static let letter = try! NSRegularExpression(pattern: #"\p{L}"#)
+  static let runs: [ReplyLang: NSRegularExpression] = unreadable.mapValues { try! NSRegularExpression(pattern: "(?:" + $0.pattern + #"\p{M}*)+"#) }
+
+  static func replace(_ s: String, _ pattern: String, _ template: String) -> String {
+    s.replacingOccurrences(of: pattern, with: template, options: .regularExpression)
+  }
+
+  /// What a run drop leaves behind: empty quotes and brackets, doubled spaces and punctuation.
+  public static func tidy(_ s: String) -> String {
+    var t = s
+    var prev = ""
+    while prev != t {
+      prev = t
+      t = replace(t, #"(?:"\s*"|“\s*”|'\s*'|‘\s*’|「\s*」|『\s*』|\(\s*\)|（\s*）|\[\s*\]|《\s*》|«\s*»)"#, "")
+    }
+    t = replace(t, #"\s+([,.;:!?，。！？；：、])"#, "$1")
+    t = replace(t, #"([,，、;；:：])(?:\s*[,，、;；:：])+"#, "$1")
+    t = replace(t, #"[,，、;；:：]\s*([.。!！?？])"#, "$1")
+    t = replace(t, #"^[\s,，、;；:：.。]+"#, "")
+    t = replace(t, #"\s+"#, " ")
+    return t.trimmingCharacters(in: .whitespaces)
+  }
+
+  /// The text the voice of `lang` reads: `s` itself when it can read every letter; without the
+  /// runs it can't read, tidied, when they are a small share (`partial`); nil when they are not,
+  /// or nothing readable is left.
+  public static func forVoice(_ s: String, _ lang: ReplyLang) -> (text: String, partial: Bool)? {
+    let foreign = unreadable[lang]!
+    var total = 0
+    var other = 0
+    for m in letter.matches(in: s, range: NSRange(s.startIndex..., in: s)) {
+      let c = (s as NSString).substring(with: m.range)
+      let r = NSRange(c.startIndex..., in: c)
+      let w = dense.firstMatch(in: c, range: r) != nil ? 3 : 1
+      total += w
+      if foreign.firstMatch(in: c, range: r) != nil { other += w }
+    }
+    if other == 0 { return (s, false) }
+    if Double(other) / Double(total) > maxForeignShare { return nil }
+    let text = tidy(runs[lang]!.stringByReplacingMatches(in: s, range: NSRange(s.startIndex..., in: s), withTemplate: ""))
+    return text.range(of: #"[\p{L}\p{N}]"#, options: .regularExpression) != nil ? (text, true) : nil
+  }
+
   static func trimEnd(_ s: String) -> String {
     var scalars = Array(s.unicodeScalars)
     while let last = scalars.last, trimSet.contains(last) { scalars.removeLast() }

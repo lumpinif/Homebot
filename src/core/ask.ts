@@ -3,7 +3,7 @@
 import { setTimeout as sleep } from "node:timers/promises";
 import { syncToEnd, decideReply, HistoryTooLongError, type Entry, type Turn } from "./entries.ts";
 import { END_MARK, buildEnvelope, newRequestId } from "./envelope.ts";
-import { readableBy, speakable } from "./speech.ts";
+import { forVoice, speakable } from "./speech.ts";
 import { messages } from "./i18n.ts";
 import { BdkError, type BdkClient } from "./bdk.ts";
 import type { Bot, Cursor, Settings } from "./store.ts";
@@ -192,10 +192,12 @@ export class AskService {
           const spoken = speakable(d.text.split(END_MARK).join(" "), settings.maxSpokenChars[lang] ?? 600);
           const say = !spoken && d.ended ? m.goodbye() : spoken;
           if (!say) return done("unspeakable", m.unspeakable(), { requestId });
-          // The Shortcut's voice can't read this script: say so rather than speak noise (S25).
-          if (!readableBy(say, lang)) return done("unspeakable", m.unspeakable(), { requestId, reason: "script" });
+          // The Shortcut's voice can't read this script: say so rather than speak noise (S25). A
+          // few words in another script are left out instead (DECISIONS item 39).
+          const voice = forVoice(say, lang);
+          if (!voice) return done("unspeakable", m.wrongScript(), { requestId, reason: "script" });
           if (this.traceIdle.maxMs > 0) this.#traceTail(bot, requestId, pos);
-          return done("answered", say, { requestId, a_len: say.length, ...(d.ended ? { ended: true } : {}) });
+          return done("answered", voice.text, { requestId, a_len: voice.text.length, ...(voice.partial ? { reason: "script-partial" } : {}), ...(d.ended ? { ended: true } : {}) });
         }
         await sleep(Date.now() - t0 > 10_000 ? settings.pollMs * 2 : settings.pollMs, undefined, { signal: sig });
         try {
