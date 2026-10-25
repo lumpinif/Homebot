@@ -106,7 +106,7 @@ export const en = {
   staysTitle: "Stays on your Mac",
   staysBody: "Your settings, your API key, and a log of what Siri heard and said. Clear it any time.",
   leavesTitle: "Leaves your Mac",
-  leavesBody: "Your questions go to your Grok Bot at Cursor. With Sign with Apple on, each new Shortcut file goes to Apple to be signed. Optional: anonymous daily counts (off by default).",
+  leavesBody: "Your questions go to your Grok Bot at Cursor. Each new Shortcut file goes to Apple to be signed. Optional: anonymous daily counts (off by default).",
   networkTitle: "Home network only",
   networkBody: "Your iPhone reaches the Mac over plain HTTP on your Wi‑Fi. Use it on a network you trust, and never open its port to the internet.",
   policyTitle: "Privacy policy",

@@ -99,7 +99,7 @@ export const ptBR: Strings = {
   staysTitle: "Fica no seu Mac",
   staysBody: "Seus ajustes, sua chave de API e um registro do que a Siri ouviu e disse. Apague quando quiser.",
   leavesTitle: "Sai do seu Mac",
-  leavesBody: "Suas perguntas vão para seu Grok Bot na Cursor. Com “Assinar com a Apple” ativado, cada atalho novo vai para a Apple ser assinado. Opcional: contagens diárias anônimas (desativadas por padrão).",
+  leavesBody: "Suas perguntas vão para seu Grok Bot na Cursor. Cada atalho novo vai para a Apple ser assinado. Opcional: contagens diárias anônimas (desativadas por padrão).",
   networkTitle: "Só na rede de casa",
   networkBody: "Seu iPhone chega ao Mac por HTTP simples na Wi‑Fi. Use em uma rede confiável e nunca abra a porta dele para a internet.",
   policyTitle: "Política de privacidade",

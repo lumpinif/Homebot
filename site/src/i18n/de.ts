@@ -99,7 +99,7 @@ export const de: Strings = {
   staysTitle: "Bleibt auf deinem Mac",
   staysBody: "Deine Einstellungen, dein API-Schlüssel und ein Protokoll dessen, was Siri gehört und gesagt hat. Jederzeit löschbar.",
   leavesTitle: "Verlässt deinen Mac",
-  leavesBody: "Deine Fragen gehen an deinen Grok Bot bei Cursor. Mit „Mit Apple signieren“ geht jeder neue Kurzbefehl zum Signieren an Apple. Optional: anonyme tägliche Zählungen (standardmäßig aus).",
+  leavesBody: "Deine Fragen gehen an deinen Grok Bot bei Cursor. Jeder neue Kurzbefehl geht zum Signieren an Apple. Optional: anonyme tägliche Zählungen (standardmäßig aus).",
   networkTitle: "Nur im Heimnetz",
   networkBody: "Dein iPhone erreicht den Mac per einfachem HTTP im WLAN. Nutze es in einem vertrauenswürdigen Netz und öffne seinen Port nie zum Internet.",
   policyTitle: "Datenschutzerklärung",

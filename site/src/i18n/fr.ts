@@ -99,7 +99,7 @@ export const fr: Strings = {
   staysTitle: "Reste sur votre Mac",
   staysBody: "Vos réglages, votre clé d’API et un journal de ce que Siri a entendu et dit. Effacez-le quand vous voulez.",
   leavesTitle: "Quitte votre Mac",
-  leavesBody: "Vos questions vont à votre Grok Bot chez Cursor. Avec « Signer avec Apple », chaque nouveau raccourci part chez Apple pour être signé. En option : des comptages quotidiens anonymes (désactivés par défaut).",
+  leavesBody: "Vos questions vont à votre Grok Bot chez Cursor. Chaque nouveau raccourci part chez Apple pour être signé. En option : des comptages quotidiens anonymes (désactivés par défaut).",
   networkTitle: "Réseau domestique uniquement",
   networkBody: "Votre iPhone joint le Mac en HTTP simple sur votre Wi‑Fi. Utilisez-la sur un réseau de confiance et n’ouvrez jamais son port à Internet.",
   policyTitle: "Politique de confidentialité",

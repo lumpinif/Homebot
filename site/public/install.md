@@ -14,7 +14,7 @@ You are helping a person install Homebot on their Mac. They may never have heard
 
 - **Never ask for, read, type, store or repeat their Cursor API key.** They paste it into Homebot's window themselves. If they paste it to you by mistake, tell them to revoke that key in their Cursor dashboard themselves, make a new one and paste the new one into Homebot.
 - **Never change macOS security or privacy settings.** They click "Open Anyway" themselves.
-- **Don't turn on "Sign with Apple" for them.** Explain it, and let them decide.
+- **Don't click "Sign with Apple and make" for them.** It sends the Shortcut file, which carries its token, to Apple. Explain it, and let them click.
 - Don't open port 8787 to the internet or change their router.
 - Steps marked **YOU (the person)** are for the person. Tell them exactly what to click, then wait.
 - If you can run commands on their Mac, you may run the read-only checks in "Checks". Otherwise just guide.
@@ -56,8 +56,7 @@ In the **Shortcut** step:
 - Pick a bot, or **All my bots**: one phrase, and Siri asks which bot (not yet tried on a HomePod).
 - Pick the language their **HomePod's Siri** speaks (Home app › HomePod › Settings › Language).
 - Check the phrase Siri will listen for. The default is "Grok Bot" in every Siri language.
-- iPhones only install signed Shortcuts. **Sign with Apple** sends the Shortcut file, which carries its token, to Apple's signing service. It starts off. They turn it on only if they agree.
-- Click **Make**.
+- iPhones and Macs only add signed Shortcuts. **Sign with Apple and make** sends the Shortcut file, which carries its token, to Apple's signing service. They click it themselves, only if they agree.
 
 ### 6. Install: YOU (the person)
 

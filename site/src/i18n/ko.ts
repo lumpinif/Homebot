@@ -99,7 +99,7 @@ export const ko: Strings = {
   staysTitle: "Mac에 남는 것",
   staysBody: "설정, API 키, 그리고 Siri가 듣고 말한 기록. 언제든 지울 수 있습니다.",
   leavesTitle: "Mac 밖으로 나가는 것",
-  leavesBody: "질문은 Cursor의 Grok Bot으로 갑니다. ‘Apple로 서명’을 켜면 새 단축어 파일이 서명을 위해 Apple로 갑니다. 선택 사항: 익명 일일 집계(기본값은 꺼짐).",
+  leavesBody: "질문은 Cursor의 Grok Bot으로 갑니다. 새 단축어 파일은 서명을 위해 Apple로 갑니다. 선택 사항: 익명 일일 집계(기본값은 꺼짐).",
   networkTitle: "집 네트워크에서만",
   networkBody: "iPhone은 Wi‑Fi에서 일반 HTTP로 Mac에 연결합니다. 신뢰할 수 있는 네트워크에서 쓰고, 포트를 인터넷에 열지 마세요.",
   policyTitle: "개인정보 처리방침",

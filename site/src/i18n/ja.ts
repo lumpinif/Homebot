@@ -99,7 +99,7 @@ export const ja: Strings = {
   staysTitle: "Mac に残るもの",
   staysBody: "設定、API キー、そして Siri が聞いたこと・話したことの記録。いつでも消去できます。",
   leavesTitle: "Mac の外へ出るもの",
-  leavesBody: "質問は Cursor の Grok Bot に送られます。「Apple で署名」がオンのときは、新しいショートカットのファイルが署名のため Apple に送られます。任意：匿名の 1 日ごとの集計（初期設定はオフ）。",
+  leavesBody: "質問は Cursor の Grok Bot に送られます。新しいショートカットのファイルは署名のため Apple に送られます。任意：匿名の 1 日ごとの集計（初期設定はオフ）。",
   networkTitle: "自宅のネットワークだけで",
   networkBody: "iPhone は Wi‑Fi 上の通常の HTTP で Mac に接続します。信頼できるネットワークで使い、ポートをインターネットに公開しないでください。",
   policyTitle: "プライバシーポリシー",

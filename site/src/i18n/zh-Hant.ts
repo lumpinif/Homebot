@@ -99,7 +99,7 @@ export const zhHant: Strings = {
   staysTitle: "留在你的 Mac 上",
   staysBody: "你的設定、API key，以及 Siri 聽到和說過的紀錄。隨時可以清除。",
   leavesTitle: "會離開你的 Mac",
-  leavesBody: "你的問題傳給 Cursor 上的 Grok Bot。打開「用 Apple 簽署」時，每個新捷徑檔案會傳給 Apple 簽署。可選：匿名的每日計數（預設關閉）。",
+  leavesBody: "你的問題傳給 Cursor 上的 Grok Bot。每個新捷徑檔案會傳給 Apple 簽署。可選：匿名的每日計數（預設關閉）。",
   networkTitle: "只在家庭網路",
   networkBody: "iPhone 透過 Wi‑Fi 用一般 HTTP 連線到 Mac。請在可信任的網路上使用，不要把連接埠開放到網際網路。",
   policyTitle: "隱私權政策",
