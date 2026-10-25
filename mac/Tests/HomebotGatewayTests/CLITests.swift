@@ -464,6 +464,13 @@ struct CLITests {
     #expect(brand.code == 0 && !brand.text.contains("Note:"), "the brand is fine in a Chinese phrase (DECISIONS item 33): \(brand.text)")
     #expect(await h.cli("shortcut", "build", "chai", "--url", "file:///invalid").code == 1)
     #expect(await h.cli("shortcut", "build", "chai", "--conversation", "--lab").code == 1)
+    let looping = await h.cli("shortcut", "build", "chai", "--name", "Our Grok Bot")
+    let once = await h.cli("shortcut", "build", "chai", "--no-conversation", "--name", "Chai Once")
+    #expect(looping.code == 0 && once.code == 0, "\(looping.text) \(once.text)")
+    // On by default (DECISIONS item 36); --no-conversation makes a one-question Shortcut.
+    let records = try JSONSerialization.jsonObject(with: Data(contentsOf: h.home.tokens)) as? [String: Any]
+    let byLabel = Dictionary(((records?["tokens"] as? [[String: Any]]) ?? []).map { ($0["label"] as? String ?? "", $0["mode"] as? String ?? "") }, uniquingKeysWith: { a, _ in a })
+    #expect(byLabel["Our Grok Bot"] == "conversation" && byLabel["Chai Once"] == "single", "\(byLabel)")
   }
 
   @Test("M2 S2: every CLI run removes artifacts older than 24 h; the token stays pending")

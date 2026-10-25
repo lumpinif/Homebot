@@ -751,7 +751,7 @@ A conversation turn uses the same short hint as a one-shot question (§5.4), wit
 - **Latency per bot turn** is about 6–10 s (today's log).
 
 ### 18.6 Questions for Felix
-- **Q18-1** Conversation mode default. My recommendation (changed after review): **opt-in** while we experiment; decide the default after the device results.
+- **Q18-1** Conversation mode default. **Closed: on by default (Felix, 2026-10-26; DECISIONS item 36).** New per-bot Shortcuts keep listening after each answer (the Make form, `homebot shortcut build`; `--no-conversation` turns it off). Existing Shortcuts keep their kind; "All my bots" always loops.
 - **Q18-2** The end words in §18.2: add or remove any?
 - **Q18-3** OK to wait up to `followupIdleMs` (expected a few seconds; set from the turn-tail data) for idle on a follow-up inside a run, instead of answering "busy" at once (§18.3)?
 
@@ -786,7 +786,7 @@ A conversation turn uses the same short hint as a one-shot question (§5.4), wit
 ### 19.4 Needs Felix
 - Approve signing the lab Shortcut (Apple's signing service) and the Mac dry run.
 - Pick a time for E1–E7 (HomePod speaks).
-- Q16-1, Q16-2, Q18-1, Q18-2, Q18-3.
+- Q16-1, Q16-2, Q18-2, Q18-3 (Q18-1 closed: on by default).
 
 ### 19.5 Research notes (2026-10-22, Grok web research; claims as labeled above)
 - Siri Pause Time: support.apple.com/guide/iphone/change-siri-accessibility-settings-iphaff1d606/ios. HomePod settings: support.apple.com/guide/homepod/change-settings-apde6dc8093d/homepod.

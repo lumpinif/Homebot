@@ -532,7 +532,7 @@ struct ShortcutCmd: AsyncParsableCommand {
     @Option var replaces: String?
     @Flag var probe = false
     @Flag var lab = false
-    @Flag(help: "Siri keeps listening after each answer (experimental, DESIGN §18).") var conversation = false
+    @Flag(inversion: .prefixedNo, help: "Siri keeps listening after each answer (DESIGN §18; on by default, DECISIONS item 36).") var conversation: Bool?
     @Flag(help: "One phrase for several bots: Siri asks which one (DESIGN §20.5; not yet tried on a HomePod).") var entry = false
     @Option(help: "With --entry: bot keys, comma-separated, in menu order (default: every bot, at most 9).") var bots: String?
     @Flag(help: "Send the Shortcut to Apple's signing service (records that consent).") var sign = false
@@ -542,7 +542,7 @@ struct ShortcutCmd: AsyncParsableCommand {
       let io = CLI.io
       let ctx = try await Ctx.open(g)
       let test = probe || lab
-      if [probe, lab, conversation, entry].filter({ $0 }).count > 1 { throw UserError("Use only one of --probe, --lab, --conversation and --entry.") }
+      if [probe, lab, conversation == true, entry].filter({ $0 }).count > 1 { throw UserError("Use only one of --probe, --lab, --conversation and --entry.") }
       if bots != nil && !entry { throw UserError("--bots goes with --entry.") }
       var chosen: [Bot] = []
       if entry {
@@ -596,7 +596,7 @@ struct ShortcutCmd: AsyncParsableCommand {
       let signer: SignFn? = sign ? (io.sign ?? { input, output in
         _ = try await Signer.sign(input: input, output: output, onAttempt: { n, mode in out("Signing (attempt \(n), mode \(mode.rawValue))…") })
       }) : nil
-      let kind: ShortcutKind = probe ? .probe : lab ? .lab : conversation ? .conversation : entry ? .entry : .ask
+      let kind: ShortcutKind = probe ? .probe : lab ? .lab : entry ? .entry : conversation ?? true ? .conversation : .ask
       let r = try await ShortcutMaker.make(tokens: ctx.tokens, lifecycle: ctx.lifecycle, bots: chosen, profile: profile, baseUrl: baseUrl, kind: kind, replaces: replaces, sign: signer)
       CLI.out("Built \"\(r.name)\" for \(entry ? "bots \(chosen.map(\.key).joined(separator: ", "))" : "bot \(bot.key)") (Siri \(profile.siriLang), gateway \(baseUrl)).")
       if entry {

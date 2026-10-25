@@ -75,7 +75,11 @@ test("default build: English, Bonjour URL, private file named after the Shortcut
   assert.match(xml, /<string>http:\/\/felix-mac\.local:8787\/v1\/ask<\/string>/);
   assert.match(xml, /<string>en-US<\/string>/);
   assert.match(xml, /What would you like to ask Grok Bot\?/);
+  assert.match(xml, /<string>listen<\/string>/, "keeps listening after each answer by default (DECISIONS item 36)");
   assert.match((await cli(["token", "list"])).text, /\tchai\tpending\tGrok Bot\ten-US\t/);
+  const once = await cli(["shortcut", "build", "chai", "--no-conversation", "--name", "My Grok Bot"]);
+  assert.equal(once.code, 0, once.text);
+  assert.doesNotMatch(await readFile(fileOf(once.text), "utf8"), /<string>listen<\/string>/, "--no-conversation: one question per run");
   assert.ok(!r.text.includes(tokenIn(xml)), "the token is never printed");
 });
 

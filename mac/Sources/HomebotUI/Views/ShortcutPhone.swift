@@ -18,8 +18,9 @@ struct ShortcutStep: View {
   @State private var name = ""
   /// This Shortcut's language; nil: the default language (Settings).
   @State private var lang: String?
-  /// Keep listening after each answer (DESIGN §18): opt-in, per-bot Shortcuts only.
-  @State private var conversation = false
+  /// Keep listening after each answer (DESIGN §18): on by default (DECISIONS item 36), per-bot
+  /// Shortcuts only. A Shortcut opened from the list keeps its own choice.
+  @State private var conversation = true
   @State private var url = ""
   /// nil: the default (replace the bot's working Shortcut); "": replace nothing.
   @State private var replaces: String?
@@ -254,7 +255,7 @@ struct ShortcutStep: View {
       phase = .done
       name = ""
       lang = nil
-      conversation = false
+      conversation = true
       replaces = nil
       try? await Task.sleep(nanoseconds: 650_000_000)
       phase = .idle

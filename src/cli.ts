@@ -44,11 +44,11 @@ const USAGE = `Usage: homebot <command>
                                 (--curl-header: as "X-Homebot-Token: ..." for curl -H @file)
   token list | token revoke <tokenId>
   shortcut build <botKey> [--siri-lang en-US|es-ES|fr-FR|de-DE|it-IT|pt-BR|ru-RU|ja-JP|ko-KR|zh-CN|zh-TW] [--phone-lang en|es|fr|de|it|ja|ko|zh-Hans|zh-Hant|pt-BR|ru] [--name <Siri phrase>]
-                 [--url http://host.local:8787] [--replaces <tokenId>] [--probe | --lab | --conversation]
+                 [--url http://host.local:8787] [--replaces <tokenId>] [--probe | --lab | --no-conversation]
                  [--sign] [--reveal]
                                 Build a Shortcut file (token inside; private, short-lived).
-                                --conversation: Siri keeps listening after each answer
-                                (experimental, DESIGN §18)
+                                Siri keeps listening after each answer (DESIGN §18; on by
+                                default); --no-conversation: one question per run
   start --probe-wait            Also serve the Siri wait-limit probe (device session only)
   start --lab                   Also serve the lab Shortcut's experiments (device session only;
                                 never contacts a bot)
@@ -335,6 +335,7 @@ export async function run(argv: string[], { env = process.env, out = console.log
           probe: { type: "boolean" },
           lab: { type: "boolean" },
           conversation: { type: "boolean" },
+          "no-conversation": { type: "boolean" },
           sign: { type: "boolean" },
           reveal: { type: "boolean" },
         },
@@ -373,7 +374,8 @@ export async function run(argv: string[], { env = process.env, out = console.log
         baseUrl,
         probe: values.probe,
         lab: values.lab,
-        conversation: values.conversation,
+        // On by default (DECISIONS item 36); test Shortcuts never loop.
+        conversation: !test && !values["no-conversation"],
         replaces: values.replaces,
         sign: values.sign ? { signer, onAttempt: ({ attempt, mode }) => out(`Signing (attempt ${attempt}, mode ${mode})…`) } : false,
       });

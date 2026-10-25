@@ -1,4 +1,5 @@
-// The make flow's opt-in "Keep listening after each answer" (DESIGN §18, Q18-1): it builds the
+// The make flow's "Keep listening after each answer" (DESIGN §18; on in the form by default,
+// DECISIONS item 36; the model API takes it explicitly): it builds the
 // same conversation Shortcut as `homebot shortcut build --conversation`, the list shows it as
 // plain metadata, and making it again or in a new language keeps the kind.
 import Foundation
