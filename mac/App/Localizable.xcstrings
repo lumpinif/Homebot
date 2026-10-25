@@ -12077,67 +12077,67 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select it, then **Edit › Delete**."
+            "value": "Right-click it, then **Delete…**."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selecciónalo y elige **Edición › Eliminar**."
+            "value": "Haz clic derecho y elige **Eliminar…**."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sélectionnez-le, puis **Édition › Supprimer**."
+            "value": "Clic droit, puis **Supprimer…**."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Auswählen, dann **Bearbeiten › Löschen**."
+            "value": "Rechtsklick, dann **Löschen …**."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selezionalo, poi **Modifica › Elimina**."
+            "value": "Fai clic destro, poi **Elimina…**."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selecione-o e escolha **Editar › Apagar**."
+            "value": "Clique com o botão direito e escolha **Apagar…**."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выберите её, затем **Правка › Удалить**."
+            "value": "Нажмите правой кнопкой, затем **Удалить…**."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "選択して **編集 › 削除**。"
+            "value": "右クリックして **削除…**。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "선택한 다음 **편집 › 삭제**."
+            "value": "오른쪽 클릭한 다음 **삭제…**."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "选中它，然后选 **编辑 › 删除**。"
+            "value": "右键点按它，然后选 **删除…**。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "選取它，然後選 **編輯 › 刪除**。"
+            "value": "用右鍵點按它，然後選 **刪除⋯**。"
           }
         }
       }
