@@ -66,8 +66,8 @@ struct EntryOffer: View {
   }
 }
 
-/// One Shortcut in fixed columns, the same in every row: icon | name over one line of details |
-/// a status dot | Install | the actions menu. The status is the dot's colour (its words are in
+/// One Shortcut in fixed columns, the same in every row: icon | name and its status dot over one
+/// line of details | Install | the actions menu. The status is the dot's colour (its words are in
 /// the tooltip and for VoiceOver); "Install" is always in the same place, prominent only when the
 /// Shortcut needs an update. It is also the way to another iPhone: the Install page's iPhone tab
 /// always offers AirDrop and the code (S26). An action a row can't take is not in its menu.
@@ -90,11 +90,14 @@ struct ShortcutRow: View {
       }
       .frame(width: 36, height: 36)
       VStack(alignment: .leading, spacing: 2) {
-        Text(t.label).font(.system(size: 13, weight: .medium)).lineLimit(1)
+        // The dot describes the Shortcut, so it follows its name; a long name truncates first.
+        HStack(spacing: 3) {
+          Text(t.label).font(.system(size: 13, weight: .medium)).lineLimit(1)
+          StatusMark(status: status, label: status.label(T)).fixedSize()
+        }
         Text(details(t)).font(.system(size: 12)).foregroundStyle(Theme.muted).lineLimit(1).truncationMode(.middle).help(made(t))
       }
       .frame(maxWidth: .infinity, alignment: .leading)
-      StatusMark(status: status, label: status.label(T))
       Button { Task { await model.install(t) } } label: { Text(T.install).frame(minWidth: 56) }
         .modifier(ActionButtonStyle(prominent: status == .needsUpdate))
         .controlSize(.small)
@@ -181,8 +184,8 @@ struct StatusMark: View {
       case .notUsedYet, .retired, .needsKey: Circle().strokeBorder(Color(nsColor: .tertiaryLabelColor), lineWidth: 1.5)
       }
     }
-    .frame(width: 9, height: 9)
-    .frame(width: 20, height: 28)
+    .frame(width: 8, height: 8)
+    .frame(width: 14, height: 16)
     .contentShape(Rectangle())
     .help(label)
     .accessibilityElement()
