@@ -115,14 +115,16 @@ struct AccountStep: View {
           Text(c.source == .saved ? T.keySaved : T.keyDetected).lineLimit(1)
           Spacer(minLength: 8)
           // Shown once Grok Bot answered a check; before a bot exists there is nothing to read.
-          if c.access != .unchecked {
-            StatusDot(text: c.access == .ok ? T.accessOk : T.accessRejected, ok: c.access == .ok)
-              .transition(.opacity)
-          }
-          // The saved key's Remove sits with its status, quiet; the alert still guards it.
-          if c.source == .saved {
-            if c.access != .unchecked { Text("·").font(.system(size: 12)).foregroundStyle(Theme.muted) }
-            DangerLink(title: T.removeKey) { confirmRemove = true }
+          HStack(spacing: 6) {
+            if c.access != .unchecked {
+              StatusDot(text: c.access == .ok ? T.accessOk : T.accessRejected, ok: c.access == .ok)
+                .transition(.opacity)
+            }
+            // The saved key's Remove sits with its status, quiet; the alert still guards it.
+            if c.source == .saved {
+              if c.access != .unchecked { Text("·").font(.system(size: 12)).foregroundStyle(Theme.muted) }
+              DangerLink(title: T.removeKey) { confirmRemove = true }
+            }
           }
         }
         .animation(.easeOut, value: c.access)
