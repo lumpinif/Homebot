@@ -65,18 +65,15 @@ import HomebotTestSupport
     // Never used, file expired or cleaned up: no AirDrop or QR code for a missing file.
     #expect(PhoneDelivery.of(b, [file(token("t1", state: .pending), false)]) == .gone)
     #expect(PhoneDelivery.of(b, []) == .gone)
-    // Make it again: a copy for another iPhone replaces nothing; a lost one replaces what it did.
-    var t = token("t1", bot: "kitchen", state: .active)
-    t.replaces = "t0"
-    #expect(PhoneDelivery.installed.again(t) == ShortcutDraft(bot: "kitchen", replaces: "", entry: false, siriLang: "en-US"))
-    #expect(PhoneDelivery.gone.again(t) == ShortcutDraft(bot: "kitchen", replaces: "t0", entry: false, siriLang: "en-US"))
+    // A new copy: one in use (on a device) is never replaced, a lost one is.
+    #expect(!PhoneDelivery.installed.copyReplaces && PhoneDelivery.gone.copyReplaces)
     // On the phone but not answered yet (DECISIONS 27): no file to send, not "installed", and a
     // copy for another iPhone still replaces nothing.
     var trying = token("t1", bot: "kitchen", state: .pending)
     trying.usedAt = 5
     trying.replaces = "t0"
     #expect(PhoneDelivery.of(b, [trying]) == .trying)
-    #expect(PhoneDelivery.trying.again(trying) == ShortcutDraft(bot: "kitchen", replaces: "", entry: false, siriLang: "en-US"))
+    #expect(PhoneDelivery.trying.onDevice && !PhoneDelivery.trying.copyReplaces)
   }
 
   @Test func aReplacementWaitingForItsFirstAnswerIsOnItsWay() {

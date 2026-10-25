@@ -1235,12 +1235,16 @@ public final class AppModel {
 
   /// A new copy of a Shortcut whose file is gone: the same phrase, bots, language and kind. It
   /// replaces this one once it has answered (a never-used one is replaced at once).
+  /// `replacing: false` is a copy for another device (S26): the file is gone once a Shortcut is in
+  /// use and its token is kept only as a hash, so another iPhone needs a token of its own. It
+  /// replaces nothing, so the device already using this one keeps working, and it takes the first
+  /// free phrase, since two Shortcuts can't share one (§16.2).
   /// `consent`: the user clicked a button that says it signs with Apple.
   @discardableResult
-  public func makeCopy(_ tokenId: String, consent: Bool = false) async -> ShortcutBuild? {
+  public func makeCopy(_ tokenId: String, consent: Bool = false, replacing: Bool = true) async -> ShortcutBuild? {
     guard let t = snapshot.tokens.first(where: { $0.id == tokenId }), t.state != .retired else { return nil }
     if consent, !(await giveSigningConsent()) { return nil }
-    let input = ShortcutInput(bot: t.bot, name: t.label, replaces: t.id, entry: t.mode == .entry, bots: t.bots, siriLang: t.siriLang, conversation: t.mode == .conversation)
+    let input = ShortcutInput(bot: t.bot, name: replacing ? t.label : nil, replaces: replacing ? t.id : nil, entry: t.mode == .entry, bots: t.bots, siriLang: t.siriLang, conversation: t.mode == .conversation)
     return await makeShortcut(input, sign: snapshot.appleSigning)
   }
 

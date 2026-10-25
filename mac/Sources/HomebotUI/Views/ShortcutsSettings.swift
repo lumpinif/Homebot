@@ -69,7 +69,8 @@ struct EntryOffer: View {
 /// One Shortcut in fixed columns, the same in every row: icon | name over one line of details |
 /// a status dot | Install | the actions menu. The status is the dot's colour (its words are in
 /// the tooltip and for VoiceOver); "Install" is always in the same place, prominent only when the
-/// Shortcut needs an update. An action a row can't take is not in its menu.
+/// Shortcut needs an update. It is also the way to another iPhone: the Install page's iPhone tab
+/// always offers AirDrop and the code (S26). An action a row can't take is not in its menu.
 struct ShortcutRow: View {
   @Environment(AppModel.self) private var model
   let token: TokenView
@@ -127,11 +128,6 @@ struct ShortcutRow: View {
     let entry = t.mode == .entry
     return MoreMenu(help: T.shortcutActions) {
       if t.kind == .ask {
-        // A copy for another iPhone: it replaces nothing, so this one keeps working.
-        Button {
-          model.draft = ShortcutDraft(bot: entry ? nil : t.bot, replaces: "", entry: entry, siriLang: t.siriLang, conversation: t.mode == .conversation)
-          model.go(.shortcut)
-        } label: { Label(T.installAnother, systemImage: "iphone.badge.plus") }
         // The same bots in another language or kind; it replaces this one once it has answered.
         Button {
           model.draft = ShortcutDraft(bot: entry ? nil : t.bot, replaces: t.id, entry: entry, siriLang: t.siriLang, conversation: t.mode == .conversation)

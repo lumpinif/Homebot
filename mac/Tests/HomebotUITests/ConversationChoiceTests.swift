@@ -69,13 +69,27 @@ import HomebotTestSupport
     #expect(made[0].endWord == "stop")
   }
 
-  /// "Make it again" on the iPhone step keeps the Shortcut's own language and kind.
-  @Test func makeItAgainKeepsLanguageAndKind() {
-    var t = token("zh", state: .active, siriLang: "zh-CN")
-    t.mode = .conversation
-    let d = PhoneDelivery.installed.again(t)
-    #expect(d.siriLang == "zh-CN" && d.conversation && d.replaces == "" && !d.entry)
-    t.mode = .single
-    #expect(PhoneDelivery.gone.again(t).conversation == false)
+  /// A new copy from the Install page keeps the Shortcut's own language and kind. One for another
+  /// device (S26) replaces nothing and takes a free phrase; a replacement keeps the phrase.
+  @Test func aCopyKeepsLanguageAndKind() async throws {
+    let fake = FakeGrokBot()
+    fake.addNamed("homebot", sid: "14752726")
+    let m = try await makeModel(fake)
+    defer { Task { await m.shutdown() } }
+    _ = await m.saveKey(FakeGrokBot.key)
+    #expect(await m.addBySession("14752726", name: "homebot", strict: true))
+    let k = m.snapshot.bots[0].key
+    let first = try #require(await m.makeShortcut(ShortcutInput(bot: k, siriLang: "zh-CN", conversation: true), sign: false))
+
+    let other = try #require(await m.makeCopy(first.tokenId, replacing: false))
+    let o = try #require(m.snapshot.tokens.first { $0.id == other.tokenId })
+    #expect(o.siriLang == "zh-CN" && o.mode == .conversation && o.replaces == nil)
+    #expect(o.label != first.name, "two Shortcuts can't share a phrase")
+    #expect(m.snapshot.tokens.first { $0.id == first.tokenId }?.state == .pending, "the first one is untouched")
+    #expect(m.build?.tokenId == other.tokenId, "the page shows the copy")
+
+    let again = try #require(await m.makeCopy(other.tokenId))
+    let a = try #require(m.snapshot.tokens.first { $0.id == again.tokenId })
+    #expect(a.label == o.label && a.mode == .conversation && a.siriLang == "zh-CN")
   }
 }

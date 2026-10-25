@@ -349,8 +349,10 @@ struct ExchangePreview: View {
 struct InstallStep: View {
   @Environment(AppModel.self) private var model
   let make: () -> Void
-  @State private var link: DownloadLink?
+  /// The code shown, for the Shortcut it was made for.
+  @State private var link: (tokenId: String, link: DownloadLink)?
   @State private var linking = false
+  @State private var copying = false
 
   var body: some View {
     Group {
@@ -360,7 +362,6 @@ struct InstallStep: View {
         empty
       }
     }
-    .onChange(of: model.build?.tokenId) { link = nil }
   }
 
   var empty: some View {
@@ -451,53 +452,60 @@ struct InstallStep: View {
     }
   }
 
-  /// The iPhone path: AirDrop or a code, then one answer on the iPhone.
+  /// The iPhone path: AirDrop or a code, then one answer on the iPhone. AirDrop and the code are
+  /// always here, so the same tab serves another iPhone, another Apple Account or someone in the
+  /// family (S26).
   @ViewBuilder
   func phone(_ build: ShortcutBuild) -> some View {
     let T = model.tr
     let delivery = PhoneDelivery.of(build, model.snapshot.tokens)
     VStack(spacing: Theme.gap) {
-      if delivery == .send {
-        send(build)
-      } else if delivery == .gone {
-        // The file is deleted once the Shortcut is in use (it holds the Shortcut's token), or when
-        // it was never used in time: nothing is left to send, so the step offers a new copy.
-        Button { again(build, delivery) } label: { Text(T.installMakeCopy).frame(minWidth: 88) }
-          .primaryAction()
+      if delivery.onDevice {
+        FirstAnswer(build: build, answered: delivery == .installed)
+        VStack(alignment: .leading, spacing: 8) {
+          SectionTitle(text: T.installAnother)
+          send(build, delivery)
+        }
+      } else {
+        send(build, delivery)
+        FirstAnswer(build: build, answered: false)
       }
-      FirstAnswer(build: build, answered: delivery == .installed)
       steps(build)
     }
   }
 
-  /// A new copy for the same bots. Gone unused: the same replacement again.
-  func again(_ build: ShortcutBuild, _ delivery: PhoneDelivery) {
-    if let t = model.snapshot.tokens.first(where: { $0.id == build.tokenId }) { model.draft = delivery.again(t) }
-    make()
-  }
-
+  /// AirDrop or a code. The file is deleted once the Shortcut is in use (it holds the Shortcut's
+  /// token), or when it was never used in time: then a click makes a new copy first, right here.
   @ViewBuilder
-  func send(_ build: ShortcutBuild) -> some View {
+  func send(_ build: ShortcutBuild, _ delivery: PhoneDelivery) -> some View {
     let T = model.tr
-    if !build.signed { UnsignedCopy(build: build) }
+    let ready = delivery == .send
+    if ready && !build.signed { UnsignedCopy(build: build) }
     HStack(spacing: 12) {
-      DeliveryCard(symbol: "folder", tint: Color(nsColor: .systemBlue), title: T.airdrop, note: T.airdropNote, enabled: true, busy: false) {
-        Task { await model.reveal(build.tokenId) }
+      DeliveryCard(symbol: "folder", tint: Color(nsColor: .systemBlue), title: T.airdrop, note: T.airdropNote, enabled: !linking, busy: copying) {
+        guard !copying else { return }
+        copying = true
+        Task {
+          if let b = ready ? build : await copy(build, delivery) { await model.reveal(b.tokenId) }
+          copying = false
+        }
       }
       // A download link for a file iOS won't import only leads to an error on the phone.
-      DeliveryCard(symbol: "qrcode", tint: Color(nsColor: .systemPurple), title: T.scan, note: T.scanNote, enabled: build.signed, busy: linking) {
+      DeliveryCard(symbol: "qrcode", tint: Color(nsColor: .systemPurple), title: T.scan, note: T.scanNote, enabled: (build.signed || !ready) && !copying, busy: linking) {
         guard !linking else { return }
         linking = true
         Task {
-          let l = await model.link(build.tokenId)
+          guard let b = ready ? build : await copy(build, delivery) else { linking = false; return }
+          let l = await model.link(b.tokenId)
           linking = false
-          // Another Shortcut of the batch picked meanwhile: this code is not for it.
-          if let l, model.build?.tokenId == build.tokenId { withAnimation(.spring(response: 0.5, dampingFraction: 0.78)) { link = l } }
+          if let l { withAnimation(.spring(response: 0.5, dampingFraction: 0.78)) { link = (b.tokenId, l) } }
         }
       }
     }
     .fixedSize(horizontal: false, vertical: true)
-    if let link, let img = QRCode.image(link.url) {
+    if !ready && !model.snapshot.appleSigning { SignConsentNote() }
+    // Another Shortcut of the batch picked meanwhile: this code is not for it.
+    if let link, link.tokenId == build.tokenId, let img = QRCode.image(link.link.url) {
       VStack(spacing: 10) {
         Image(decorative: img, scale: 1)
           .resizable()
@@ -508,11 +516,17 @@ struct InstallStep: View {
           .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).strokeBorder(Theme.border, lineWidth: 1))
           .accessibilityLabel(T.scan)
         Text(T.qrNote).font(.system(size: 12)).foregroundStyle(Theme.muted)
-        Text(T.fmt(T.expires, ["time": Date(timeIntervalSince1970: link.expiresAt / 1000).formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(T.locale))]))
+        Text(T.fmt(T.expires, ["time": Date(timeIntervalSince1970: link.link.expiresAt / 1000).formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(T.locale))]))
           .font(.system(size: 11)).monospacedDigit().foregroundStyle(Theme.muted)
       }
       .transition(Motion.transition(.scale(scale: 0.92).combined(with: .opacity)))
     }
+  }
+
+  /// The new copy a send needs when the file is gone; the page then shows it. Without consent,
+  /// the click is the consent (the line under the cards says what signing sends).
+  func copy(_ build: ShortcutBuild, _ delivery: PhoneDelivery) async -> ShortcutBuild? {
+    await model.makeCopy(build.tokenId, consent: true, replacing: delivery.copyReplaces)
   }
 
   /// The steps as an animated iPhone (PhoneGuide), in the iPhone's language (chosen right here; it
@@ -731,13 +745,13 @@ enum PhoneDelivery: Equatable {
     return t.hasFile ? .send : .gone
   }
 
-  /// The Shortcut step "Make it again" opens: the same bots, language and kind; on a phone, a copy
-  /// that replaces nothing (its first answer must not retire the one on the first iPhone); else
-  /// what this one replaced.
-  func again(_ t: TokenView) -> ShortcutDraft {
-    ShortcutDraft(bot: t.bot, replaces: self == .installed || self == .trying ? "" : t.replaces ?? "", entry: t.mode == .entry,
-                  siriLang: t.siriLang, conversation: t.mode == .conversation)
-  }
+  /// In use on some device (its file is gone by design).
+  var onDevice: Bool { self == .installed || self == .trying }
+
+  /// Whether a new copy replaces this one. One in use stays in use: its copy, for another
+  /// device, replaces nothing, so its first answer never retires the Shortcut on the first one.
+  /// One never used is replaced (and retired at once, DESIGN §7.7), keeping its phrase.
+  var copyReplaces: Bool { !onDevice }
 }
 
 /// One of the two ways to the phone; the whole card is the button, hover changes its fill only.
