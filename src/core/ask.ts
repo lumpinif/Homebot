@@ -3,7 +3,7 @@
 import { setTimeout as sleep } from "node:timers/promises";
 import { syncToEnd, decideReply, HistoryTooLongError, type Entry, type Turn } from "./entries.ts";
 import { buildEnvelope, newRequestId } from "./envelope.ts";
-import { speakable } from "./speech.ts";
+import { readableBy, speakable } from "./speech.ts";
 import { messages } from "./i18n.ts";
 import { BdkError, type BdkClient } from "./bdk.ts";
 import type { Bot, Cursor, Settings } from "./store.ts";
@@ -187,6 +187,8 @@ export class AskService {
           mark("reply_ms");
           const say = speakable(d.text, settings.maxSpokenChars[lang] ?? 600);
           if (!say) return done("unspeakable", m.unspeakable(), { requestId });
+          // The Shortcut's voice can't read this script: say so rather than speak noise (S25).
+          if (!readableBy(say, lang)) return done("unspeakable", m.unspeakable(), { requestId, reason: "script" });
           if (this.traceIdle.maxMs > 0) this.#traceTail(bot, requestId, pos);
           return done("answered", say, { requestId, a_len: say.length });
         }

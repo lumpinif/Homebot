@@ -234,17 +234,17 @@ struct ConversationTests {
     #expect(c.ask.calls.count == 1 && c2.ask.calls.isEmpty)
   }
 
-  @Test("envelope: every language asks for the language of the question, the token's as fallback (DECISIONS item 29)")
+  @Test("envelope: every language asks for the token's language, whatever the question's (DECISIONS item 31)")
   func envelopeReplyLanguage() {
     let ask: [ReplyLang: String] = [
-      .en: "language of the question", .es: "idioma de la pregunta", .fr: "langue de la question", .de: "Sprache der Frage", .it: "lingua della domanda",
-      .ptBR: "idioma da pergunta", .ru: "на языке вопроса", .ja: "質問と同じ言語", .ko: "질문과 같은 언어", .zhCN: "用提问的语言", .zhTW: "用提問的語言",
+      .en: "answer in English even if", .es: "responde en español aunque", .fr: "réponds en français même si", .de: "antworte auf Deutsch, auch wenn", .it: "rispondi in italiano anche se",
+      .ptBR: "responda em português mesmo que", .ru: "отвечай по-русски, даже если", .ja: "質問が別の言語でも日本語で", .ko: "다른 언어여도 한국어로", .zhCN: "也要用中文回答", .zhTW: "也要用繁體中文回答",
     ]
     #expect(Set(ask.keys) == Set(ReplyLang.allCases))
     for l in ReplyLang.allCases {
       let e = Envelope.build(id: "abc", text: "What time is it?", lang: l, strictEcho: true)
       #expect(e.contains(ask[l]!), "\(l)")
-      #expect(e.hasPrefix("[Homebot voice · hb:abc · \(l.rawValue)]"), "the head names the fallback language")
+      #expect(e.hasPrefix("[Homebot voice · hb:abc · \(l.rawValue)]"), "the head names the reply language")
     }
   }
 

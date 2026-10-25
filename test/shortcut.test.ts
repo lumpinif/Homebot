@@ -47,7 +47,7 @@ test("profile: English is the default; Siri language drives name, prompt, voice"
   assert.equal(en.siriLang, "en-US");
   assert.equal(en.name, "Grok Bot", "a product phrase first (DESIGN §16, Q16-1)");
   assert.deepEqual(en.alternatives, ["My Grok Bot", "Our Grok Bot", "Chai"], "the bot's own name is offered when it fits");
-  assert.equal(en.prompt, "What would you like to ask Chai?");
+  assert.equal(en.prompt, "What would you like to ask Grok Bot?", "the phrase, never the bot (S25)");
   assert.equal(en.speakLang, "en-US");
   assert.equal(en.replyLang, "en");
   assert.deepEqual(en.problems, []);
@@ -58,7 +58,7 @@ test("profile: English is the default; Siri language drives name, prompt, voice"
 test("profile: Felix's setup — iPhone English, Siri Chinese", () => {
   const p = shortcutProfile({ botName: "homebot", siriLang: "zh-CN", phoneLang: "en" });
   assert.equal(p.name, "家庭助手", "only Han characters for a Chinese Siri (DECISIONS item 18)");
-  assert.equal(p.prompt, "想问什么？", "the Latin bot name stays out of the Chinese question");
+  assert.equal(p.prompt, "想问家庭助手什么？", "the phrase the user says, not the bot \"homebot\" (S25)");
   assert.equal(p.speakLang, "zh-CN");
   assert.equal(p.replyLang, "zh-CN");
   assert.deepEqual(p.alternatives, ["我家助手", "居家助手"]);
@@ -72,7 +72,8 @@ test("profile: Felix's setup — iPhone English, Siri Chinese", () => {
 test("profile: script, digits and first words are advice; unsafe names and phrases in use block (DESIGN §16.2)", () => {
   const han = shortcutProfile({ botName: "拆解师", siriLang: "zh-CN" });
   assert.equal(han.name, "家庭助手");
-  assert.equal(han.prompt, "想问拆解师什么？", "a Han bot name fits the Chinese question");
+  assert.equal(han.prompt, "想问家庭助手什么？", "the phrase, not the bot");
+  assert.equal(shortcutProfile({ botName: "拆解师", siriLang: "zh-CN", name: "Grok Bot" }).prompt, "想问什么？", "a phrase with advice is left out of the question");
   assert.deepEqual(han.alternatives, ["我家助手", "居家助手", "拆解师"]);
   const codes = (name: string, siriLang = "zh-CN", taken: string[] = []) => shortcutProfile({ botName: "homebot", siriLang, name, taken }).problems.map((p) => (p.blocking ? p.code : `${p.code}?`));
   assert.deepEqual(codes("家庭助手"), []);
@@ -114,7 +115,7 @@ test("every Siri language: same options as the iPhone menu, a valid default phra
     assert.deepEqual(p.problems, [], `${code}: default phrase "${p.name}" passes its own rules`);
     assert.ok(p.alternatives.length >= 1, `${code}: has alternatives`);
     assert.equal(p.speakLang, code, `${code}: Speak Text voice`);
-    assert.ok(p.prompt.length > 3 && !/Chai/.test(p.prompt) === /^(ru|ja|ko|zh)/.test(code), `${code}: prompt names the bot only in its own script`);
+    assert.ok(p.prompt.includes(p.name) && !p.prompt.includes("Chai"), `${code}: prompt names the phrase, never the bot (S25)`);
     assert.ok(!seen.has(p.name), `${code}: default phrase differs from other languages`);
     seen.add(p.name);
     assert.ok(heySiri(code, p.name).includes(p.name));

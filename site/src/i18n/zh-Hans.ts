@@ -35,7 +35,6 @@ export const zhHans: Strings = {
   stage4: "Siri 读出回答",
   pause: "暂停",
   play: "播放",
-  sampleBot: "跑腿助手",
   sampleQ: "扫地机器人那个对比做完了吗？",
   sampleA: "三台比完了两台，目前便宜的那台扫得一样干净。全部做完我把表格发给你。",
 

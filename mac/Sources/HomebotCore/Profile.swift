@@ -122,7 +122,7 @@ public enum Profile {
 
   /// The entry Shortcut's profile (DESIGN §20.5): a product phrase of the Siri language's table,
   /// never a bot's name (the phrase stands for every bot in the set), and the question prompt
-  /// without a bot. The phrase rules, kept phrase and uniqueness are the same as for any Shortcut.
+  /// without a name. The phrase rules, kept phrase and uniqueness are the same as for any Shortcut.
   public static func entry(siriLang: String = Langs.defaultSiriLang, phoneLang: String = Langs.defaultPhoneLang.rawValue, name: String? = nil, keep: String? = nil, taken: [String] = []) throws -> ShortcutProfile {
     try make(botName: "", siriLang: siriLang, phoneLang: phoneLang, name: name, keep: keep, taken: taken)
   }
@@ -150,7 +150,9 @@ public enum Profile {
     guard !finalName.isEmpty, finalName.utf16.count <= 60 else { throw ProfileError(description: "Shortcut name must be 1-60 characters") }
     return ShortcutProfile(
       siriLang: siriLang, phoneLang: phone, replyLang: reply, name: finalName,
-      prompt: row.prompt(botFits ? bot : nil),
+      // The question names the phrase the user said, never the bot: a bot called "homebot" read
+      // as the app's name (S25). An entry Shortcut (no bot) asks without a name.
+      prompt: row.prompt(!bot.isEmpty && problems(finalName, row, taken: []).isEmpty ? finalName : nil),
       speakLang: siriLang, // Speak Text voice follows Siri's language, not the iPhone's
       probeName: row.probeName, labName: row.labName,
       alternatives: usable.filter { labelKey($0) != labelKey(finalName) },

@@ -35,7 +35,6 @@ export const ptBR: Strings = {
   stage4: "A Siri lê a resposta",
   pause: "Pausar",
   play: "Reproduzir",
-  sampleBot: "Tarefas",
   sampleQ: "Como está a comparação dos robôs aspiradores?",
   sampleA: "Já fiz dois de três. Até agora o mais barato limpa igual. Mando a tabela quando terminar.",
 

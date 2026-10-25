@@ -35,7 +35,6 @@ export const it: Strings = {
   stage4: "Siri legge la risposta",
   pause: "Pausa",
   play: "Riproduci",
-  sampleBot: "Commissioni",
   sampleQ: "Come va il confronto tra i robot aspirapolvere?",
   sampleA: "Due su tre fatti. Per ora il più economico pulisce altrettanto bene. Ti mando la tabella quando ho finito.",
 

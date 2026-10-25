@@ -341,7 +341,7 @@ struct AskTests {
     let r = await h.ask("What time is it?", lang: .en)
     #expect(r.text == "It is three.")
     #expect(h.fake.posts[0].text.firstMatch(of: /^\[Homebot voice · hb:[0-9a-f]{12} · en\]\nWhat time is it\?\n/) != nil)
-    #expect(h.fake.posts[0].text.contains("in the language of the question (English if unclear)"))
+    #expect(h.fake.posts[0].text.contains("Then answer in English,") && h.fake.posts[0].text.contains("answer in English even if the question is in another language."))
   }
 
   @Test("busy rule: idle=false, inFlight=true or queued>0 each count as busy")
@@ -447,6 +447,27 @@ struct AskTests {
     #expect(r.outcome == "answered")
     #expect(r.text == "好的 结束 。")
     #expect(!r.text.contains("hb:") && !r.text.contains(FakeGrokBot.key))
+  }
+
+  @Test("S25: a reply its voice can't read is never spoken; the token's language says so instead")
+  func unreadableScript() async throws {
+    let h = try await askHarness()
+    h.fake.autoReply(SID, text: "我是 homebot，陪你琢磨软件点子的工程师朋友。")
+    let en = await h.ask("你是谁", lang: .en)
+    #expect(en.outcome == "unspeakable" && en.reason == "script")
+    #expect(en.text == Messages.of(.en).unspeakable)
+    h.fake.autoReply(SID, text: "我是 homebot。")
+    #expect(await h.ask("你是谁", lang: .zhCN).text == "我是 homebot。", "a Chinese voice reads it, Latin words included")
+  }
+
+  @Test("S25: which letters each voice can read")
+  func readableScripts() {
+    let cases: [(String, ReplyLang, Bool)] = [
+      ("我是 homebot。", .en, false), ("我是 homebot。", .zhCN, true), ("It is three.", .zhTW, true), ("Café crème, 3 €", .fr, true),
+      ("コーヒーを飲む", .ja, true), ("コーヒー", .zhCN, false), ("안녕하세요 OK", .ko, true), ("안녕", .ja, false),
+      ("Привет, OK", .ru, true), ("Привет", .de, false), ("", .en, true),
+    ]
+    for (s, lang, ok) in cases { #expect(Speech.readable(s, by: lang) == ok, "\(lang): \(s)") }
   }
 
   @Test("a reply that is only protocol text is unspeakable")

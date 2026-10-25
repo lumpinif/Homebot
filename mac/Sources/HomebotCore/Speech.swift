@@ -52,6 +52,27 @@ public enum Speech {
     truncate(sanitize(s), maxChars)
   }
 
+  /// Letters each Speak Text voice can read, by script. Common/Inherited letters (e.g. the
+  /// Japanese long-vowel mark) are always fine, and every voice reads Latin, with an accent. A
+  /// letter in any other script is read as noise or skipped (an en-US voice read a Chinese answer
+  /// as noise on a Mac, S25), so such a reply is never spoken.
+  static let unreadable: [ReplyLang: NSRegularExpression] = {
+    let extra: [ReplyLang: String] = [
+      .ru: #"\p{Script=Cyrillic}"#, .ja: #"\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}"#, .ko: #"\p{Script=Hangul}"#,
+      .zhCN: #"\p{Script=Han}"#, .zhTW: #"\p{Script=Han}"#,
+    ]
+    var m: [ReplyLang: NSRegularExpression] = [:]
+    for l in ReplyLang.allCases {
+      m[l] = try! NSRegularExpression(pattern: #"[^\P{L}\p{Script=Latin}\p{Script=Common}\p{Script=Inherited}"# + (extra[l] ?? "") + "]")
+    }
+    return m
+  }()
+
+  /// True when the voice of `lang` can read every letter of `s`.
+  public static func readable(_ s: String, by lang: ReplyLang) -> Bool {
+    unreadable[lang]!.firstMatch(in: s, range: NSRange(s.startIndex..., in: s)) == nil
+  }
+
   static func trimEnd(_ s: String) -> String {
     var scalars = Array(s.unicodeScalars)
     while let last = scalars.last, trimSet.contains(last) { scalars.removeLast() }

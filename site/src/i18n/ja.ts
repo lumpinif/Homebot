@@ -35,7 +35,6 @@ export const ja: Strings = {
   stage4: "Siri が答えを読み上げる",
   pause: "一時停止",
   play: "再生",
-  sampleBot: "おつかい係",
   sampleQ: "ロボット掃除機の比較、どうなった？",
   sampleA: "3 台中 2 台が終わりました。今のところ安いほうも同じくらいきれいです。終わったら表を送りますね。",
 

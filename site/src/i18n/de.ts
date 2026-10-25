@@ -35,7 +35,6 @@ export const de: Strings = {
   stage4: "Siri liest die Antwort vor",
   pause: "Pause",
   play: "Abspielen",
-  sampleBot: "Besorgungen",
   sampleQ: "Wie weit ist der Vergleich der Saugroboter?",
   sampleA: "Zwei von drei sind fertig. Bisher putzt der günstigere genauso gut. Die Tabelle schicke ich dir, wenn ich fertig bin.",
 

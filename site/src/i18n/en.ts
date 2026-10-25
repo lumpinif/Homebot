@@ -38,7 +38,6 @@ export const en = {
   stage4: "Siri reads the reply",
   pause: "Pause",
   play: "Play",
-  sampleBot: "Errands",
   sampleQ: "How's the vacuum comparison going?",
   sampleA: "Two of the three are done. So far the cheaper one cleans just as well. I'll send you the table when I'm finished.",
 

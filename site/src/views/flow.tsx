@@ -78,7 +78,7 @@ export function Flow() {
   // The sample exchange is in the page's language, with the app's own wake phrase and question.
   const sl = siriLang(lang);
   const wake = hey(sl, sl.phrases[0]);
-  const ask = sl.prompt(t.sampleBot);
+  const ask = sl.prompt(sl.phrases[0]);
   const lines: { who: "you" | "siri"; text: string }[] = [
     { who: "you", text: wake },
     { who: "siri", text: ask },

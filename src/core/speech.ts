@@ -30,3 +30,23 @@ export function truncate(s: string, maxChars: number): string {
 }
 
 export const speakable = (s: string, maxChars: number): string => truncate(sanitize(s), maxChars);
+
+/**
+ * Letters each Speak Text voice can read, by script. Common/Inherited letters (e.g. the Japanese
+ * long-vowel mark) are always fine, and every voice reads Latin, with an accent. A letter in any
+ * other script is read as noise or skipped (an en-US voice read a Chinese answer as noise on a Mac,
+ * S25), so such a reply is never spoken.
+ */
+const READABLE: Record<string, string> = {
+  ru: "\\p{Script=Cyrillic}",
+  ja: "\\p{Script=Han}\\p{Script=Hiragana}\\p{Script=Katakana}",
+  ko: "\\p{Script=Hangul}",
+  "zh-CN": "\\p{Script=Han}",
+  "zh-TW": "\\p{Script=Han}",
+};
+
+export const unreadablePattern = (lang: string): string =>
+  `[^\\P{L}\\p{Script=Latin}\\p{Script=Common}\\p{Script=Inherited}${READABLE[lang] ?? ""}]`;
+
+/** True when the voice of `lang` can read every letter of `s`. */
+export const readableBy = (s: string, lang: string): boolean => !new RegExp(unreadablePattern(lang), "u").test(s);

@@ -96,7 +96,7 @@ struct ShortcutTests {
     #expect(en.siriLang == "en-US")
     #expect(en.name == "Grok Bot", "a product phrase first (DESIGN §16, Q16-1)")
     #expect(en.alternatives == ["My Grok Bot", "Our Grok Bot", "Chai"])
-    #expect(en.prompt == "What would you like to ask Chai?")
+    #expect(en.prompt == "What would you like to ask Grok Bot?", "the phrase, never the bot (S25)")
     #expect(en.speakLang == "en-US")
     #expect(en.replyLang == .en)
     #expect(en.problems.isEmpty)
@@ -107,7 +107,7 @@ struct ShortcutTests {
   func felix() throws {
     let p = try Profile.make(botName: "homebot", siriLang: "zh-CN", phoneLang: "en")
     #expect(p.name == "家庭助手")
-    #expect(p.prompt == "想问什么？", "the Latin bot name stays out of the Chinese question")
+    #expect(p.prompt == "想问家庭助手什么？", "the phrase the user says, not the bot \"homebot\" (S25)")
     #expect(p.speakLang == "zh-CN")
     #expect(p.replyLang == .zhCN)
     #expect(p.alternatives == ["我家助手", "居家助手"])
@@ -126,7 +126,8 @@ struct ShortcutTests {
   func phraseRules() throws {
     let han = try Profile.make(botName: "拆解师", siriLang: "zh-CN")
     #expect(han.name == "家庭助手")
-    #expect(han.prompt == "想问拆解师什么？")
+    #expect(han.prompt == "想问家庭助手什么？", "the phrase, not the bot")
+    #expect(try Profile.make(botName: "拆解师", siriLang: "zh-CN", name: "Grok Bot").prompt == "想问什么？", "a phrase with advice is left out of the question")
     #expect(han.alternatives == ["我家助手", "居家助手", "拆解师"])
     #expect(try codes("家庭助手") == [])
     #expect(try codes("homebot 你好") == ["wrong-script?"])
@@ -170,8 +171,7 @@ struct ShortcutTests {
       #expect(p.problems.isEmpty, "\(code): \(p.name)")
       #expect(!p.alternatives.isEmpty)
       #expect(p.speakLang == code)
-      let ownScript = ["ru", "ja", "ko", "zh"].contains { code.hasPrefix($0) }
-      #expect(p.prompt.count > 3 && p.prompt.contains("Chai") != ownScript, "\(code)")
+      #expect(p.prompt.contains(p.name) && !p.prompt.contains("Chai"), "\(code): the prompt names the phrase, never the bot (S25)")
       #expect(!seen.contains(p.name))
       seen.insert(p.name)
       #expect(Langs.heySiri(code, p.name).contains(p.name))

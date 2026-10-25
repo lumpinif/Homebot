@@ -44,7 +44,7 @@ struct MakeTests {
     let xml = try String(contentsOf: m.file, encoding: .utf8)
     #expect(xml.contains("<string>http://felix-mac.local:8787/v1/ask</string>"))
     #expect(xml.contains("<string>en-US</string>"))
-    #expect(xml.contains("What would you like to ask homebot?"))
+    #expect(xml.contains("What would you like to ask Grok Bot?"), "the phrase, never the bot (S25)")
     let info = try #require(await e.tokens.list().first)
     #expect(info.state == .pending && info.label == "Grok Bot" && info.siriLang == "en-US" && info.mode == .single)
     #expect(info.bots == [BotGrant(key: "chai", sessionId: chai.sessionId)])
@@ -59,7 +59,7 @@ struct MakeTests {
     #expect(m.name == "家庭助手")
     let xml = try String(contentsOf: m.file, encoding: .utf8)
     #expect(xml.contains("<key>WFSpeakTextLanguage</key>\n\t\t\t\t<string>zh-CN</string>") || xml.contains("zh-CN"))
-    #expect(xml.contains("想问什么？"))
+    #expect(xml.contains("想问家庭助手什么？"))
     #expect(xml.contains("http://192.168.1.5:8787/v1/ask"))
   }
 

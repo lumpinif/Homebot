@@ -74,7 +74,7 @@ test("default build: English, Bonjour URL, private file named after the Shortcut
   const xml = await readFile(file, "utf8");
   assert.match(xml, /<string>http:\/\/felix-mac\.local:8787\/v1\/ask<\/string>/);
   assert.match(xml, /<string>en-US<\/string>/);
-  assert.match(xml, /What would you like to ask homebot\?/);
+  assert.match(xml, /What would you like to ask Grok Bot\?/);
   assert.match((await cli(["token", "list"])).text, /\tchai\tpending\tGrok Bot\ten-US\t/);
   assert.ok(!r.text.includes(tokenIn(xml)), "the token is never printed");
 });
@@ -88,7 +88,7 @@ test("Felix's setup: iPhone English, Siri Chinese", async () => {
   assert.match(r.text, /allow it to connect to 192\.168\.1\.5:8787/);
   const xml = await readFile(fileOf(r.text), "utf8");
   assert.match(xml, /<key>WFSpeakTextLanguage<\/key>\s*<string>zh-CN<\/string>/);
-  assert.match(xml, /想问什么？/);
+  assert.match(xml, /想问家庭助手什么？/);
 });
 
 test("language defaults come from settings (the user's setup answers)", async () => {

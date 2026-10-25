@@ -258,6 +258,8 @@ public actor AskService {
             let cleaned = ProtocolFilter.clean(text, requestId: requestId, secrets: secrets)
             let say = Speech.speakable(cleaned, settings.maxSpoken(req.lang.rawValue))
             if say.isEmpty { return finish("unspeakable", m.unspeakable) }
+            // The Shortcut's voice can't read this script: say so rather than speak noise (S25).
+            if !Speech.readable(say, by: req.lang) { return finish("unspeakable", m.unspeakable, reason: "script") }
             // Revoked while the bot answered: the answer is not returned (T3).
             if let still = req.stillGranted, !(await still()) { return finish("revoked", m.botNotConfigured, extra: ["phase": "after-reply"]) }
             return finish("answered", say, delivery: skipped + 1, interim: skipped, extra: ["a_len": .int(say.count)])

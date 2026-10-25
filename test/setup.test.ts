@@ -177,7 +177,7 @@ test("setup: English is the default for a new user", async () => {
   assert.equal((await h.post("/api/bots", { sessionId: SID, name: "Chai" })).status, 200);
   const p = (await h.post("/api/shortcuts/preview", { bot: "chai" })).preview();
   assert.equal(p.name, "Grok Bot");
-  assert.equal(p.prompt, "What would you like to ask Chai?");
+  assert.equal(p.prompt, "What would you like to ask Grok Bot?", "the question names the phrase, never the bot (S25)");
   assert.match(p.steps.join("\n"), /Allow Running When Locked/);
 });
 
@@ -190,7 +190,7 @@ test("setup: Felix's mix (iPhone English, Siri Chinese) end to end through the p
   const pre = (await h.post("/api/shortcuts/preview", { bot: bot.key })).preview();
   assert.equal(pre.kind, "ask");
   assert.equal(pre.name, "家庭助手", "DESIGN §16: only Chinese characters for a Chinese Siri");
-  assert.equal(pre.prompt, "想问什么？", "a Latin bot name is left out of the Chinese question");
+  assert.equal(pre.prompt, "想问家庭助手什么？", "the question names the phrase, never the bot (S25)");
   assert.deepEqual(pre.alternatives, ["我家助手", "居家助手"]);
   assert.deepEqual(pre.problems, []);
   const mixed = (await h.post("/api/shortcuts/preview", { bot: bot.key, name: "homebot 你好" })).preview();

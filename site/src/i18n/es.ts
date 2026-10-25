@@ -35,7 +35,6 @@ export const es: Strings = {
   stage4: "Siri lee la respuesta",
   pause: "Pausa",
   play: "Reproducir",
-  sampleBot: "Recados",
   sampleQ: "¿Cómo va la comparación de robots aspiradores?",
   sampleA: "Llevo dos de tres. Por ahora el más barato limpia igual de bien. Te mando la tabla cuando termine.",
 

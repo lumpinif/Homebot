@@ -334,7 +334,9 @@ export function shortcutProfile({ botName, siriLang = DEFAULT_SIRI_LANG, phoneLa
     phoneLang,
     replyLang: reply,
     name: finalName,
-    prompt: row.prompt(botFits ? bot : undefined),
+    // The question names the phrase the user said, never the bot: a bot called "homebot" read as
+    // the app's name (S25). An entry Shortcut (no bot) asks without a name.
+    prompt: row.prompt(bot && !phraseProblems(finalName, row, []).length ? finalName : undefined),
     speakLang: siriLang, // Speak Text voice follows Siri's language, not the iPhone's
     probeName: row.probeName,
     labName: row.labName,

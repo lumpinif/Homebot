@@ -35,7 +35,6 @@ export const ko: Strings = {
   stage4: "Siri가 답 읽기",
   pause: "일시 정지",
   play: "재생",
-  sampleBot: "심부름 비서",
   sampleQ: "로봇청소기 비교는 어떻게 돼 가?",
   sampleA: "세 대 중 두 대를 마쳤어요. 지금까진 저렴한 쪽도 똑같이 깨끗해요. 다 끝나면 표를 보내 드릴게요.",
 
