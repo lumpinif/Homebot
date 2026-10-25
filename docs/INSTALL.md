@@ -38,7 +38,7 @@ Click **Done**. Do not click Move to Trash.
 
 The Open Anyway button is there for about an hour after step 3. If it is gone, open Homebot again (step 3) and come back.
 
-*(Picture pending: this step has not been captured yet. On the Mac used for these pictures, the "was blocked" line had not appeared yet while the message from step 3 was still open.)*
+![Privacy & Security, Security section: “Homebot.app” was blocked to protect your Mac. Button: Open Anyway.](images/install/open-anyway-en.png)
 
 ## 5. Open Homebot
 

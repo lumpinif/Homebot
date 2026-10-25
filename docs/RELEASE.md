@@ -28,27 +28,26 @@ Run it in a clean checkout (it refuses changes under `mac/`). The version is `ma
 
 - [ ] **Real-device checks** from STATUS S16 (also in [ACCEPTANCE.md](ACCEPTANCE.md) §3): the This Mac path end to end and its ticks; iCloud sync to the iPhone and HomePod; replacing on the Mac path (delete first; what a same-name import does); the sync tip's settings paths; delete the probe Shortcuts "HB Install Probe 1", "2", "3".
 - [x] **Version**: `0.1.0` for the first public release (Felix, 2026-10-25). `0.5.0` had been a placeholder set with the release script in Swift phase S5 (commit 0f46c70), not a decision.
-- [ ] **Download URL / GitHub Release**: README and INSTALL download through `https://homebot.fun/download/latest?from=github` (the agent prompt uses `from=agent`), with `https://github.com/lumpinif/Homebot/releases` as the fallback. No release exists yet. Upload the zip and paste the notes below, with the SHA-256 from the `.txt`.
-- [ ] **Repository visibility**: `lumpinif/Homebot` is **private** (checked with `gh repo view`), so the Releases link and the agent prompt's repository link don't work for anyone else. Make it public, or host the zip elsewhere and change the links.
-- [ ] **Website hosting**: the site on branch `claude/website-2fd2d7` (`site/`, with the agent guide `site/public/install.md`) is not merged or hosted. Choose where it lives and its domain.
-- [ ] **"Open Anyway" picture** for `docs/INSTALL*.md` (the only missing picture).
+- [x] **Download URL / GitHub Release**: the main download is `https://homebot.fun/download/latest?from=…`, which redirects to the zip in the R2 bucket `homebot-releases`; the same zip (same SHA-256) is attached to the GitHub Release `v0.1.0` as the fallback (Felix, 2026-10-26: release the first version).
+- [x] **Repository visibility**: `lumpinif/Homebot` is public, with a fresh history (Felix, 2026-10-25).
+- [x] **Website hosting**: homebot.fun, one Cloudflare Worker on Felix's personal account (`cloud/DEPLOY.md`).
+- [x] **"Open Anyway" picture**: `docs/images/install/open-anyway-en.png`, captured 2026-10-26 on Felix's Mac (macOS 26) from a quarantined copy of the app; Open Anyway was not clicked.
 - [x] **Siri orb**: kept. It is our own drawing and differs from Apple's (Felix, 2026-10-25).
 
-## Release notes (draft)
+## Release notes (v0.1.0)
 
-> **Homebot 0.1.0** — first release of the native Mac app.
+> **Homebot 0.1.0**: the first release.
 >
-> Ask your Grok Bot with Siri on HomePod and iPhone. Homebot runs on your Mac at home and makes the Siri Shortcut for you. Setup is clicking, no Terminal.
+> Ask your Grok Bot with Siri on HomePod, iPhone and Mac. Homebot runs on your Mac at home and makes the Siri Shortcut for you. Setup is clicking, no Terminal.
 >
-> - Four setup steps: Account, Bot, Shortcut, Install.
-> - Install on **This Mac** (same Apple Account and iCloud Sync on; iCloud brings it to your iPhone) or send it to your **iPhone** by AirDrop or QR code. One answer finishes setup.
-> - English phrases "Grok Bot", "My Grok Bot", "Our Grok Bot"; eleven Siri languages, each Shortcut keeps its own. Homebot asks your bot to answer in the language you ask in.
-> - Phrase rules are advice; tapping a Shortcut always works.
-> - Optional conversation mode: Siri keeps listening after each answer.
-> - "Why didn't Siri speak?" help, an app icon that follows Light and Dark, a calmer Shortcuts list.
->
-> **Status:** release candidate. Tested offline (over 500 automated tests); not yet confirmed answering a real Siri request on a device. Languages other than English and Chinese are drafts.
+> - Four setup steps: Account, Bot, Shortcut, Install. Home shows **Ready** when Siri can reach your bot.
+> - Install on **This Mac** (iCloud brings it to your iPhone) or send it to an **iPhone** by AirDrop or QR code, also to an iPhone on another Apple Account.
+> - Say "Hey Siri, Grok Bot". Siri keeps listening after each answer; say you're done to end.
+> - Eleven Siri languages. Each Shortcut keeps its own phrase and voice, and your bot answers in that language. Make as many Shortcuts as you like.
+> - Strict reply checking: Siri reads only the answer to your question, never a different one.
+> - Activity shows what was asked and said, stored only on this Mac.
+> - Anonymous analytics are off unless you choose Share.
 >
 > **First open:** Homebot isn't notarized. macOS says "Homebot.app" Not Opened: click Done, then System Settings › Privacy & Security › Open Anyway. [Guide with pictures](https://github.com/lumpinif/Homebot/blob/main/docs/INSTALL.md).
 >
-> Requires macOS 15 or later (Apple silicon or Intel). SHA-256: from `Homebot-0.1.0.txt` of the commit you release (each commit changes the build number and the hash).
+> Requires macOS 15 or later (Apple silicon or Intel). Download: https://homebot.fun. SHA-256: on the release page and in `Homebot-0.1.0.txt`.
