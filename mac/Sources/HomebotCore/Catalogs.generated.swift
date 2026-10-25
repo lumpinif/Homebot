@@ -528,14 +528,14 @@ extension Profile {
       "在“快捷指令” App 中轻点“\(name)”运行一次，并允许它连接 \(host)。",
       "打开该快捷指令的详细信息（ⓘ），如果看到“锁定时允许运行”，请打开。",
       "HomePod：在“家庭” App 中打开“识别我的声音”和“个人内容”（iOS 26 之前叫“个人请求”），并在“查找”中把这台 iPhone 设为定位设备。",
-      "先在 iPhone 上测试（iPhone 的 Siri 语言要和 HomePod 的一致）：“嘿Siri，\(name)”。新名字在 HomePod 上可能要几分钟到一天才生效。",
+      "先在 iPhone 上测试（iPhone 的 Siri 语言要和 HomePod 的一致）：“嘿 Siri，\(name)”。新名字在 HomePod 上可能要几分钟到一天才生效。",
     ] },
     .zhHant: { name, host in [
       "把檔案傳到 iPhone（AirDrop），然後點一下「加入捷徑」。",
       "在「捷徑」App 中點一下「\(name)」執行一次，並允許它連接 \(host)。",
       "打開該捷徑的詳細資訊（ⓘ），如果看到「鎖定時允許執行」，請將它打開。",
       "HomePod：在「家庭」App 中打開「辨識我的聲音」和「個人化內容」，並在「尋找」中把這台 iPhone 設為定位裝置。",
-      "先在 iPhone 上測試（iPhone 的 Siri 語言要和 HomePod 的一致）：「嘿Siri，\(name)」。新名字在 HomePod 上可能要幾分鐘到一天才生效。",
+      "先在 iPhone 上測試（iPhone 的 Siri 語言要和 HomePod 的一致）：「嘿 Siri，\(name)」。新名字在 HomePod 上可能要幾分鐘到一天才生效。",
     ] },
   ]
 }

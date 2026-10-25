@@ -190,7 +190,7 @@ test("setup: Felix's mix (iPhone English, Siri Chinese) end to end through the p
   const pre = (await h.post("/api/shortcuts/preview", { bot: bot.key })).preview();
   assert.equal(pre.kind, "ask");
   assert.equal(pre.name, "Grok Bot", "the default in every language; a Chinese Siri ran it (DECISIONS item 33)");
-  assert.equal(pre.prompt, "想问Grok Bot什么？", "the question names the phrase, never the bot (S25)");
+  assert.equal(pre.prompt, "想问 Grok Bot 什么？", "the question names the phrase, never the bot (S25)");
   assert.deepEqual(pre.alternatives, ["我的 Grok Bot", "家庭助手", "我家助手"], "a bot called homebot is never suggested");
   assert.deepEqual(pre.problems, []);
   const mixed = (await h.post("/api/shortcuts/preview", { bot: bot.key, name: "homebot 你好" })).preview();

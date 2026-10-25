@@ -88,7 +88,7 @@ test("Felix's setup: iPhone English, Siri Chinese", async () => {
   assert.match(r.text, /allow it to connect to 192\.168\.1\.5:8787/);
   const xml = await readFile(fileOf(r.text), "utf8");
   assert.match(xml, /<key>WFSpeakTextLanguage<\/key>\s*<string>zh-CN<\/string>/);
-  assert.match(xml, /想问Grok Bot什么？/);
+  assert.match(xml, /想问 Grok Bot 什么？/);
 });
 
 test("language defaults come from settings (the user's setup answers)", async () => {
@@ -214,7 +214,7 @@ test("M2 S3: probe build instructions name the probe Shortcut, never the Ask Sho
   const r = await cli(["shortcut", "build", "chai", "--probe", "--siri-lang", "zh-CN", "--phone-lang", "zh-Hans"]);
   assert.match(r.text, /Built "家庭等待测试"/);
   assert.match(r.text, /轻点“家庭等待测试”运行一次/);
-  assert.match(r.text, /“嘿Siri，家庭等待测试”/);
+  assert.match(r.text, /“嘿 Siri，家庭等待测试”/);
   assert.ok(!r.text.includes("家庭助手"), "would invoke the bot instead of measuring the wait");
   assert.ok(!r.text.includes("Note: the name was changed"));
 });

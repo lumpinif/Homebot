@@ -35,8 +35,8 @@ public enum Lang: String, CaseIterable, Sendable, Codable {
     case .ru: Info(name: "Русский", siri: "ru-RU", reply: .ru, hey: "Привет, Siri, {name}")
     case .ja: Info(name: "日本語", siri: "ja-JP", reply: .ja, hey: "Hey Siri、{name}")
     case .ko: Info(name: "한국어", siri: "ko-KR", reply: .ko, hey: "Siri야, {name}")
-    case .zhHans: Info(name: "简体中文", siri: "zh-CN", reply: .zhCN, hey: "嘿Siri，{name}")
-    case .zhHant: Info(name: "繁體中文", siri: "zh-TW", reply: .zhTW, hey: "嘿Siri，{name}")
+    case .zhHans: Info(name: "简体中文", siri: "zh-CN", reply: .zhCN, hey: "嘿 Siri，{name}")
+    case .zhHant: Info(name: "繁體中文", siri: "zh-TW", reply: .zhTW, hey: "嘿 Siri，{name}")
     }
   }
 
@@ -94,8 +94,18 @@ public enum Langs {
     langOfSiri(siriLang).info.reply
   }
 
+  private static let hanLatin = try! NSRegularExpression(pattern: "(\\p{Script=Han})(?=[A-Za-z0-9])|([A-Za-z0-9])(?=\\p{Script=Han})")
+
+  /// Chinese text that embeds a name puts a space between Han and Latin letters or digits
+  /// ("想问我的 Grok Bot 什么？"). Other languages (Japanese and Korean too) pass through unchanged.
+  public static func spaceMixed(_ text: String, _ lang: String) -> String {
+    guard lang.hasPrefix("zh") else { return text }
+    return hanLatin.stringByReplacingMatches(in: text, range: NSRange(text.startIndex..., in: text), withTemplate: "$1$2 ")
+  }
+
   /// What the user says to run a Shortcut, in its Siri language: "Hey Siri, <name>".
   public static func heySiri(_ siriLang: String?, _ name: String) -> String {
-    langOfSiri(siriLang).info.hey.replacingOccurrences(of: "{name}", with: name)
+    let lang = langOfSiri(siriLang)
+    return spaceMixed(lang.info.hey.replacingOccurrences(of: "{name}", with: name), lang.info.reply.rawValue)
   }
 }

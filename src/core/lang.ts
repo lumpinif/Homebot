@@ -30,8 +30,8 @@ export const LANGUAGES = {
   ru: { name: "Русский", siri: "ru-RU", reply: "ru", hey: "Привет, Siri, {name}" },
   ja: { name: "日本語", siri: "ja-JP", reply: "ja", hey: "Hey Siri、{name}" },
   ko: { name: "한국어", siri: "ko-KR", reply: "ko", hey: "Siri야, {name}" },
-  "zh-Hans": { name: "简体中文", siri: "zh-CN", reply: "zh-CN", hey: "嘿Siri，{name}" },
-  "zh-Hant": { name: "繁體中文", siri: "zh-TW", reply: "zh-TW", hey: "嘿Siri，{name}" },
+  "zh-Hans": { name: "简体中文", siri: "zh-CN", reply: "zh-CN", hey: "嘿 Siri，{name}" },
+  "zh-Hant": { name: "繁體中文", siri: "zh-TW", reply: "zh-TW", hey: "嘿 Siri，{name}" },
 } as const satisfies Record<string, { name: string; siri: string; reply: string; hey: string }>;
 
 export type Lang = keyof typeof LANGUAGES;
@@ -75,5 +75,13 @@ export function replyLang(siriLang: string | undefined): ReplyLang {
   return LANGUAGES[langOfSiri(siriLang)].reply;
 }
 
+/**
+ * Chinese text that embeds a name puts a space between Han and Latin letters or digits
+ * ("想问我的 Grok Bot 什么？"). Other languages (Japanese and Korean too) pass through unchanged.
+ */
+export const spaceMixed = (text: string, lang: string): string =>
+  lang.startsWith("zh") ? text.replace(/(\p{Script=Han})(?=[A-Za-z0-9])|([A-Za-z0-9])(?=\p{Script=Han})/gu, "$1$2 ") : text;
+
 /** What the user says to run a Shortcut, in its Siri language: "Hey Siri, <name>". */
-export const heySiri = (siriLang: string | undefined, name: string): string => LANGUAGES[langOfSiri(siriLang)].hey.replace("{name}", name);
+export const heySiri = (siriLang: string | undefined, name: string): string =>
+  spaceMixed(LANGUAGES[langOfSiri(siriLang)].hey.replace("{name}", name), LANGUAGES[langOfSiri(siriLang)].reply);

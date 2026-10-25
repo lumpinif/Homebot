@@ -159,7 +159,7 @@ public enum Profile {
       siriLang: siriLang, phoneLang: phone, replyLang: reply, name: finalName,
       // The question names the phrase the user said, never the bot: a bot called "homebot" read
       // as the app's name (S25). An entry Shortcut (no bot) asks without a name.
-      prompt: row.prompt(!bot.isEmpty && problems(finalName, row, taken: []).isEmpty ? finalName : nil),
+      prompt: Langs.spaceMixed(row.prompt(!bot.isEmpty && problems(finalName, row, taken: []).isEmpty ? finalName : nil), reply.rawValue),
       speakLang: siriLang, // Speak Text voice follows Siri's language, not the iPhone's
       probeName: row.probeName, labName: row.labName,
       alternatives: usable.filter { labelKey($0) != labelKey(finalName) },

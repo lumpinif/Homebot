@@ -108,12 +108,12 @@ public struct ChooserText: Sendable {
       numberPrefixes: [], numberSuffixes: ["번째", "번"],
       yes: ["네", "응", "예", "맞아", "맞아요"], no: ["아니", "아니요", "아니야", "틀려"]),
     .zhCN: ChooserText(
-      ask: "问哪个机器人？", itemSeparator: "，", menuEnd: "。", confirm: { "是\($0)吗？" }, notFound: "没有找到这个机器人。", chosenSeparator: "。",
+      ask: "问哪个机器人？", itemSeparator: "，", menuEnd: "。", confirm: { Langs.spaceMixed("是\($0)吗？", "zh") }, notFound: "没有找到这个机器人。", chosenSeparator: "。",
       numbers: [["一", "幺"], ["二", "两"], ["三"], ["四"], ["五"], ["六"], ["七"], ["八"], ["九"]],
       numberPrefixes: ["第"], numberSuffixes: ["个", "号"],
       yes: ["是", "是的", "对", "对的", "嗯", "好", "好的"], no: ["不对", "不是", "不", "错了"]),
     .zhTW: ChooserText(
-      ask: "問哪個機器人？", itemSeparator: "，", menuEnd: "。", confirm: { "是\($0)嗎？" }, notFound: "沒有找到這個機器人。", chosenSeparator: "。",
+      ask: "問哪個機器人？", itemSeparator: "，", menuEnd: "。", confirm: { Langs.spaceMixed("是\($0)嗎？", "zh") }, notFound: "沒有找到這個機器人。", chosenSeparator: "。",
       numbers: [["一"], ["二", "兩"], ["三"], ["四"], ["五"], ["六"], ["七"], ["八"], ["九"]],
       numberPrefixes: ["第"], numberSuffixes: ["個", "號"],
       yes: ["是", "是的", "對", "對的", "嗯", "好", "好的"], no: ["不對", "不是", "不", "錯了"]),

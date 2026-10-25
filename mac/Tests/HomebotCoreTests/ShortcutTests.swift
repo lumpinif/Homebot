@@ -107,7 +107,7 @@ struct ShortcutTests {
   func felix() throws {
     let p = try Profile.make(botName: "homebot", siriLang: "zh-CN", phoneLang: "en")
     #expect(p.name == "Grok Bot", "the default in every language; Felix's Chinese Siri ran it (DECISIONS item 33)")
-    #expect(p.prompt == "想问Grok Bot什么？", "the phrase the user says, not the bot \"homebot\" (S25)")
+    #expect(p.prompt == "想问 Grok Bot 什么？", "the phrase the user says, not the bot \"homebot\" (S25)")
     #expect(p.speakLang == "zh-CN")
     #expect(p.replyLang == .zhCN)
     #expect(p.alternatives == ["我的 Grok Bot", "家庭助手", "我家助手"], "native names are suggestions; the bot \"homebot\" is not")
@@ -122,11 +122,25 @@ struct ShortcutTests {
     try Profile.make(botName: "homebot", siriLang: siriLang, name: name, taken: taken).problems.map { $0.blocking ? $0.code.rawValue : "\($0.code.rawValue)?" }
   }
 
+  @Test("Chinese spaces Han from Latin letters and digits around a name; other languages and native names stay as they are")
+  func spaceMixed() throws {
+    #expect(try Profile.make(botName: "x", siriLang: "zh-CN", taken: ["Grok Bot"]).prompt == "想问我的 Grok Bot 什么？")
+    #expect(try Profile.make(botName: "x", siriLang: "zh-TW").prompt == "想問 Grok Bot 什麼？")
+    #expect(try Profile.make(botName: "x", siriLang: "zh-CN", name: "家庭助手").prompt == "想问家庭助手什么？", "a native name stays unspaced")
+    #expect(try Profile.make(botName: "x", siriLang: "ja-JP").prompt == "Grok Botに何を聞きますか？", "Japanese keeps no space")
+    #expect(Langs.heySiri("zh-CN", "Grok Bot") == "嘿 Siri，Grok Bot")
+    #expect(Langs.spaceMixed("Grok Bot正在忙，请稍后再问。", "zh-CN") == "Grok Bot 正在忙，请稍后再问。")
+    #expect(ChooserText.of(.zhCN).confirm("Grok Bot 2") == "是 Grok Bot 2 吗？")
+    #expect(Langs.spaceMixed("问 Grok Bot 什么", "zh-CN") == "问 Grok Bot 什么", "never doubles a space")
+    #expect(Langs.spaceMixed("Grok Botは", "ja") == "Grok Botは")
+    #expect(Langs.spaceMixed("Grok Bot에게", "ko") == "Grok Bot에게")
+  }
+
   @Test("profile: script, digits and first words are advice; unsafe names and phrases in use block (DESIGN §16.2)")
   func phraseRules() throws {
     let han = try Profile.make(botName: "拆解师", siriLang: "zh-CN")
     #expect(han.name == "Grok Bot")
-    #expect(han.prompt == "想问Grok Bot什么？", "the phrase, not the bot")
+    #expect(han.prompt == "想问 Grok Bot 什么？", "the phrase, not the bot")
     #expect(try Profile.make(botName: "拆解师", siriLang: "zh-CN", name: "homebot 你好").prompt == "想问什么？", "a phrase with advice is left out of the question")
     #expect(han.alternatives == ["我的 Grok Bot", "家庭助手", "我家助手", "拆解师"])
     #expect(try codes("家庭助手") == [])

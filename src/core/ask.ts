@@ -8,7 +8,7 @@ import { messages } from "./i18n.ts";
 import { BdkError, type BdkClient } from "./bdk.ts";
 import type { Bot, Cursor, Settings } from "./store.ts";
 import { errorName, type Log } from "./log.ts";
-import type { ReplyLang } from "./lang.ts";
+import { spaceMixed, type ReplyLang } from "./lang.ts";
 
 /** `POST /messages` delivery values that mean the message was taken (as in @cursor/bdk). */
 const ACCEPTED = new Set(["accepted_temporal", "duplicate"]);
@@ -117,7 +117,7 @@ export class AskService {
     if (!question) return done("empty", m.emptyQuestion());
     if ([...question].length > settings.maxQuestionChars) return done("too-long", m.tooLong());
     // Guard per session (not per key), so no two Homebot requests ever share one conversation.
-    if (this.inFlight.has(bot.sessionId)) return done("in-flight", m.inFlight(bot.name));
+    if (this.inFlight.has(bot.sessionId)) return done("in-flight", spaceMixed(m.inFlight(bot.name), lang));
 
     this.inFlight.add(bot.sessionId);
     const requestId = newRequestId();
@@ -148,17 +148,17 @@ export class AskService {
         // meanwhile (someone else's message, in any version) refuses the follow-up. Deliveries
         // seen here fall below the baseline and are never spoken (DESIGN §18.3).
         const until = Date.now() + waitIdleMs;
-        if (sawUser) return done("busy", m.busy(bot.name), { requestId, wait: "user" });
+        if (sawUser) return done("busy", spaceMixed(m.busy(bot.name), lang), { requestId, wait: "user" });
         while (isBusy(base.turn) && Date.now() < until) {
           // Never sleep past the allowance (conversation review S4).
           await sleep(Math.max(0, Math.min(settings.pollMs, until - Date.now())), undefined, { signal: sig });
           base = await syncToEnd((c) => retrying(() => fetchPage(c), sig, 3), { ...pos, maxPages: this.warmMaxPages, ...watchUsers });
           pos = { cursor: base.cursor, maxSeq: base.maxSeq };
-          if (sawUser) return done("busy", m.busy(bot.name), { requestId, wait: "user" });
+          if (sawUser) return done("busy", spaceMixed(m.busy(bot.name), lang), { requestId, wait: "user" });
         }
         mark("idle_wait_ms");
       }
-      if (isBusy(base.turn)) return done("busy", m.busy(bot.name), { requestId });
+      if (isBusy(base.turn)) return done("busy", spaceMixed(m.busy(bot.name), lang), { requestId });
       if (sig.aborted) throw sig.reason; // last point where nothing has been sent
 
       phase = "sent";
@@ -171,7 +171,7 @@ export class AskService {
       // the old behavior (wait for an owned reply). The value itself is never logged: an
       // unexpected string could carry anything (BDK review S2).
       if (delivery !== undefined && !ACCEPTED.has(delivery)) {
-        return done("not-accepted", m.noReplyInTime(bot.name), { requestId, delivery: "unknown" });
+        return done("not-accepted", spaceMixed(m.noReplyInTime(bot.name), lang), { requestId, delivery: "unknown" });
       }
 
       const seen: Entry[] = [];
@@ -219,7 +219,7 @@ export class AskService {
         const why = err instanceof Deadline ? "deadline" : "disconnect";
         return phase === "before-send"
           ? done(`not-sent:${why}`, m.notSent(), { requestId })
-          : done(`no-reply:${why}`, m.noReplyInTime(bot.name), { requestId });
+          : done(`no-reply:${why}`, spaceMixed(m.noReplyInTime(bot.name), lang), { requestId });
       }
       if (err instanceof BdkError && err.kind === "auth") return done("auth-failed", m.authFailed(), { requestId, phase });
       if (err instanceof HistoryTooLongError) return done("history-too-long", m.botNotConfigured(), { requestId });
@@ -227,7 +227,7 @@ export class AskService {
         // A 4xx rejection means nothing was accepted. Network/5xx after sending started is uncertain.
         const uncertain = phase === "sent" && err.kind !== "request";
         return uncertain
-          ? done("no-reply:upstream", m.noReplyInTime(bot.name), { requestId, status: err.status ?? 0 })
+          ? done("no-reply:upstream", spaceMixed(m.noReplyInTime(bot.name), lang), { requestId, status: err.status ?? 0 })
           : done("upstream", m.upstreamDown(), { requestId, phase, status: err.status ?? 0 });
       }
       return done("error", m.internalError(), { requestId, phase, error: errorName(err) });

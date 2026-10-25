@@ -59,7 +59,7 @@ struct MakeTests {
     #expect(m.name == "Grok Bot")
     let xml = try String(contentsOf: m.file, encoding: .utf8)
     #expect(xml.contains("<key>WFSpeakTextLanguage</key>\n\t\t\t\t<string>zh-CN</string>") || xml.contains("zh-CN"))
-    #expect(xml.contains("想问Grok Bot什么？"))
+    #expect(xml.contains("想问 Grok Bot 什么？"))
     #expect(xml.contains("http://192.168.1.5:8787/v1/ask"))
   }
 
@@ -154,7 +154,7 @@ struct MakeTests {
     #expect(m.name == "家庭等待测试")
     let steps = p.steps(host: "mac.local", name: m.name).joined(separator: "\n")
     #expect(steps.contains("轻点“家庭等待测试”运行一次"))
-    #expect(steps.contains("“嘿Siri，家庭等待测试”"))
+    #expect(steps.contains("“嘿 Siri，家庭等待测试”"))
     #expect(!steps.contains("家庭助手"))
     #expect(await e.tokens.list().first?.kind == .probe)
     #expect(try String(contentsOf: m.file, encoding: .utf8).contains("/v1/probe-wait"))

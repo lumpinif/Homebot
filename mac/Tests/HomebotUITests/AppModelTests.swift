@@ -238,11 +238,11 @@ func makeModel(_ fake: FakeGrokBot, library: (@Sendable () async -> [String]?)? 
     let input = ShortcutInput(bot: "", url: "http://mac.local:8787", entry: true, bots: keys)
     let pv = try await m.preview(input)
     #expect(pv.name == "Grok Bot", "the default in every language (DECISIONS item 33)")
-    #expect(pv.exchange.map(\.text) == ["嘿Siri，Grok Bot", "问哪个机器人？1 拆解师，2 厨房。", "拆解师", "拆解师。想问什么？"])
+    #expect(pv.exchange.map(\.text) == ["嘿 Siri，Grok Bot", "问哪个机器人？1 拆解师，2 厨房。", "拆解师", "拆解师。想问什么？"])
     #expect(pv.exchange.map(\.user) == [true, false, true, false])
     #expect(pv.numberOnly.isEmpty)
     let one = try await m.preview(ShortcutInput(bot: "", url: "http://mac.local:8787", entry: true, bots: [keys[1]]))
-    #expect(one.exchange.map(\.text) == ["嘿Siri，Grok Bot", "厨房。想问什么？"])
+    #expect(one.exchange.map(\.text) == ["嘿 Siri，Grok Bot", "厨房。想问什么？"])
     let single = try await m.preview(ShortcutInput(bot: keys[0], url: "http://mac.local:8787"))
     #expect(single.exchange.count == 2 && single.exchange[0].user && !single.exchange[1].user)
 

@@ -161,7 +161,7 @@ public actor AskService {
     tails[bot.sessionId]?.cancel()
     if question.isEmpty { return done("empty", m.emptyQuestion) }
     if question.unicodeScalars.count > settings.maxQuestionChars { return done("too-long", m.tooLong) }
-    if inFlight.contains(bot.sessionId) { return done("in-flight", m.inFlight(bot.name)) }
+    if inFlight.contains(bot.sessionId) { return done("in-flight", Langs.spaceMixed(m.inFlight(bot.name), req.lang.rawValue)) }
     if req.signal?.isCancelled == true {
       // The client left before anything happened (e.g. while the token was activated).
       return done("not-sent:disconnect", m.notSent, requestId: Envelope.newRequestId())
@@ -202,7 +202,7 @@ public actor AskService {
           // A scheduling allowance, never evidence of ownership: the baseline is taken only after
           // the wait, and any user entry that arrived meanwhile refuses the follow-up (§18.3).
           let until = Date().addingTimeInterval(Double(req.waitIdleMs) / 1000)
-          if sawUser.isSet { return finish("busy", m.busy(bot.name), extra: ["wait": "user"]) }
+          if sawUser.isSet { return finish("busy", Langs.spaceMixed(m.busy(bot.name), req.lang.rawValue), extra: ["wait": "user"]) }
           while isBusy(base.turn) {
             // Never sleep past the allowance (conversation review S4), and never poll without a
             // sleep: a remainder under 1 ms used to round to a zero sleep and spin on the API.
@@ -213,11 +213,11 @@ public actor AskService {
               try await retrying(3) { try await fetchPage(c) }
             }
             run.pos = (base.cursor, base.maxSeq)
-            if sawUser.isSet { return finish("busy", m.busy(bot.name), extra: ["wait": "user"]) }
+            if sawUser.isSet { return finish("busy", Langs.spaceMixed(m.busy(bot.name), req.lang.rawValue), extra: ["wait": "user"]) }
           }
           run.mark("idle_wait_ms")
         }
-        if isBusy(base.turn) { return finish("busy", m.busy(bot.name)) }
+        if isBusy(base.turn) { return finish("busy", Langs.spaceMixed(m.busy(bot.name), req.lang.rawValue)) }
         // The last point where nothing has been sent.
         try Task.checkCancellation()
         if run.abort != nil { throw CancellationError() }
@@ -232,7 +232,7 @@ public actor AskService {
         // Any other delivery means "not accepted"; we can't be sure nothing arrived, so we say it
         // may have been delivered, but stop waiting. The value itself is never logged.
         if let d = sent.delivery, !acceptedDeliveries.contains(d) {
-          return finish("not-accepted", m.noReplyInTime(bot.name), extra: ["delivery": "unknown"])
+          return finish("not-accepted", Langs.spaceMixed(m.noReplyInTime(bot.name), req.lang.rawValue), extra: ["delivery": "unknown"])
         }
 
         var seen: [Entry] = []
@@ -291,7 +291,7 @@ public actor AskService {
           let why = a == .deadline ? "deadline" : "disconnect"
           // Only untagged output by the deadline: a reply arrived but none is proved ours (O5).
           if a == .deadline, let n = run.interim { return finish("refused", m.refused, reason: Refusal.O5.rawValue, interim: n, extra: ["end": "deadline"]) }
-          return run.phase == "before-send" ? finish("not-sent:\(why)", m.notSent) : finish("no-reply:\(why)", m.noReplyInTime(bot.name))
+          return run.phase == "before-send" ? finish("not-sent:\(why)", m.notSent) : finish("no-reply:\(why)", Langs.spaceMixed(m.noReplyInTime(bot.name), req.lang.rawValue))
         }
         if let b = error as? BdkError, b.kind == .auth {
           await onCredential(session.generation, false)
@@ -302,7 +302,7 @@ public actor AskService {
           // A 4xx rejection means nothing was accepted. Network/5xx after sending started is uncertain.
           let uncertain = run.phase == "sent" && b.kind != .request
           return uncertain
-            ? finish("no-reply:upstream", m.noReplyInTime(bot.name), extra: ["status": .int(b.status ?? 0)])
+            ? finish("no-reply:upstream", Langs.spaceMixed(m.noReplyInTime(bot.name), req.lang.rawValue), extra: ["status": .int(b.status ?? 0)])
             : finish("upstream", m.upstreamDown, extra: ["phase": .string(run.phase), "status": .int(b.status ?? 0)])
         }
         return finish("error", m.internalError, extra: ["phase": .string(run.phase), "error": .string(Log.errorName(error))])

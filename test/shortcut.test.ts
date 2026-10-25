@@ -8,7 +8,7 @@ import { join } from "node:path";
 import { toXmlPlist } from "../src/shortcut/plist.ts";
 import { buildAskShortcut, buildProbeShortcut } from "../src/shortcut/build.ts";
 import { keptPhrase, shortcutProfile, takenPhrases } from "../src/shortcut/profile.ts";
-import { LANGUAGES, SIRI_OPTIONS, heySiri, langOfSiri, replyLang } from "../src/core/lang.ts";
+import { LANGUAGES, SIRI_OPTIONS, heySiri, langOfSiri, replyLang, spaceMixed } from "../src/core/lang.ts";
 import { buildEnvelope } from "../src/core/envelope.ts";
 import { END_WORDS } from "../src/core/conversation.ts";
 import { signShortcut, UMASK_LAUNCHER } from "../src/shortcut/sign.ts";
@@ -58,7 +58,7 @@ test("profile: English is the default; Siri language drives name, prompt, voice"
 test("profile: Felix's setup — iPhone English, Siri Chinese", () => {
   const p = shortcutProfile({ botName: "homebot", siriLang: "zh-CN", phoneLang: "en" });
   assert.equal(p.name, "Grok Bot", "the default in every language; Felix's Chinese Siri ran it (DECISIONS item 33)");
-  assert.equal(p.prompt, "想问Grok Bot什么？", "the phrase the user says, not the bot \"homebot\" (S25)");
+  assert.equal(p.prompt, "想问 Grok Bot 什么？", "the phrase the user says, not the bot \"homebot\" (S25)");
   assert.equal(p.speakLang, "zh-CN");
   assert.equal(p.replyLang, "zh-CN");
   assert.deepEqual(p.alternatives, ["我的 Grok Bot", "家庭助手", "我家助手"], "native names are suggestions; the bot \"homebot\" is not");
@@ -72,7 +72,7 @@ test("profile: Felix's setup — iPhone English, Siri Chinese", () => {
 test("profile: script, digits and first words are advice; unsafe names and phrases in use block (DESIGN §16.2)", () => {
   const han = shortcutProfile({ botName: "拆解师", siriLang: "zh-CN" });
   assert.equal(han.name, "Grok Bot");
-  assert.equal(han.prompt, "想问Grok Bot什么？", "the phrase, not the bot");
+  assert.equal(han.prompt, "想问 Grok Bot 什么？", "the phrase, not the bot");
   assert.equal(shortcutProfile({ botName: "拆解师", siriLang: "zh-CN", name: "homebot 你好" }).prompt, "想问什么？", "a phrase with advice is left out of the question");
   assert.deepEqual(han.alternatives, ["我的 Grok Bot", "家庭助手", "我家助手", "拆解师"]);
   const codes = (name: string, siriLang = "zh-CN", taken: string[] = []) => shortcutProfile({ botName: "homebot", siriLang, name, taken }).problems.map((p) => (p.blocking ? p.code : `${p.code}?`));
@@ -254,4 +254,17 @@ test("replacement: the old phrase is kept unless a blocking rule refuses it (re-
   assert.equal(unsafe.name, "Grok Bot", "a name iOS would change is not kept");
   assert.equal(keptPhrase({ label: "Grok Bot", siriLang: "en-US" }, "zh-CN"), "Grok Bot", "a language change never renames a Shortcut (DECISIONS item 33)");
   assert.equal(keptPhrase({ label: "家庭助手", siriLang: "zh-CN" }, "en-US"), "家庭助手");
+});
+
+test("Chinese spaces Han from Latin letters and digits around a name; other languages and native names stay as they are", () => {
+  assert.equal(shortcutProfile({ botName: "x", siriLang: "zh-CN", taken: ["Grok Bot"] }).prompt, "想问我的 Grok Bot 什么？");
+  assert.equal(shortcutProfile({ botName: "x", siriLang: "zh-TW" }).prompt, "想問 Grok Bot 什麼？");
+  assert.equal(shortcutProfile({ botName: "x", siriLang: "zh-CN", name: "家庭助手" }).prompt, "想问家庭助手什么？", "a native name stays unspaced");
+  assert.equal(shortcutProfile({ botName: "x", siriLang: "ja-JP" }).prompt, "Grok Botに何を聞きますか？", "Japanese keeps no space");
+  assert.equal(heySiri("zh-CN", "Grok Bot"), "嘿 Siri，Grok Bot");
+  assert.equal(spaceMixed("Grok Bot正在忙，请稍后再问。", "zh-CN"), "Grok Bot 正在忙，请稍后再问。");
+  assert.equal(spaceMixed("是Grok Bot 2吗？", "zh-TW"), "是 Grok Bot 2 吗？");
+  assert.equal(spaceMixed("问 Grok Bot 什么", "zh-CN"), "问 Grok Bot 什么", "never doubles a space");
+  assert.equal(spaceMixed("Grok Botは", "ja"), "Grok Botは");
+  assert.equal(spaceMixed("Grok Bot에게", "ko"), "Grok Bot에게");
 });
