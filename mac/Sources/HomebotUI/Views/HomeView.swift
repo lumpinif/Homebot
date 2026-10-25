@@ -125,11 +125,19 @@ struct HomeView: View {
   var activity: some View {
     let T = model.tr
     return VStack(alignment: .leading, spacing: 8) {
-      HStack(alignment: .firstTextBaseline) {
+      HStack(alignment: .firstTextBaseline, spacing: 12) {
         SectionTitle(text: T.activityTitle) {
           // Answers came back as text only: how to make the iPhone speak.
           if !model.activity.isEmpty { SpeakHelp() }
         }
+        // Where the questions are kept, next to Clear; when the row is tight, the lock alone
+        // (its words in the tooltip).
+        ViewThatFits(in: .horizontal) {
+          privacy(full: true)
+          privacy(full: false)
+        }
+        .layoutPriority(1)
+        .padding(.trailing, model.activity.isEmpty ? Theme.inset : 0)
         if !model.activity.isEmpty {
           Button(T.clear) { confirmClear = true }.buttonStyle(.borderless).padding(.trailing, Theme.inset)
         }
@@ -145,18 +153,21 @@ struct HomeView: View {
           ForEach(model.activity, id: \.id) { r in ActivityRow(record: r) }
         }
       }
-      // One quiet line; the details are behind (i). Network and sleep notes live in Help.
-      HStack(spacing: 6) {
-        Image(systemName: "lock.fill").font(.system(size: 10))
-        InlineInfo {
-          Text(T.privacyShort).font(.system(size: 12))
-        } info: {
-          InfoButton(label: T.privacyMore, text: T.activityNote)
-        }
-      }
-      .foregroundStyle(Theme.muted)
-      .padding(.horizontal, Theme.inset)
     }
+  }
+
+  /// "Stored only on this Mac" with its (i); the details are behind (i). Network and sleep notes
+  /// live in Help.
+  func privacy(full: Bool) -> some View {
+    let T = model.tr
+    return HStack(alignment: .firstTextBaseline, spacing: 6) {
+      Image(systemName: "lock.fill").font(.system(size: 10))
+      if full { Text(T.privacyShort).font(.system(size: 12)).lineLimit(1) }
+      InfoButton(label: T.privacyMore, text: T.activityNote)
+    }
+    .foregroundStyle(Theme.muted)
+    .fixedSize()
+    .help(full ? "" : T.privacyShort)
   }
 }
 
@@ -288,7 +299,11 @@ struct ActivityRow: View {
           Badge(text: T.outcomeLabel(r.outcome), style: HomeStatus.outcomeStyle(r.outcome), dot: true)
         }
       }
-      if let a = r.spoken { answer(a, T) }
+      if let n = line.note {
+        Text(n).font(.system(size: 13)).foregroundStyle(Theme.muted).fixedSize(horizontal: false, vertical: true)
+      } else if let a = line.spoken {
+        answer(a, T)
+      }
       Text(line.meta)
         .font(.system(size: 11)).monospacedDigit().foregroundStyle(.tertiary)
         .lineLimit(1).truncationMode(.middle)

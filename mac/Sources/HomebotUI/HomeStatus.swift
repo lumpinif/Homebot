@@ -68,7 +68,7 @@ enum HomeStatus {
   /// start), a refusal or failure, or something to retry.
   static func outcomeStyle(_ o: String) -> BadgeStyle {
     if o == "answered" { return .success }
-    if ["end-word", "silence", "chosen", "restart"].contains(o) { return .neutral }
+    if ["end-word", "silence", "chosen", "restart"].contains(o) || ActivityOutcome.stopped(o) { return .neutral }
     if ["refused", "auth-failed", "error", "forbidden", "bad-token", "revoked"].contains(o) { return .danger }
     return .warning
   }

@@ -31,13 +31,24 @@ public struct Tr: Sendable {
   }
 
   /// A UI label for an activity outcome code (A2); `not-sent:<why>` and `no-reply:<why>` use the
-  /// base code, unknown codes show as "other".
+  /// base code, unknown codes show as "other". The Shortcut stopping (`:disconnect`) is "Stopped",
+  /// not a timeout (S26).
   public func outcomeLabel(_ code: String) -> String {
+    if ActivityOutcome.stopped(code) { return outcomeStopped }
     let base = code.split(separator: ":", maxSplits: 1).first.map(String.init) ?? code
     return outcome(base) ?? outcome("other") ?? code
   }
 
   public var locale: Locale { Locale(identifier: lang.rawValue) }
+}
+
+/// Outcome codes the app reads specially.
+public enum ActivityOutcome {
+  /// The Shortcut's connection closed before the answer (the run was stopped, or the device left):
+  /// nothing timed out and nobody heard the gateway's message.
+  public static func stopped(_ code: String) -> Bool { code.hasSuffix(":disconnect") }
+  /// The question reached Grok Bot before the Shortcut stopped.
+  public static func sent(_ code: String) -> Bool { code.hasPrefix("no-reply:") }
 }
 
 public enum L10n {

@@ -11,6 +11,11 @@ struct ActivityLine: Equatable {
   var details: String
   /// Answered rows show no status; anything else shows its outcome.
   var showsOutcome: Bool
+  /// What the row says in place of the spoken text, when nobody heard it: the Shortcut stopped
+  /// before the answer, so the gateway's message went to a closed connection (S26).
+  var note: String?
+  /// The spoken text, unless `note` replaces it.
+  var spoken: String?
 
   init(_ r: ActivityRecord, T: Tr, manyBots: Bool, now: Date = Date(), calendar: Calendar = .current) {
     let at = Date(timeIntervalSince1970: r.at / 1000)
@@ -31,6 +36,8 @@ struct ActivityLine: Equatable {
     if let reason = r.reason, !reason.isEmpty { lines.append(T.fmt(T.activityReason, ["reason": reason])) }
     details = lines.joined(separator: "\n")
     showsOutcome = r.outcome != "answered"
+    note = ActivityOutcome.stopped(r.outcome) ? (ActivityOutcome.sent(r.outcome) ? T.stoppedSent : T.stoppedNotSent) : nil
+    spoken = note == nil ? r.spoken : nil
   }
 
   /// Today: the time. Yesterday: "Yesterday" in the app's language. Earlier: a short date, with

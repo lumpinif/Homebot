@@ -68,4 +68,22 @@ import HomebotCore
     #expect(line.showsOutcome)
     #expect(line.details.contains("O5"))
   }
+
+  /// The Shortcut stopped (its connection closed) is not a timeout: "Stopped", grey, and a line in
+  /// place of the message nobody heard (S26). A real timeout keeps its wording and colour.
+  @Test func aStoppedShortcutIsNotATimeout() {
+    let T = tr(.en)
+    let sent = ActivityLine(record(at: now, total: 6218, reply: nil, outcome: "no-reply:disconnect"), T: T, manyBots: false, now: now, calendar: cal)
+    #expect(sent.note == T.stoppedSent && sent.spoken == nil && sent.showsOutcome)
+    #expect(T.outcomeLabel("no-reply:disconnect") == "Stopped")
+    #expect(HomeStatus.outcomeStyle("no-reply:disconnect") == .neutral)
+    let early = ActivityLine(record(at: now, outcome: "not-sent:disconnect"), T: T, manyBots: false, now: now, calendar: cal)
+    #expect(early.note == T.stoppedNotSent && early.spoken == nil)
+    #expect(tr(.zhHans).outcomeLabel("not-sent:disconnect") == "已停止")
+
+    let late = ActivityLine(record(at: now, outcome: "no-reply:deadline"), T: T, manyBots: false, now: now, calendar: cal)
+    #expect(late.note == nil && late.spoken == "…")
+    #expect(T.outcomeLabel("no-reply:deadline") == T.outcomeLabel("no-reply"))
+    #expect(HomeStatus.outcomeStyle("no-reply:deadline") == .warning)
+  }
 }
