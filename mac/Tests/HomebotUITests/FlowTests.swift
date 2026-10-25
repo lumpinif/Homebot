@@ -102,13 +102,15 @@ let oneBot = [BotView(key: "homebot", name: "homebot", sessionId: "1", strictEch
     #expect(Flow.next(after: .settings, keyed) == .settings)
   }
 
-  @Test func defaultReplacesIsTheWorkingOneOrAUsableRequest() {
+  @Test("a plain Make replaces nothing; only a usable Shortcut the user picked is replaced (DECISIONS item 37)")
+  func defaultReplacesIsOnlyAUsableRequest() {
     let s = Snapshot(bots: oneBot, tokens: [token("old", state: .active), token("new", state: .active), token("wait", state: .pending), token("gone", state: .retired), token("other", bot: "x", state: .active)])
-    #expect(Flow.defaultReplaces(s, bot: "homebot", requested: nil) == "new")
+    #expect(Flow.defaultReplaces(s, bot: "homebot", requested: nil) == nil)
+    #expect(Flow.defaultReplaces(s, bot: "homebot", requested: "") == nil)
     #expect(Flow.defaultReplaces(s, bot: "homebot", requested: "wait") == "wait")
     #expect(Flow.defaultReplaces(s, bot: "homebot", requested: "gone") == nil)
     #expect(Flow.defaultReplaces(s, bot: "homebot", requested: "other") == nil)
-    #expect(Flow.defaultReplaces(s, bot: "x", requested: nil) == "other")
+    #expect(Flow.defaultReplaces(s, bot: "x", requested: nil) == nil)
     #expect(Flow.defaultReplaces(Snapshot(), bot: "homebot", requested: nil) == nil)
   }
 
@@ -118,7 +120,7 @@ let oneBot = [BotView(key: "homebot", name: "homebot", sessionId: "1", strictEch
     entry.mode = .entry
     let s = Snapshot(tokens: [token("a1", bot: "a", state: .active), token("c1", bot: "c", state: .active), entry, token("dev", bot: "a", state: .active, kind: .probe)])
     #expect(Flow.replaceable(s, entryBots: ["a", "b"]).map(\.id) == ["entry", "a1"], "a token for a bot outside the set, or a test token, is never offered")
-    #expect(Flow.defaultReplaces(s, entryBots: ["a", "b"], requested: nil) == "entry", "the per-bot Shortcut stays by default")
+    #expect(Flow.defaultReplaces(s, entryBots: ["a", "b"], requested: nil) == nil, "a plain Make adds one")
     #expect(Flow.defaultReplaces(s, entryBots: ["a"], requested: nil) == nil, "a narrower set never replaces the wider one")
     #expect(Flow.defaultReplaces(s, entryBots: ["a", "b"], requested: "a1") == "a1")
     #expect(Flow.defaultReplaces(s, entryBots: ["a", "b"], requested: "c1") == nil)

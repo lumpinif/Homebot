@@ -150,16 +150,17 @@ public enum Flow {
     }
   }
 
-  /// The Shortcut a replacement request or a fresh build would replace by default: the given one if
-  /// it is still usable, else the bot's working voice Shortcut, newest first.
+  /// The bot's voice Shortcuts a new one may replace when the user picks one, newest first.
   public static func replaceable(_ s: Snapshot, bot: String) -> [TokenView] {
     s.tokens.filter { $0.bot == bot && $0.state != .retired && $0.kind == .ask }.reversed()
   }
 
+  /// What a new Shortcut replaces: only the one the user asked for ("Make it again", Needs update,
+  /// or the Replaces picker), if it is still usable. A plain Make adds one and replaces nothing:
+  /// several Shortcuts per bot are normal (DECISIONS item 37).
   public static func defaultReplaces(_ s: Snapshot, bot: String, requested: String?) -> String? {
     let usable = replaceable(s, bot: bot)
-    if let r = requested { return usable.contains { $0.id == r } ? r : nil }
-    return usable.first { $0.state == .active }?.id
+    return requested.flatMap { r in usable.contains { $0.id == r } ? r : nil }
   }
 
   /// Voice Shortcuts an entry Shortcut for `bots` may replace: every bot of theirs is in the set
@@ -168,12 +169,9 @@ public enum Flow {
     s.tokens.filter { $0.state != .retired && $0.kind == .ask && !$0.bots.isEmpty && Set($0.bots).isSubset(of: bots) }.reversed()
   }
 
-  /// By default an entry Shortcut replaces only the working entry Shortcut it covers: per-bot
-  /// Shortcuts stay until the one-phrase flow is proved on a device (§20.11).
   public static func defaultReplaces(_ s: Snapshot, entryBots bots: [String], requested: String?) -> String? {
     let usable = replaceable(s, entryBots: bots)
-    if let r = requested { return usable.contains { $0.id == r } ? r : nil }
-    return usable.first { $0.state == .active && $0.mode == .entry }?.id
+    return requested.flatMap { r in usable.contains { $0.id == r } ? r : nil }
   }
 
   /// The optional suggestion right after the user changes the default language (DESIGN §7.3):
