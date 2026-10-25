@@ -32,7 +32,7 @@ Run it in a clean checkout (it refuses changes under `mac/`). The version is `ma
 - [ ] **Repository visibility**: `lumpinif/Homebot` is **private** (checked with `gh repo view`), so the Releases link and the agent prompt's repository link don't work for anyone else. Make it public, or host the zip elsewhere and change the links.
 - [ ] **Website hosting**: the site on branch `claude/website-2fd2d7` (`site/`, with the agent guide `site/public/install.md`) is not merged or hosted. Choose where it lives and its domain.
 - [ ] **"Open Anyway" picture** for `docs/INSTALL*.md` (the only missing picture).
-- [ ] **Siri orb**: our own drawing, but meant to evoke Siri (STATUS S11 risk). Keep it for a public release?
+- [x] **Siri orb**: kept. It is our own drawing and differs from Apple's (Felix, 2026-10-25).
 
 ## Release notes (draft)
 
