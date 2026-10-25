@@ -39,7 +39,10 @@ public struct ShortcutInput: Equatable, Sendable {
   public var siriLang: String?
   /// Keep listening after each answer (DESIGN §18); never with `entry`.
   public var conversation: Bool
-  public init(bot: String, name: String? = nil, url: String? = nil, replaces: String? = nil, entry: Bool = false, bots: [String] = [], siriLang: String? = nil, conversation: Bool = false) {
+  /// For an iPhone on another Apple Account (S26): it may keep a phrase in use here.
+  public var otherAccount = false
+  public init(bot: String, name: String? = nil, url: String? = nil, replaces: String? = nil, entry: Bool = false, bots: [String] = [], siriLang: String? = nil, conversation: Bool = false, otherAccount: Bool = false) {
+    self.otherAccount = otherAccount
     self.siriLang = siriLang
     self.conversation = conversation
     self.bot = bot
@@ -316,7 +319,7 @@ public final class AppModel {
         kind: t.kind ?? .ask, mode: t.mode, createdAt: t.createdAt, activatedAt: t.activatedAt, replaces: t.replaces,
         hasFile: t.state == .pending && t.usedAt == nil && (builds[t.id].map { fm.fileExists(atPath: $0.file.path) } ?? (diskFile(t.id) != nil)),
         builtFor: prefs.builtFor[t.id],
-        usedAt: t.usedAt, answeredHereAt: t.answeredHereAt, answeredElsewhereAt: t.answeredElsewhereAt)
+        usedAt: t.usedAt, answeredHereAt: t.answeredHereAt, answeredElsewhereAt: t.answeredElsewhereAt, otherAccount: t.otherAccount == true)
     }
     let st = await host.status()
     let port = st.running ? st.port : (env.port ?? s.port)
@@ -994,7 +997,10 @@ public final class AppModel {
     let phoneLang = s.phoneLang ?? Langs.defaultPhoneLang.rawValue
     let keep = Profile.keptPhrase(replaces.flatMap { r in list.first { $0.id == r } }, siriLang: siriLang)
     let chain = TokenStore.takeoverChain(from: replaces) { r in list.first { $0.id == r && $0.state == .pending && $0.usedAt == nil }?.replaces }
-    let taken = Profile.takenPhrases(list.map { ($0.id, $0.label, $0.state) }, replaces: replaces, chain: chain)
+    // A copy for another Apple Account (or a replacement of one) may share any phrase; copies for
+    // another account never take one from this account (S26).
+    let other = input.otherAccount || replaces.flatMap { r in list.first { $0.id == r }?.otherAccount } == true
+    let taken = other ? [] : Profile.takenPhrases(list.filter { $0.otherAccount != true }.map { ($0.id, $0.label, $0.state) }, replaces: replaces, chain: chain)
     let p = input.entry
       ? try Profile.entry(siriLang: siriLang, phoneLang: phoneLang, name: phrase, keep: keep, taken: taken)
       : try Profile.make(botName: bot.name, siriLang: siriLang, phoneLang: phoneLang, name: phrase, keep: keep, taken: taken)
@@ -1103,7 +1109,7 @@ public final class AppModel {
       let replaces = input.replaces.flatMap { $0.isEmpty ? nil : $0 }
       let made: MadeShortcut
       do {
-        made = try await ShortcutMaker.make(tokens: host.tokens, lifecycle: host.lifecycle, bots: bots, profile: p, baseUrl: baseUrl, kind: input.entry ? .entry : input.conversation ? .conversation : .ask, replaces: replaces, sign: signer)
+        made = try await ShortcutMaker.make(tokens: host.tokens, lifecycle: host.lifecycle, bots: bots, profile: p, baseUrl: baseUrl, kind: input.entry ? .entry : input.conversation ? .conversation : .ask, replaces: replaces, otherAccount: input.otherAccount, sign: signer)
       } catch {
         log(["event": "setup", "action": "shortcut-build", "outcome": "error"])
         throw error
@@ -1248,13 +1254,15 @@ public final class AppModel {
   /// `replacing: false` is a copy for another device (S26): the file is gone once a Shortcut is in
   /// use and its token is kept only as a hash, so another iPhone needs a token of its own. It
   /// replaces nothing, so the device already using this one keeps working, and it takes the first
-  /// free phrase, since two Shortcuts can't share one (§16.2).
+  /// free phrase, since two Shortcuts can't share one (§16.2). With `otherAccount` (an iPhone on
+  /// another Apple Account, whose Siri never sees this account's Shortcuts) it keeps the phrase.
   /// `consent`: the user clicked a button that says it signs with Apple.
   @discardableResult
-  public func makeCopy(_ tokenId: String, consent: Bool = false, replacing: Bool = true) async -> ShortcutBuild? {
+  public func makeCopy(_ tokenId: String, consent: Bool = false, replacing: Bool = true, otherAccount: Bool = false) async -> ShortcutBuild? {
     guard let t = snapshot.tokens.first(where: { $0.id == tokenId }), t.state != .retired else { return nil }
     if consent, !(await giveSigningConsent()) { return nil }
-    let input = ShortcutInput(bot: t.bot, name: replacing ? t.label : nil, replaces: replacing ? t.id : nil, entry: t.mode == .entry, bots: t.bots, siriLang: t.siriLang, conversation: t.mode == .conversation)
+    let other = !replacing && otherAccount
+    let input = ShortcutInput(bot: t.bot, name: replacing || other ? t.label : nil, replaces: replacing ? t.id : nil, entry: t.mode == .entry, bots: t.bots, siriLang: t.siriLang, conversation: t.mode == .conversation, otherAccount: other)
     return await makeShortcut(input, sign: snapshot.appleSigning)
   }
 

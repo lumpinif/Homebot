@@ -571,7 +571,9 @@ struct ShortcutCmd: AsyncParsableCommand {
       let phone = phoneLang ?? s.phoneLang ?? Langs.defaultPhoneLang.rawValue
       let keep = Profile.keptPhrase(replaces.flatMap { r in list.first { $0.id == r } }, siriLang: lang)
       let chain = TokenStore.takeoverChain(from: replaces) { r in list.first { $0.id == r && $0.state == .pending && $0.usedAt == nil }?.replaces }
-      let taken = Profile.takenPhrases(list.map { ($0.id, $0.label, $0.state) }, replaces: replaces, chain: chain)
+      // Copies for another Apple Account never take a phrase from this one (S26).
+      let other = replaces.flatMap { r in list.first { $0.id == r }?.otherAccount } == true
+      let taken = other ? [] : Profile.takenPhrases(list.filter { $0.otherAccount != true }.map { ($0.id, $0.label, $0.state) }, replaces: replaces, chain: chain)
       let profile = entry
         ? try Profile.entry(siriLang: lang, phoneLang: phone, name: phrase, keep: keep, taken: taken)
         : try Profile.make(botName: bot.name, siriLang: lang, phoneLang: phone, name: phrase, keep: keep, taken: taken)

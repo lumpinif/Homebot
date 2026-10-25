@@ -68,8 +68,12 @@ public struct TokenRecord: Codable, Sendable, Equatable {
   /// shows both; neither changes what the token may do.
   public var answeredHereAt: Double?
   public var answeredElsewhereAt: Double?
+  /// A copy for an iPhone on another Apple Account (S26): Siri there never sees this account's
+  /// Shortcuts, so it may keep a phrase another Shortcut uses, and its phrase never blocks one made
+  /// here. Absent (nil) for every other token; a replacement of one inherits it.
+  public var otherAccount: Bool?
 
-  public init(id: String, hash: String, bots: [BotGrant], label: String, state: TokenState, createdAt: Double, activatedAt: Double? = nil, retiredAt: Double? = nil, usedAt: Double? = nil, replaces: String? = nil, siriLang: String? = nil, kind: TokenKind? = nil, mode: ShortcutMode? = nil, answeredHereAt: Double? = nil, answeredElsewhereAt: Double? = nil) {
+  public init(id: String, hash: String, bots: [BotGrant], label: String, state: TokenState, createdAt: Double, activatedAt: Double? = nil, retiredAt: Double? = nil, usedAt: Double? = nil, replaces: String? = nil, siriLang: String? = nil, kind: TokenKind? = nil, mode: ShortcutMode? = nil, answeredHereAt: Double? = nil, answeredElsewhereAt: Double? = nil, otherAccount: Bool? = nil) {
     self.id = id
     self.hash = hash
     self.bots = bots
@@ -85,6 +89,7 @@ public struct TokenRecord: Codable, Sendable, Equatable {
     self.mode = mode
     self.answeredHereAt = answeredHereAt
     self.answeredElsewhereAt = answeredElsewhereAt
+    self.otherAccount = otherAccount
   }
 
   public var effectiveKind: TokenKind { kind ?? .ask }
@@ -92,7 +97,7 @@ public struct TokenRecord: Codable, Sendable, Equatable {
 
   /// The token as shown to the UI or CLI: everything but the hash.
   public var info: TokenInfo {
-    TokenInfo(id: id, bots: bots, label: label, state: state, createdAt: createdAt, activatedAt: activatedAt, retiredAt: retiredAt, usedAt: usedAt, replaces: replaces, siriLang: siriLang, kind: kind, mode: mode, answeredHereAt: answeredHereAt, answeredElsewhereAt: answeredElsewhereAt)
+    TokenInfo(id: id, bots: bots, label: label, state: state, createdAt: createdAt, activatedAt: activatedAt, retiredAt: retiredAt, usedAt: usedAt, replaces: replaces, siriLang: siriLang, kind: kind, mode: mode, answeredHereAt: answeredHereAt, answeredElsewhereAt: answeredElsewhereAt, otherAccount: otherAccount)
   }
 }
 
@@ -111,6 +116,7 @@ public struct TokenInfo: Sendable, Equatable, Encodable {
   public var mode: ShortcutMode?
   public var answeredHereAt: Double? = nil
   public var answeredElsewhereAt: Double? = nil
+  public var otherAccount: Bool? = nil
 }
 
 public enum VerifyResult: Sendable, Equatable {
@@ -224,7 +230,7 @@ public actor TokenStore {
   /// label: a Shortcut's label is its Siri phrase, and this check runs under the issuance lock
   /// (DESIGN §16.2). `replaces` must be a usable token of the same kind whose set is a subset of
   /// the new set (T6). Callers issue through BotLifecycle.issueFor (identity check).
-  public func issue(bots: [BotGrant], label: String, replaces: String? = nil, siriLang: String? = nil, kind: TokenKind = .ask, mode: ShortcutMode? = nil, uniqueLabel: Bool = false) async throws -> (id: String, token: String) {
+  public func issue(bots: [BotGrant], label: String, replaces: String? = nil, siriLang: String? = nil, kind: TokenKind = .ask, mode: ShortcutMode? = nil, uniqueLabel: Bool = false, otherAccount: Bool = false) async throws -> (id: String, token: String) {
     try TokenStore.checkSet(bots)
     let token = Random.base64url(bytes: 32)
     let id = Random.hex(bytes: 6)
@@ -246,10 +252,13 @@ public actor TokenStore {
       let exempt = TokenStore.takeoverChain(from: replaces) { r in
         records.first { $0.id == r && $0.state == .pending && $0.usedAt == nil }?.replaces
       }
-      if uniqueLabel, let clash = records.first(where: { $0.state != .retired && !exempt.contains($0.id) && labelKey($0.label) == labelKey(label) }) {
+      // A copy for another Apple Account, or a replacement of one, may share a phrase; one made
+      // for this account never clashes with such a copy (S26).
+      let other = otherAccount || (replaces.flatMap { r in records.first { $0.id == r }?.otherAccount } ?? false)
+      if uniqueLabel, !other, let clash = records.first(where: { $0.state != .retired && $0.otherAccount != true && !exempt.contains($0.id) && labelKey($0.label) == labelKey(label) }) {
         throw TokenError("Another of your Homebot Shortcuts (token \(clash.id)) already uses \"\(label)\". Siri can't tell them apart. Revoke it first, or replace it.")
       }
-      records.append(TokenRecord(id: id, hash: TokenStore.sha256Hex(token), bots: bots, label: label, state: .pending, createdAt: t, replaces: replaces, siriLang: siriLang, kind: kind == .ask ? nil : kind, mode: mode))
+      records.append(TokenRecord(id: id, hash: TokenStore.sha256Hex(token), bots: bots, label: label, state: .pending, createdAt: t, replaces: replaces, siriLang: siriLang, kind: kind == .ask ? nil : kind, mode: mode, otherAccount: other ? true : nil))
     }
     return (id, token)
   }

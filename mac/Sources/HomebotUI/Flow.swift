@@ -50,6 +50,8 @@ public struct TokenView: Sendable, Equatable, Identifiable {
   /// Its first spoken answer from this Mac, and from another device (an iPhone or a HomePod).
   public var answeredHereAt: Double? = nil
   public var answeredElsewhereAt: Double? = nil
+  /// A copy for an iPhone on another Apple Account (S26); it may share its phrase.
+  public var otherAccount = false
   public var bot: String { bots.first ?? "" }
   public var waitingForAnswer: Bool { state == .pending && usedAt != nil }
 }

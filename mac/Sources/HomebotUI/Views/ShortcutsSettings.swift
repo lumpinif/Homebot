@@ -159,6 +159,8 @@ struct ShortcutRow: View {
     if t.mode == .legacy { out.append(T.modeLegacy) }
     if t.mode == .entry { out.append(T.modeEntry) }
     if t.mode == .conversation { out.append(T.modeConversation) }
+    // Two rows may share a phrase when one is for another Apple Account (S26).
+    if t.otherAccount { out.append(T.otherAccountNote) }
     return out
   }
 

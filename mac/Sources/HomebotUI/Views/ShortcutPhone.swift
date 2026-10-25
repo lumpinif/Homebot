@@ -353,6 +353,8 @@ struct InstallStep: View {
   @State private var link: (tokenId: String, link: DownloadLink)?
   @State private var linking = false
   @State private var copying = false
+  /// The copy is for an iPhone on another Apple Account: it keeps the phrase (S26).
+  @State private var otherAccount = false
 
   var body: some View {
     Group {
@@ -464,6 +466,10 @@ struct InstallStep: View {
         FirstAnswer(build: build, answered: delivery == .installed)
         VStack(alignment: .leading, spacing: 8) {
           SectionTitle(text: T.installAnother)
+          Toggle(T.installOtherAccount, isOn: $otherAccount)
+            .toggleStyle(.checkbox)
+            .padding(.horizontal, Theme.inset)
+            .padding(.bottom, 4)
           send(build, delivery)
         }
       } else {
@@ -526,7 +532,7 @@ struct InstallStep: View {
   /// The new copy a send needs when the file is gone; the page then shows it. Without consent,
   /// the click is the consent (the line under the cards says what signing sends).
   func copy(_ build: ShortcutBuild, _ delivery: PhoneDelivery) async -> ShortcutBuild? {
-    await model.makeCopy(build.tokenId, consent: true, replacing: delivery.copyReplaces)
+    await model.makeCopy(build.tokenId, consent: true, replacing: delivery.copyReplaces, otherAccount: delivery.onDevice && otherAccount)
   }
 
   /// The steps as an animated iPhone (PhoneGuide), in the iPhone's language (chosen right here; it

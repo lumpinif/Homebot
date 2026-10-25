@@ -72,7 +72,7 @@ public enum ShortcutMaker {
   /// replaced is untouched (it is only retired by the new token's first answered request).
   public static func make(
     tokens: TokenStore, lifecycle: BotLifecycle?, bots: [Bot], profile: ShortcutProfile, baseUrl: String,
-    kind: ShortcutKind = .ask, replaces: String? = nil, sign: SignFn? = nil, builder: ShortcutBuilder = ShortcutBuilder()
+    kind: ShortcutKind = .ask, replaces: String? = nil, otherAccount: Bool = false, sign: SignFn? = nil, builder: ShortcutBuilder = ShortcutBuilder()
   ) async throws -> MadeShortcut {
     guard let url = URLComponents(string: baseUrl), let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https", url.host?.isEmpty == false else {
       throw MakeError(description: "gateway URL must be http(s)://host:port, got \"\(baseUrl)\"")
@@ -95,7 +95,7 @@ public enum ShortcutMaker {
     let tokenKind = kind.tokenKind
     let mode = kind.mode
     let issue: @Sendable ([Bot]) async throws -> (id: String, token: String) = { current in
-      try await tokens.issue(bots: current.map { BotGrant(key: $0.key, sessionId: $0.sessionId) }, label: name, replaces: replaces, siriLang: siriLang, kind: tokenKind, mode: mode, uniqueLabel: true)
+      try await tokens.issue(bots: current.map { BotGrant(key: $0.key, sessionId: $0.sessionId) }, label: name, replaces: replaces, siriLang: siriLang, kind: tokenKind, mode: mode, uniqueLabel: true, otherAccount: otherAccount)
     }
     let (id, token): (String, String)
     if let lifecycle { (id, token) = try await lifecycle.issueFor(bots, issue) } else { (id, token) = try await issue(bots) }
