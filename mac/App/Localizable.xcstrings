@@ -19881,6 +19881,77 @@
         }
       }
     },
+    "outcomeStopped": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopped"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detenido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrêté"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestoppt"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interrotto"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interrompido"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Остановлено"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "停止"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "중지됨"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已停止"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已停止"
+          }
+        }
+      }
+    },
     "pageLanguage": {
       "extractionState": "manual",
       "localizations": {
@@ -28752,6 +28823,148 @@
           "stringUnit": {
             "state": "translated",
             "value": "捷徑"
+          }
+        }
+      }
+    },
+    "stoppedNotSent": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Shortcut stopped before the question was sent."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El atajo se detuvo antes de enviar la pregunta."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le raccourci s’est arrêté avant l’envoi de la question."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Kurzbefehl stoppte, bevor die Frage gesendet wurde."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il comando rapido si è fermato prima di inviare la domanda."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O atalho parou antes de enviar a pergunta."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Быстрая команда остановилась до отправки вопроса."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "質問を送信する前にショートカットが停止しました。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "질문을 보내기 전에 단축어가 멈췄습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "快捷指令在发送问题前停止了。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "捷徑在傳送問題前停止了。"
+          }
+        }
+      }
+    },
+    "stoppedSent": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Shortcut stopped before the answer. Your question was sent; the answer is in Grok Bot."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El atajo se detuvo antes de la respuesta. Tu pregunta se envió; la respuesta está en Grok Bot."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le raccourci s’est arrêté avant la réponse. Votre question a été envoyée ; la réponse est dans Grok Bot."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Kurzbefehl stoppte vor der Antwort. Deine Frage wurde gesendet; die Antwort steht in Grok Bot."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il comando rapido si è fermato prima della risposta. La domanda è stata inviata; la risposta è in Grok Bot."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O atalho parou antes da resposta. Sua pergunta foi enviada; a resposta está no Grok Bot."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Быстрая команда остановилась до ответа. Вопрос отправлен; ответ — в Grok Bot."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "回答の前にショートカットが停止しました。質問は送信済みで、回答は Grok Bot にあります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "답변 전에 단축어가 멈췄습니다. 질문은 보냈으며 답변은 Grok Bot에 있습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "快捷指令在回答前停止了。问题已发送，回答在 Grok Bot 里。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "捷徑在回答前停止了。問題已傳送，回答在 Grok Bot 裡。"
           }
         }
       }
