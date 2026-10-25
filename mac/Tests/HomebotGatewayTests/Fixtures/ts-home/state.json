@@ -1,0 +1,16 @@
+{
+  "cursors": {
+    "chai": {
+      "cursor": "1007",
+      "maxSeq": "1007",
+      "syncedAt": 1792824027987,
+      "sessionId": "14752726"
+    },
+    "kitchen": {
+      "cursor": "1009",
+      "maxSeq": "1009",
+      "syncedAt": 1792824028016,
+      "sessionId": "555"
+    }
+  }
+}

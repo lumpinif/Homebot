@@ -1,0 +1,25 @@
+{
+  "name": "homebot",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Talk to your Grok Bots through Siri on HomePod and iPhone.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "homebot": "bin/homebot.ts"
+  },
+  "engines": {
+    "node": ">=24.12.0"
+  },
+  "scripts": {
+    "start": "node bin/homebot.ts start",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc -p tsconfig.json && npm --prefix web run typecheck",
+    "build:ui": "node scripts/build-ui.ts",
+    "check:ui": "node scripts/build-ui.ts --check"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2"
+  }
+}

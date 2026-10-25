@@ -1,0 +1,21 @@
+# agent run logs
+.agent-logs/
+# secrets / local config (never commit)
+auth/
+.homebot/
+secrets*.json
+!mac/Tests/**/Fixtures/**/secrets.json
+*.header
+*.token
+token.txt
+.env
+.env.*
+config.local.*
+data/
+*.shortcut
+# deps / build
+node_modules/
+dist/
+.DS_Store
+# local agent worktrees
+.claude/worktrees/

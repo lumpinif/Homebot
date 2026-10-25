@@ -1,0 +1,17 @@
+# Homebot
+
+> A free Mac app that lets you talk to your Grok Bot through Siri on HomePod and iPhone. Siri asks what you'd like to know, Homebot passes the question to your bot, and Siri reads the answer aloud. macOS 15 or later.
+
+Not affiliated with Apple, xAI or Cursor.
+
+## Guides
+
+- [Install guide for AI agents](install.md): step by step, with the steps the person must do themselves marked
+- [README](https://github.com/lumpinif/Homebot#readme): what you need, setup, privacy and troubleshooting
+- [Install with pictures](https://github.com/lumpinif/Homebot/blob/main/docs/INSTALL.md): the first open (Open Anyway)
+
+## Optional
+
+- [Download the newest Homebot](https://homebot.fun/download/latest?from=agent)
+- [Releases](https://github.com/lumpinif/Homebot/releases)
+- [Source](https://github.com/lumpinif/Homebot) (MIT)

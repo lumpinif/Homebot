@@ -1,0 +1,24 @@
+{
+  "fill-specializations": [
+    { "value": { "solid": "srgb:1.00000,1.00000,1.00000,1.00000" } },
+    { "appearance": "dark", "value": { "solid": "srgb:0.00000,0.00000,0.00000,1.00000" } }
+  ],
+  "groups": [
+    {
+      "layers": [
+        {
+          "image-name": "mark.svg",
+          "name": "Mark",
+          "fill-specializations": [
+            { "value": { "solid": "srgb:0.00000,0.00000,0.00000,1.00000" } },
+            { "appearance": "dark", "value": { "solid": "srgb:1.00000,1.00000,1.00000,1.00000" } }
+          ],
+          "position": { "scale": 18, "translation-in-points": [0, 0] }
+        }
+      ],
+      "shadow": { "kind": "neutral", "opacity": 0.5 },
+      "translucency": { "enabled": false, "value": 0.5 }
+    }
+  ],
+  "supported-platforms": { "squares": ["macOS"] }
+}

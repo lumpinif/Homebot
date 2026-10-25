@@ -1,0 +1,44 @@
+// homebot.fun: one Worker serves the website (static assets from site/dist) and the API.
+// Deploy only to this account_id (see DEPLOY.md). The D1 id is a placeholder;
+// DEPLOY.md says where the real value comes from.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "homebot",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-20",
+  "account_id": "c511849a74548b7f9be7e3a280afeb8f",
+  "workers_dev": false,
+  // The whole host is this Worker (a Custom Domain: Cloudflare adds the DNS record and certificate).
+  "routes": [{ "pattern": "homebot.fun", "custom_domain": true }],
+  // The site is served as static assets without running the Worker, except for the paths below.
+  // Any other path that isn't a file gets index.html (the site picks its page from the #hash).
+  "assets": {
+    "directory": "../site/dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/download/*", "/api/*", "/confirm", "/unsubscribe", "/manage", "/privacy", "/install"]
+  },
+  // No persisted logs: invocation logs carry request metadata, and we keep no IP addresses.
+  // Debug live with `wrangler tail` only.
+  "observability": { "enabled": false },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "homebot",
+      "database_id": "fbf3f7e2-f699-4dd4-95be-5eb5cf5eee33",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [{ "binding": "RELEASES", "bucket_name": "homebot-releases" }],
+  "send_email": [{ "name": "EMAIL" }],
+  "ratelimits": [
+    { "name": "PING_LIMIT", "namespace_id": "2001", "simple": { "limit": 600, "period": 60 } },
+    { "name": "SUBSCRIBE_LIMIT", "namespace_id": "2002", "simple": { "limit": 20, "period": 60 } }
+  ],
+  "triggers": { "crons": ["0 3 * * *", "0 4 1 * *"] },
+  "vars": {
+    "SITE_ORIGIN": "https://homebot.fun",
+    "MAIL_FROM": "hello@homebot.fun",
+    "MAIL_DAILY_CAP": "500"
+  }
+  // Secret (never in git): HMAC_SECRET, set with `wrangler secret put HMAC_SECRET`.
+}

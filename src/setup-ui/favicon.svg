@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <clipPath id="sq"><rect width="64" height="64" rx="14.3"/></clipPath>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <radialGradient id="fade" cx="50%" cy="112%" r="75%"><stop offset=".3" stop-color="#fff"/><stop offset=".72" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <mask id="rise"><rect width="64" height="64" fill="url(#fade)"/></mask>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect width="64" height="64" fill="#000"/>
+    <g mask="url(#rise)" filter="url(#soft)" opacity=".9">
+      <circle cx="12" cy="60" r="16" fill="#fb64ff"/>
+      <circle cx="30" cy="66" r="16" fill="#ff2555"/>
+      <circle cx="46" cy="62" r="14" fill="#ff9300"/>
+      <circle cx="58" cy="54" r="14" fill="#0096ff"/>
+    </g>
+  </g>
+  <g transform="translate(32 32) scale(1.185) translate(-32 -32)" fill="#fff">
+    <path d="M17 31 32 19l15 12" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="23.3" y="34.5" width="5.4" height="11" rx="2.7"/>
+    <rect x="35.3" y="34.5" width="5.4" height="11" rx="2.7"/>
+  </g>
+  <rect x=".5" y=".5" width="63" height="63" rx="13.8" fill="none" stroke="#fff" stroke-opacity=".12"/>
+</svg>

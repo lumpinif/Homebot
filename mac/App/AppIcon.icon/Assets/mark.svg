@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="5 5 54 54" width="54" height="54">
+  <!-- The roof as two capsules (a 4.6-wide stroke with round caps and join), the eyes as two
+       rounded bars: filled shapes only, since the icon's layer fill recolours every shape. -->
+  <rect x="-2.3" y="-2.3" width="23.809" height="4.6" rx="2.3" transform="translate(17 31) rotate(-38.6598)"/>
+  <rect x="-2.3" y="-2.3" width="23.809" height="4.6" rx="2.3" transform="translate(32 19) rotate(38.6598)"/>
+  <rect x="23.3" y="34.5" width="5.4" height="11" rx="2.7"/>
+  <rect x="35.3" y="34.5" width="5.4" height="11" rx="2.7"/>
+</svg>

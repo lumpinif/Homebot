@@ -1,0 +1,20 @@
+{
+  "bots": {
+    "chai": {
+      "name": "拆解师",
+      "sessionId": "14752726",
+      "strictEcho": true
+    },
+    "kitchen": {
+      "name": "厨房",
+      "sessionId": "555",
+      "strictEcho": false
+    }
+  },
+  "settings": {
+    "answerBudgetMs": 2000,
+    "pollMs": 10,
+    "rateLimitPerMin": 100,
+    "siriLang": "zh-CN"
+  }
+}

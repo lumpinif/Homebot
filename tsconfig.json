@@ -1,0 +1,36 @@
+{
+  // Type-checking only: Node runs the .ts files directly by stripping types
+  // (https://nodejs.org/api/typescript.html), so nothing is emitted and Node ignores this file.
+  // The setup page (web/) has its own toolchain and configs.
+  "compilerOptions": {
+    // What Node >=24.12 runs natively; no downleveling happens, so the target is the runtime.
+    "target": "es2024",
+    "lib": ["es2024"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"],
+    "noEmit": true,
+
+    // Only syntax Node can strip: no enums, namespaces with code, parameter properties or
+    // import aliases; type-only imports must say `import type`. Imports may name the real .ts
+    // file (our convention; this permits it but does not require it).
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+    // Our code is checked in full; declaration files of the toolchain itself are not ours to fix.
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts", "bin/**/*.ts", "scripts/**/*.ts", "test/**/*.ts", "test-helpers/**/*.ts"],
+  "exclude": ["node_modules"]
+}

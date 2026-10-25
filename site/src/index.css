@@ -1,0 +1,347 @@
+@import "tailwindcss";
+
+/* Dark mode follows the html.dark class, which main.tsx sets from the theme menu (System
+   follows prefers-color-scheme). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* macOS system colours (light / dark), as the app uses them through SwiftUI. */
+:root {
+  color-scheme: light;
+  --canvas: #ffffff;
+  --label: rgb(0 0 0 / 0.86);
+  --label-2: rgb(60 60 67 / 0.8);
+  --label-3: rgb(60 60 67 / 0.7);
+  --fill: rgb(0 0 0 / 0.035);
+  --fill-2: rgb(0 0 0 / 0.06);
+  --fill-hover: rgb(0 0 0 / 0.05);
+  --selected: rgb(0 0 0 / 0.07);
+  --separator: rgb(60 60 67 / 0.13);
+  --control: #ffffff;
+  --accent: #0071e3;
+  /* Behind white text: dark enough for 4.5:1. */
+  --accent-fill: #0071e3;
+  --accent-soft: rgb(0 122 255 / 0.1);
+  --green: #34c759;
+  --orange: #ff9500;
+  --red: #ff3b30;
+  --pink: #ff2d55;
+  --purple: #af52de;
+  --teal: #30b0a0;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 24px rgb(0 0 0 / 0.06);
+}
+.dark {
+  color-scheme: dark;
+  --canvas: #1e1e1e;
+  --label: rgb(255 255 255 / 0.9);
+  --label-2: rgb(235 235 245 / 0.6);
+  --label-3: rgb(235 235 245 / 0.55);
+  --fill: rgb(255 255 255 / 0.05);
+  --fill-2: rgb(255 255 255 / 0.09);
+  --fill-hover: rgb(255 255 255 / 0.07);
+  --selected: rgb(255 255 255 / 0.1);
+  --separator: rgb(255 255 255 / 0.1);
+  --control: rgb(255 255 255 / 0.14);
+  --accent: #2997ff;
+  --accent-fill: #0a6fd8;
+  --accent-soft: rgb(10 132 255 / 0.18);
+  --green: #30d158;
+  --orange: #ff9f0a;
+  --red: #ff453a;
+  --pink: #ff375f;
+  --purple: #bf5af2;
+  --teal: #40c8b8;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.25);
+}
+
+@theme inline {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+  --color-canvas: var(--canvas);
+  --color-label: var(--label);
+  --color-label-2: var(--label-2);
+  --color-label-3: var(--label-3);
+  --color-fill: var(--fill);
+  --color-fill-2: var(--fill-2);
+  --color-fill-hover: var(--fill-hover);
+  --color-selected: var(--selected);
+  --color-separator: var(--separator);
+  --color-control: var(--control);
+  --color-accent: var(--accent);
+  --color-accent-fill: var(--accent-fill);
+  --color-accent-soft: var(--accent-soft);
+  --color-green: var(--green);
+  --color-orange: var(--orange);
+  --color-red: var(--red);
+  --color-pink: var(--pink);
+  --color-purple: var(--purple);
+  --color-teal: var(--teal);
+}
+
+/* Fluid Functionalism tokens (MIT; site/public/THIRD_PARTY.md) for the vendored components in
+   src/ui/ff/: surfaces and their shadows as published, the rest mapped to the site's colours. */
+:root {
+  --surface-1: #FAFAFA;
+  --surface-2: #FCFCFC;
+  --surface-3: #FFFFFF;
+  --surface-4: #FFFFFF;
+  --surface-5: #FFFFFF;
+  --surface-6: #FFFFFF;
+  --surface-7: #FFFFFF;
+  --surface-8: #FFFFFF;
+  --shadow-color: rgb(0 0 0 / 0.06);
+  --shadow-1: 0 0 0 1px var(--shadow-color);
+  --shadow-2: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color);
+  --shadow-3: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color);
+  --shadow-4: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color);
+  --shadow-5: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color), 0 12px 12px -6px var(--shadow-color);
+  --shadow-6: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color), 0 12px 12px -6px var(--shadow-color), 0 24px 24px -12px var(--shadow-color);
+  --shadow-7: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color), 0 12px 12px -6px var(--shadow-color), 0 24px 24px -12px var(--shadow-color), 0 48px 48px -24px var(--shadow-color);
+  --shadow-8: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color), 0 12px 12px -6px var(--shadow-color), 0 24px 24px -12px var(--shadow-color), 0 48px 48px -24px var(--shadow-color), 0 96px 96px -48px var(--shadow-color);
+  --overlay: 0 0 0;
+  --focus-ring: var(--accent);
+}
+.dark {
+  --surface-1: #171717;
+  --surface-2: #1E1E1E;
+  --surface-3: #252525;
+  --surface-4: #2C2C2C;
+  --surface-5: #333333;
+  --surface-6: #3A3A3A;
+  --surface-7: #414141;
+  --surface-8: #484848;
+  --dm-hi-base: rgba(255,255,255,0.01);
+  --dm-hi-mid: rgba(255,255,255,0.02);
+  --dm-hi-high: rgba(255,255,255,0.04);
+  --dm-hi-peak: rgba(255,255,255,0.06);
+  --dm-ring-base: rgba(255,255,255,0.02);
+  --dm-ring-mid: rgba(255,255,255,0.04);
+  --dm-ring-high: rgba(255,255,255,0.06);
+  --dm-drop: rgba(0,0,0,0.18);
+  --shadow-1: inset 0 0 0 1px var(--dm-ring-base);
+  --shadow-2: inset 0 1px 0 0 var(--dm-hi-base), inset 0 0 0 1px var(--dm-ring-base), 0 1px 1px -0.5px var(--dm-drop);
+  --shadow-3: inset 0 1px 0 0 var(--dm-hi-mid), inset 0 0 0 1px var(--dm-ring-base), 0 0 0 1px rgba(0,0,0,0.12), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop);
+  --shadow-4: inset 0 1px 0 0 var(--dm-hi-mid), inset 0 0 0 1px var(--dm-ring-mid), 0 0 0 1px rgba(0,0,0,0.14), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop);
+  --shadow-5: inset 0 1px 0 0 var(--dm-hi-high), inset 0 0 0 1px var(--dm-ring-mid), 0 0 0 1px rgba(0,0,0,0.16), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop), 0 12px 12px -6px var(--dm-drop);
+  --shadow-6: inset 0 1px 0 0 var(--dm-hi-high), inset 0 0 0 1px var(--dm-ring-high), 0 0 0 1px rgba(0,0,0,0.18), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop), 0 12px 12px -6px var(--dm-drop), 0 24px 24px -12px var(--dm-drop);
+  --shadow-7: inset 0 1px 0 0 var(--dm-hi-peak), inset 0 0 0 1px var(--dm-ring-high), 0 0 0 1px rgba(0,0,0,0.20), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop), 0 12px 12px -6px var(--dm-drop), 0 24px 24px -12px var(--dm-drop), 0 48px 48px -24px var(--dm-drop);
+  --shadow-8: inset 0 1px 0 0 var(--dm-hi-peak), inset 0 0 0 1px var(--dm-ring-high), 0 0 0 1px rgba(0,0,0,0.22), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop), 0 12px 12px -6px var(--dm-drop), 0 24px 24px -12px var(--dm-drop), 0 48px 48px -24px var(--dm-drop), 0 96px 96px -48px var(--dm-drop);
+  --overlay: 255 255 255;
+}
+@theme inline {
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-4: var(--surface-4);
+  --color-surface-5: var(--surface-5);
+  --color-surface-6: var(--surface-6);
+  --color-surface-7: var(--surface-7);
+  --color-surface-8: var(--surface-8);
+  --shadow-surface-1: var(--shadow-1);
+  --shadow-surface-2: var(--shadow-2);
+  --shadow-surface-3: var(--shadow-3);
+  --shadow-surface-4: var(--shadow-4);
+  --shadow-surface-5: var(--shadow-5);
+  --shadow-surface-6: var(--shadow-6);
+  --shadow-surface-7: var(--shadow-7);
+  --shadow-surface-8: var(--shadow-8);
+  --color-foreground: var(--label);
+  --color-muted-foreground: var(--label-2);
+  --color-border: var(--separator);
+  --color-hover: var(--fill-hover);
+  --color-active: var(--fill-2);
+}
+
+html,
+body {
+  background: var(--canvas);
+  color: var(--label);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+body {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+}
+::selection {
+  background: var(--accent-soft);
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+button {
+  cursor: default;
+}
+a,
+a button,
+button.link {
+  cursor: pointer;
+}
+
+/* Homebot's logo (src/ui/brand.tsx, HomebotLogo): the mark on a flowing light in the Siri orb's
+   hues and the Glow icon's warmth. The patches drift and the warm light breathes on transforms
+   only (composited, no repaint); the glyph is moved by mark.ts. Paused unless the logo is live
+   (on screen, tab visible, motion allowed). */
+.hb-logo {
+  position: relative;
+  isolation: isolate;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  overflow: hidden;
+  border-radius: 22.37%;
+  background: #0d0b1a;
+  vertical-align: middle;
+}
+.hb-logo > * {
+  position: absolute;
+  inset: 0;
+}
+.hb-flow {
+  inset: -25% !important;
+  animation: hb-turn 48s linear infinite;
+}
+.hb-flow > i {
+  position: absolute;
+  left: 5%;
+  top: 5%;
+  width: 64%;
+  height: 64%;
+  opacity: 0.92;
+  will-change: transform;
+  animation: hb-drift calc(11s + var(--i) * 2.7s) ease-in-out calc(var(--i) * -3.1s) infinite;
+}
+.hb-flow > i:nth-child(1) { --ax: -12%; --ay: 18%; --bx: 30%; --by: 38%; --cx: 12%; --cy: 4%; }
+.hb-flow > i:nth-child(2) { --ax: 34%; --ay: 8%; --bx: -6%; --by: 28%; --cx: 26%; --cy: 44%; }
+.hb-flow > i:nth-child(3) { --ax: 6%; --ay: 44%; --bx: 38%; --by: 14%; --cx: -10%; --cy: 24%; }
+.hb-flow > i:nth-child(4) { --ax: 20%; --ay: 50%; --bx: -4%; --by: 40%; --cx: 36%; --cy: 34%; }
+.hb-flow > i:nth-child(5) { --ax: 2%; --ay: 56%; --bx: 26%; --by: 50%; --cx: 10%; --cy: 40%; }
+@keyframes hb-drift {
+  0%, 100% { transform: translate(var(--ax), var(--ay)); }
+  33% { transform: translate(var(--bx), var(--by)) scale(1.12); }
+  66% { transform: translate(var(--cx), var(--cy)) scale(0.92); }
+}
+@keyframes hb-turn {
+  to { transform: rotate(1turn); }
+}
+/* A darker top, so the white roof reads, and a vignette that keeps all four corners dark; it sits
+   over the warm light that rises from the bottom edge. */
+.hb-logo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(closest-corner, rgb(8 5 20 / 0) 45%, rgb(8 5 20 / 0.8)),
+    linear-gradient(rgb(8 6 20 / 0.72), rgb(8 6 20 / 0) 62%);
+}
+/* Wider than the tile, so its sides stay outside the edges while it breathes in. */
+.hb-breath {
+  inset: 0 -20% !important;
+  z-index: 0;
+  background: radial-gradient(50% 50% at 50% 110%, rgb(255 150 70 / 0.75), rgb(255 60 110 / 0) 100%);
+  opacity: calc(0.45 + var(--lift, 0) * 0.55);
+  transform-origin: 50% 100%;
+  animation: hb-breathe 4.8s ease-in-out infinite alternate;
+}
+@keyframes hb-breathe {
+  from { transform: scale(0.88); }
+  to { transform: scale(1.12); }
+}
+.hb-logo > svg {
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0.015em 0.03em rgb(0 0 0 / 0.35));
+}
+.hb-logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 max(0.5px, 0.016em) rgb(255 255 255 / 0.14);
+  pointer-events: none;
+}
+.hb-logo:not([data-live]) *,
+.hb-logo:not([data-live])::before {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hb-logo * {
+    animation: none !important;
+  }
+}
+
+/* Siri's light (the flow's moving packet): Homebot's own drawing in four hues (the same as
+   web/src/index.css), not Apple's artwork. */
+.siri-light {
+  background: conic-gradient(#fb64ff, #ff2555 28%, #ff9300 52%, #0096ff 76%, #fb64ff);
+}
+
+/* scroll-fade, from Fluid Functionalism (MIT; site/public/THIRD_PARTY.md): the content dissolves toward
+   an edge that has more to scroll, like the scroll edge under a macOS toolbar. Scroll-driven
+   animations keep the true top and bottom crisp; browsers without them get no fade. */
+@property --sf-start {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+@property --sf-end {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+@keyframes sf-reveal-start {
+  from {
+    --sf-start: 1;
+  }
+  to {
+    --sf-start: 0;
+  }
+}
+@keyframes sf-reveal-end {
+  from {
+    --sf-end: 0;
+  }
+  to {
+    --sf-end: 1;
+  }
+}
+.scroll-fade {
+  --scroll-fade-size: 40px;
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-fade {
+    -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / var(--sf-start)) 0, #000 var(--scroll-fade-size), #000 calc(100% - var(--scroll-fade-size)), rgb(0 0 0 / var(--sf-end)) 100%);
+    mask-image: linear-gradient(to bottom, rgb(0 0 0 / var(--sf-start)) 0, #000 var(--scroll-fade-size), #000 calc(100% - var(--scroll-fade-size)), rgb(0 0 0 / var(--sf-end)) 100%);
+    animation:
+      sf-reveal-start both linear,
+      sf-reveal-end both linear;
+    animation-timeline: scroll(self), scroll(self);
+    animation-range-start: 0, calc(100% - var(--scroll-fade-size));
+    animation-range-end: var(--scroll-fade-size), 100%;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

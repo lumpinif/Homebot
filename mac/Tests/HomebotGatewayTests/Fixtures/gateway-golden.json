@@ -1,0 +1,592 @@
+{
+  "note": "Test values for the fake Grok Bot API only.",
+  "key": "test-key-not-a-secret",
+  "tokens": {
+    "zh": {
+      "id": "8fd42949ce84",
+      "token": "EoJaj9XbeplFisL6ThOj2T-tvsa59USUDX-klAWGhSI"
+    },
+    "en": {
+      "id": "8e689505701f",
+      "token": "HS6j9VOuHX4z3_vFJLZtuVAeHVZAhjEQM-eVClupz74"
+    },
+    "kitchen": {
+      "id": "cbe9943dec83",
+      "token": "Yj8_aPOTPdQH0zyi8kTfaI0olaPJiYRP4WH4TO7gCA0"
+    },
+    "revoked": {
+      "id": "98a8e1100da3",
+      "token": "HEFcM58DPWS2bYY1O9ukLnjMD-k5VtIUhPJPGu37LDw"
+    },
+    "pending": {
+      "id": "a2bcef24915c",
+      "token": "W9kdSEriIM1AANAlds5QRqZEWRtAGGp8oRVFHZUqUh8"
+    }
+  },
+  "transcripts": {
+    "555": [
+      {
+        "seq": "1004",
+        "updatedSeq": "1004",
+        "createdAtMs": 1792824023742,
+        "kind": "message",
+        "role": "user",
+        "text": "old question"
+      },
+      {
+        "seq": "1005",
+        "updatedSeq": "1005",
+        "createdAtMs": 1792824023742,
+        "kind": "send-message",
+        "text": "old answer"
+      },
+      {
+        "seq": "1008",
+        "updatedSeq": "1008",
+        "createdAtMs": 1792824027989,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:28f1b8239b63 · zh-CN]\n你好\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。然后用 1 到 3 句简短口语回答，总共不超过 80 个字，用提问的语言回答；语言不明确时用中文。不要 markdown、链接、列表、代码或表情。）"
+      },
+      {
+        "seq": "1009",
+        "updatedSeq": "1009",
+        "createdAtMs": 1792824028009,
+        "kind": "send-message",
+        "text": "[hb:28f1b8239b63] 好。"
+      },
+      {
+        "seq": "1018",
+        "updatedSeq": "1018",
+        "createdAtMs": 1792824028584,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:c14cd73f0638 · zh-CN]\n冰箱里有什么\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。然后用 1 到 3 句简短口语回答，总共不超过 80 个字，用提问的语言回答；语言不明确时用中文。不要 markdown、链接、列表、代码或表情。）"
+      },
+      {
+        "seq": "1019",
+        "updatedSeq": "1019",
+        "createdAtMs": 1792824028605,
+        "kind": "send-message",
+        "text": "冰箱里有牛奶。"
+      }
+    ],
+    "14752726": [
+      {
+        "seq": "1001",
+        "updatedSeq": "1001",
+        "createdAtMs": 1792824023742,
+        "kind": "send-message",
+        "text": "old 0"
+      },
+      {
+        "seq": "1002",
+        "updatedSeq": "1002",
+        "createdAtMs": 1792824023742,
+        "kind": "send-message",
+        "text": "old 1"
+      },
+      {
+        "seq": "1003",
+        "updatedSeq": "1003",
+        "createdAtMs": 1792824023742,
+        "kind": "send-message",
+        "text": "old 2"
+      },
+      {
+        "seq": "1006",
+        "updatedSeq": "1006",
+        "createdAtMs": 1792824023975,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:ed48e849dd32 · zh-CN]\n你好\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:ed48e849dd32] 开头。然后用 1 到 3 句简短口语回答，总共不超过 80 个字，用提问的语言回答；语言不明确时用中文。不要 markdown、链接、列表、代码或表情。）"
+      },
+      {
+        "seq": "1007",
+        "updatedSeq": "1007",
+        "createdAtMs": 1792824025985,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:c5b078f21f16 · en]\n你好\n\n(Homebot: this was spoken to Siri on a HomePod/iPhone; your reply is read aloud in the room. Start your reply with [hb:c5b078f21f16]. Then answer in 1-3 short spoken sentences, at most about 50 words, in the language of the question (English if unclear). No markdown, links, lists, code or emoji.)"
+      },
+      {
+        "seq": "1010",
+        "updatedSeq": "1010",
+        "createdAtMs": 1792824028124,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:0d42d334ca98 · zh-CN]\n几点了\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:0d42d334ca98] 开头。然后用 1 到 3 句简短口语回答，总共不超过 80 个字，用提问的语言回答；语言不明确时用中文。不要 markdown、链接、列表、代码或表情。）"
+      },
+      {
+        "seq": "1011",
+        "updatedSeq": "1011",
+        "createdAtMs": 1792824028145,
+        "kind": "send-message",
+        "text": "[hb:0d42d334ca98] 现在**三点**。"
+      },
+      {
+        "seq": "1012",
+        "updatedSeq": "1012",
+        "createdAtMs": 1792824028239,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:568150d4d92d · zh-CN]\n讲个故事\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:568150d4d92d] 开头。然后用 1 到 3 句简短口语回答，总共不超过 80 个字，用提问的语言回答；语言不明确时用中文。不要 markdown、链接、列表、代码或表情。）"
+      },
+      {
+        "seq": "1013",
+        "updatedSeq": "1013",
+        "createdAtMs": 1792824028259,
+        "kind": "send-message",
+        "text": "[hb:568150d4d92d] 这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。"
+      },
+      {
+        "seq": "1014",
+        "updatedSeq": "1014",
+        "createdAtMs": 1792824028345,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:bda416461a18 · en]\nwhat time is it\n\n(Homebot: this was spoken to Siri on a HomePod/iPhone; your reply is read aloud in the room. Start your reply with [hb:bda416461a18]. Then answer in 1-3 short spoken sentences, at most about 50 words, in the language of the question (English if unclear). No markdown, links, lists, code or emoji.)"
+      },
+      {
+        "seq": "1015",
+        "updatedSeq": "1015",
+        "createdAtMs": 1792824028367,
+        "kind": "send-message",
+        "text": "[hb:bda416461a18] It is **three**."
+      },
+      {
+        "seq": "1016",
+        "updatedSeq": "1016",
+        "createdAtMs": 1792824028477,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:a737c1ce2bfe · zh-CN]\n几点了\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:a737c1ce2bfe] 开头。然后用 1 到 3 句简短口语回答，总共不超过 80 个字，用提问的语言回答；语言不明确时用中文。不要 markdown、链接、列表、代码或表情。）"
+      },
+      {
+        "seq": "1017",
+        "updatedSeq": "1017",
+        "createdAtMs": 1792824028498,
+        "kind": "send-message",
+        "text": "我没有标签"
+      },
+      {
+        "seq": "1020",
+        "updatedSeq": "1020",
+        "createdAtMs": 1792824028692,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:1d777cd15c48 · zh-CN]\n分两段说\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。回复请以 [hb:1d777cd15c48] 开头。然后用 1 到 3 句简短口语回答，总共不超过 80 个字，用提问的语言回答；语言不明确时用中文。不要 markdown、链接、列表、代码或表情。）"
+      },
+      {
+        "seq": "1021",
+        "updatedSeq": "1021",
+        "createdAtMs": 1792824028712,
+        "kind": "send-message",
+        "text": "[hb:1d777cd15c48] 第一部分。"
+      },
+      {
+        "seq": "1022",
+        "updatedSeq": "1022",
+        "createdAtMs": 1792824028732,
+        "kind": "send-message",
+        "text": "第二部分。"
+      },
+      {
+        "seq": "1023",
+        "updatedSeq": "1023",
+        "createdAtMs": 1792824029910,
+        "kind": "message",
+        "role": "user",
+        "text": "[Homebot voice · hb:b0686d31021f · zh-CN]\n再说一点\n\n（Homebot：这是对 HomePod/iPhone 上的 Siri 说的话，你的回复会在房间里被朗读出来。这是语音对话的第 1 轮，用户听完可以马上接着说；除非必要，不要以问题结尾；房间里只会听到你这一轮的第一条消息。回复请以 [hb:b0686d31021f] 开头。然后用 1 到 3 句简短口语回答，总共不超过 80 个字，用提问的语言回答；语言不明确时用中文。不要 markdown、链接、列表、代码或表情。）"
+      },
+      {
+        "seq": "1024",
+        "updatedSeq": "1024",
+        "createdAtMs": 1792824029930,
+        "kind": "send-message",
+        "text": "[hb:b0686d31021f] 好的，**继续**。"
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "name": "v1 answer, markdown removed",
+      "bot": {
+        "sid": "14752726",
+        "text": "现在**三点**。"
+      },
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "几点了",
+          "v": "1"
+        }
+      },
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "现在三点。"
+    },
+    {
+      "name": "v1 long answer is cut",
+      "bot": {
+        "sid": "14752726",
+        "text": "这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。"
+      },
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "讲个故事",
+          "v": "1"
+        }
+      },
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。这是一个很长的回答。…"
+    },
+    {
+      "name": "v1 English token",
+      "bot": {
+        "sid": "14752726",
+        "text": "It is **three**."
+      },
+      "req": {
+        "token": "en",
+        "body": {
+          "bot": "chai",
+          "text": "what time is it",
+          "v": "1"
+        }
+      },
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "It is three."
+    },
+    {
+      "name": "strict bot, untagged reply refused",
+      "bot": {
+        "sid": "14752726",
+        "text": "我没有标签",
+        "echo": false
+      },
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "几点了",
+          "v": "1"
+        }
+      },
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "收到了回复，但无法确认它是在回答这个问题，所以没有朗读。请在 Grok Bot 里查看。"
+    },
+    {
+      "name": "non-strict bot, untagged reply spoken",
+      "bot": {
+        "sid": "555",
+        "text": "冰箱里有牛奶。",
+        "echo": false
+      },
+      "req": {
+        "token": "kitchen",
+        "body": {
+          "bot": "kitchen",
+          "text": "冰箱里有什么",
+          "v": "1"
+        }
+      },
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "冰箱里有牛奶。"
+    },
+    {
+      "name": "multi-part turn speaks the first delivery",
+      "bot": {
+        "sid": "14752726",
+        "text": "第一部分。",
+        "more": [
+          "第二部分。"
+        ]
+      },
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "分两段说",
+          "v": "1"
+        }
+      },
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "第一部分。"
+    },
+    {
+      "name": "busy bot",
+      "bot": {
+        "sid": "14752726",
+        "busy": true
+      },
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "几点了",
+          "v": "1"
+        }
+      },
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "拆解师正在忙，请稍后再问。"
+    },
+    {
+      "name": "empty question",
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "  ",
+          "v": "1"
+        }
+      },
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "没听清，请再说一次。"
+    },
+    {
+      "name": "too long question",
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长",
+          "v": "1"
+        }
+      },
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "问题太长了，请说得简短一些。"
+    },
+    {
+      "name": "bad token",
+      "req": {
+        "token": "bad",
+        "body": {
+          "bot": "chai",
+          "text": "几点了",
+          "v": "1"
+        }
+      },
+      "status": 401,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "This shortcut no longer works. Please make a new one in Homebot."
+    },
+    {
+      "name": "revoked token",
+      "req": {
+        "token": "revoked",
+        "body": {
+          "bot": "chai",
+          "text": "几点了",
+          "v": "1"
+        }
+      },
+      "status": 401,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "This shortcut no longer works. Please make a new one in Homebot."
+    },
+    {
+      "name": "another bot's token",
+      "req": {
+        "token": "kitchen",
+        "body": {
+          "bot": "chai",
+          "text": "几点了",
+          "v": "1"
+        }
+      },
+      "status": 403,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "This shortcut isn't allowed to use that bot."
+    },
+    {
+      "name": "unknown bot",
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "nobody",
+          "text": "几点了",
+          "v": "1"
+        }
+      },
+      "status": 403,
+      "contentType": "text/plain; charset=utf-8",
+      "answer": "This shortcut isn't allowed to use that bot."
+    },
+    {
+      "name": "body is not JSON",
+      "req": {
+        "token": "zh",
+        "raw": "{"
+      },
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"error\":\"bad json\"}"
+    },
+    {
+      "name": "body is not an object",
+      "req": {
+        "token": "zh",
+        "raw": "[1]"
+      },
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"error\":\"bad json\"}"
+    },
+    {
+      "name": "health",
+      "req": {
+        "token": "zh",
+        "method": "GET",
+        "path": "/v1/health"
+      },
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"ok\":true}"
+    },
+    {
+      "name": "GET /v1/ask",
+      "req": {
+        "token": "zh",
+        "method": "GET",
+        "path": "/v1/ask"
+      },
+      "status": 405,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"error\":\"method not allowed\"}"
+    },
+    {
+      "name": "unknown path",
+      "req": {
+        "token": "zh",
+        "method": "POST",
+        "path": "/v1/nope",
+        "body": {}
+      },
+      "status": 404,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"error\":\"not found\"}"
+    },
+    {
+      "name": "v2 first step",
+      "bot": {
+        "sid": "14752726",
+        "text": "我在听。"
+      },
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "我们聊聊",
+          "v": "2",
+          "step": "0",
+          "run": "",
+          "last": "5"
+        }
+      },
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"say\":\"还有吗？\",\"ask\":\"还有吗？\",\"mode\":\"v2\",\"next\":\"listen\",\"run\":\"$run\"}"
+    },
+    {
+      "name": "v2 next step",
+      "bot": {
+        "sid": "14752726",
+        "text": "好的，**继续**。"
+      },
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "再说一点",
+          "v": "2",
+          "step": "1",
+          "run": "$run",
+          "last": "5"
+        }
+      },
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"say\":\"好的，继续。\",\"ask\":\"还有吗？\",\"mode\":\"v1\",\"next\":\"listen\",\"run\":\"$run\"}"
+    },
+    {
+      "name": "v2 end word",
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "谢谢",
+          "v": "2",
+          "step": "2",
+          "run": "$run",
+          "last": "5"
+        }
+      },
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"say\":\"好的。\",\"ask\":\"还有吗？\",\"mode\":\"v1\",\"next\":\"end\",\"run\":\"$run\"}"
+    },
+    {
+      "name": "v2 empty first step",
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "",
+          "v": "2",
+          "step": "0",
+          "run": "",
+          "last": "5"
+        }
+      },
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"say\":\"还有吗？\",\"ask\":\"还有吗？\",\"mode\":\"v2\",\"next\":\"listen\",\"run\":\"$run\"}"
+    },
+    {
+      "name": "v2 unknown run",
+      "req": {
+        "token": "zh",
+        "body": {
+          "bot": "chai",
+          "text": "还在吗",
+          "v": "2",
+          "step": "3",
+          "run": "zzzzzz",
+          "last": "5"
+        }
+      },
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"say\":\"我们重新开始吧，请再说一次快捷指令的名字。\",\"ask\":\"还有吗？\",\"mode\":\"v1\",\"next\":\"end\",\"run\":\"\"}"
+    },
+    {
+      "name": "v2 bad token",
+      "req": {
+        "token": "bad",
+        "body": {
+          "bot": "chai",
+          "text": "你好",
+          "v": "2",
+          "step": "0",
+          "run": "",
+          "last": "5"
+        }
+      },
+      "status": 401,
+      "contentType": "application/json; charset=utf-8",
+      "answer": "{\"say\":\"This shortcut no longer works. Please make a new one in Homebot.\",\"ask\":\"\",\"mode\":\"v1\",\"next\":\"end\",\"run\":\"\"}"
+    }
+  ]
+}

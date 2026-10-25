@@ -1,0 +1,29 @@
+{
+  "name": "homebot-setup-web",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b"
+  },
+  "devDependencies": {
+    "@floating-ui/dom": "^1.8.0",
+    "@tailwindcss/vite": "^4",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.61.0",
+    "motion": "^14.6.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4",
+    "typescript": "~6.0.2",
+    "vite": "^8"
+  },
+  "description": "The Homebot setup page (built to ../src/setup-ui; the gateway serves the build)."
+}

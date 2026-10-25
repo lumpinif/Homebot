@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Homebot is a Mac app that lets Siri on your HomePod and iPhone talk to your Grok Bot, and read its replies aloud." />
+    <meta property="og:title" content="Homebot — Siri for your Grok Bot" />
+    <meta property="og:description" content="Ask Siri on your HomePod or iPhone; your Grok Bot answers out loud. A Mac app, free and open source." />
+    <link rel="icon" href="./favicon.ico" sizes="32x32" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="alternate" type="text/markdown" href="./install.md" title="Install guide for AI agents" />
+    <title>Homebot — Siri for your Grok Bot</title>
+    <script>
+      // Set the theme before the first paint, so a dark page doesn't flash white.
+      try {
+        var t = localStorage.getItem("hb-theme");
+        if (t === "dark" || ((!t || t === "system") && matchMedia("(prefers-color-scheme: dark)").matches)) document.documentElement.classList.add("dark");
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

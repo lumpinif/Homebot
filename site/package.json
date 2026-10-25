@@ -1,0 +1,35 @@
+{
+  "name": "homebot-site",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "The Homebot website: a landing page that is also the beginner tutorial. Static build in site/dist.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b"
+  },
+  "devDependencies": {
+    "@base-ui/react": "^1.9.0",
+    "@radix-ui/react-scroll-area": "^1.4.0",
+    "@tailwindcss/vite": "^4",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "^0.170.0",
+    "@vitejs/plugin-react": "^6",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.61.0",
+    "motion": "^14.6.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4",
+    "typescript": "~6.0.2",
+    "vite": "^8"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  }
+}
