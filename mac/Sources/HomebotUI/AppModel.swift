@@ -332,6 +332,7 @@ public final class AppModel {
       credential: cred.map { CredentialView(source: $0.source, access: access) }, login: host.credentials.loginStatus,
       bots: bots, tokens: views, gatewayURL: "http://\(hostName).local:\(port)", siriLangBefore: prefs.siriLangBefore)
     next.usageCounts = s.usageCounts == true
+    next.usageAsked = s.usageCounts != nil
     next.updateCheck = s.updateCheck != false
     let recent = st.running ? ((try? await host.activity.recent(limit: 200)) ?? activity) : []
     guard mine == refreshes else { return }
@@ -1361,5 +1362,6 @@ public final class AppModel {
   public var makeShortcutPage: Page { Flow.landing(.shortcut, snapshot) }
 
   public var setUp: Bool { Flow.isSetUp(snapshot) }
+  public var asksUsage: Bool { Flow.asksUsage(snapshot, running: status?.running == true, forcedOff: usage.forcedOff) }
   public var progress: [Page: StepState] { Flow.progress(snapshot) }
 }

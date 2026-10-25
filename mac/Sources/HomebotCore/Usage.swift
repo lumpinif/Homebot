@@ -191,9 +191,12 @@ public struct OfflineTransport: HTTPTransport {
 public actor UsageClient {
   let home: Home
   nonisolated public let transport: HTTPTransport
-  let env: [String: String]
+  nonisolated let env: [String: String]
   let now: @Sendable () -> Date
   var busy = false
+
+  /// DO_NOT_TRACK=1 or HOMEBOT_NO_USAGE=1: counts stay off, and Home never asks.
+  nonisolated public var forcedOff: Bool { Usage.forcedOff(env) }
 
   public init(home: Home, transport: HTTPTransport = EphemeralTransport(), env: [String: String] = ProcessInfo.processInfo.environment, now: @escaping @Sendable () -> Date = Date.init) {
     self.home = home

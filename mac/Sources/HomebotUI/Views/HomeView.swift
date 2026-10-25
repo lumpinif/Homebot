@@ -103,6 +103,18 @@ struct HomeView: View {
   @ViewBuilder
   var notices: some View {
     let T = model.tr
+    // Asked once, after setup (DECISIONS item 38): nothing is sent unless the user says Share;
+    // either answer is final here, and Settings › This Mac can change it.
+    if model.asksUsage {
+      Callout(text: T.usageAsk, style: .info) {
+        HStack(spacing: 8) {
+          Link(destination: privacyURL) { Image(systemName: "info.circle") }
+            .buttonStyle(.borderless).foregroundStyle(Theme.muted).help(T.usageWhatsSent).accessibilityLabel(T.usageWhatsSent)
+          Button(T.notNow) { Task { await model.setUsageCounts(false) } }.buttonStyle(.borderless).controlSize(.regular)
+          Button(T.usageAskShare) { Task { await model.setUsageCounts(true) } }.secondaryAction().controlSize(.regular)
+        }
+      }
+    }
     // The real state, not the switch: a sleep assertion that failed shows here too.
     if running && model.status?.awake != true {
       Callout(text: T.awakeOff, title: T.statusAwake) {

@@ -70,6 +70,8 @@ public struct Snapshot: Sendable, Equatable {
   public var siriLangBefore: String?
   /// Opt-in usage counts (nil in the store = never asked = off) and the update check (default on).
   public var usageCounts = false
+  /// The user answered the question about usage counts (Home's prompt or the Settings switch).
+  public var usageAsked = false
   public var updateCheck = true
 
   public init(siriLang: String = Langs.defaultSiriLang, phoneLang: Lang = .en, appleSigning: Bool = false, credential: CredentialView? = nil, login: LoginStatus = .none, bots: [BotView] = [], tokens: [TokenView] = [], gatewayURL: String = "http://mac.local:8787", siriLangBefore: String? = nil) {
@@ -115,6 +117,13 @@ public enum Flow {
   /// opens on Home (§20.6).
   public static func isSetUp(_ s: Snapshot) -> Bool {
     progress(s)[.install]?.done == true
+  }
+
+  /// Home asks once about usage counts (DECISIONS item 38): only once Homebot is Ready, never
+  /// during setup, never after the user answered here or in Settings, and never when the
+  /// environment forces counts off. Off until the user says Share.
+  public static func asksUsage(_ s: Snapshot, running: Bool, forcedOff: Bool) -> Bool {
+    running && isSetUp(s) && !s.usageAsked && !forcedOff
   }
 
   /// Where the window opens: Home after setup, else the first step still to do.
