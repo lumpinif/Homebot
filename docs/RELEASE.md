@@ -1,6 +1,6 @@
 # Release checklist and notes
 
-How a Homebot release is made, what was checked, and what still needs Felix. Agents build and check; they never push, tag, publish or notarize.
+How a Homebot release is made, what was checked, and what still needs Felix. Agents build and check. Once Felix says to release a version, an agent also tags it, makes the GitHub Release and uploads the zip and `latest.json` to R2 (only on Felix's personal Cloudflare account, as `cloud/DEPLOY.md` says). Agents never notarize.
 
 ## Build
 
