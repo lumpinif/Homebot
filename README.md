@@ -4,7 +4,7 @@ Talk to your Grok Bots through Siri on HomePod and iPhone. Say "Hey Siri, Grok B
 
 Homebot is a Mac app. It runs on a Mac at home, on the same Wi-Fi as your iPhone, and answers the Siri Shortcut it makes for you. Setup is clicking in its window: no Terminal.
 
-> **Status: first release (0.1.0).** Homebot.app (the native Mac app in `mac/`) answers real Siri requests on the maintainer's iPhone and Mac, in English and Chinese, and passes over 500 automated tests. The earlier TypeScript version also worked on a Chinese HomePod ("家庭助手"). Languages other than English and Chinese are drafts. Steps not yet checked on a device are marked *(unverified)*. Details: [docs/STATUS.md](docs/STATUS.md).
+> **Status: early release (0.1.1).** Homebot.app (the native Mac app in `mac/`) answers real Siri requests on the maintainer's iPhone and Mac, in English and Chinese, and passes over 500 automated tests. The earlier TypeScript version also worked on a Chinese HomePod ("家庭助手"). Languages other than English and Chinese are drafts. Steps not yet checked on a device are marked *(unverified)*. Details: [docs/STATUS.md](docs/STATUS.md).
 
 ## What you need
 
