@@ -285,6 +285,7 @@ struct Status: AsyncParsableCommand {
     }
     CLI.out("Homebot gateway: running on \(st["bind"] as? String ?? "?"):\(st["port"] as? Int ?? 0)")
     CLI.out("Credentials: \(st["credential"] as? String ?? "none") (Grok Bot: \(st["accepted"] as? String ?? "unchecked"))")
+    if st["accepted"] as? String == "rejected" { CLI.out("  Grok Bot answered 401/403 to this key. Make a new key in the Cursor dashboard (https://cursor.com/dashboard?tab=integrations) and save it with `pbpaste | homebot account set-key`.") }
     CLI.out("Keeps this Mac awake: \((st["awake"] as? Bool) == true ? "yes" : "no")")
     CLI.out("Text history: \((st["textHistory"] as? Bool) == true ? "on (excluded from Time Machine backups)" : "off (the activity folder could not be excluded from backups)")")
     CLI.out("Bots: \(st["bots"] as? Int ?? 0)")
@@ -741,7 +742,7 @@ struct AccountCmd: AsyncParsableCommand {
       _ = try await ctx.client().getEntries(sessionId: b.sessionId, afterUpdatedSeq: (await ctx.state.cursor(b.key))?.cursor ?? "-1")
       CLI.out("Grok Bot: accepted")
     } catch let e as BdkError where e.kind == .auth {
-      CLI.out("Grok Bot: rejected the key (\(e.status.map(String.init) ?? "auth"))")
+      CLI.out("Grok Bot: rejected the key (\(e.status.map(String.init) ?? "auth")). Make a new key in the Cursor dashboard (https://cursor.com/dashboard?tab=integrations) and save it with `pbpaste | homebot account set-key`.")
       throw ExitCode(1)
     } catch {
       CLI.out("Grok Bot: not reachable (\(HomebotCLI.describeOwn(error) ?? "error")); the key is checked again on the next question")
@@ -758,7 +759,7 @@ struct AccountCmd: AsyncParsableCommand {
       CLI.out("Credential: \(c?.source.rawValue ?? "none")")
       let login: String
       switch ctx.credentials.loginStatus {
-      case .none: login = "none"
+      case .none: login = "none (signing in to the Grok Bot app does not make one; `bdk login` does)"
       case .usable: login = "found (usable)"
       case .otherBackend: login = "found, for another server (not used)"
       case .unreadable: login = "found, unreadable (not used)"
@@ -775,7 +776,9 @@ struct AccountCmd: AsyncParsableCommand {
     func run() async throws {
       let ctx = try await Ctx.open(g)
       try ctx.credentials.removeSaved()
-      CLI.out("Removed the saved key. Credential now: \((try ctx.credentials.resolve())?.source.rawValue ?? "none").")
+      let now = try ctx.credentials.resolve()
+      CLI.out("Removed the saved key. Credential now: \(now?.source.rawValue ?? "none").")
+      if now == nil { CLI.out("No Grok Bot login on this Mac to fall back to (the Grok Bot app's sign-in is not one). Save a key with `pbpaste | homebot account set-key`.") }
     }
   }
 }

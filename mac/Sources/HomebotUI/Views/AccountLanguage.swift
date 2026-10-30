@@ -102,7 +102,9 @@ struct AccountStep: View {
     switch model.snapshot.login {
     case .otherBackend: return T.loginOther
     case .unreadable: return T.loginUnreadable
-    case .none, .usable: return nil
+    // Signed in to the Grok Bot app is not a login Homebot can read (only `bdk login` makes one).
+    case .none: return T.loginNone
+    case .usable: return nil
     }
   }
 
@@ -129,6 +131,7 @@ struct AccountStep: View {
         }
         .animation(.easeOut, value: c.access)
       }
+      if c.source == .saved && c.access == .rejected { Note(text: T.keyRejectedNote) }
       if c.source == .bdkLogin { Note(text: T.keyDetectedNote) }
       if c.source == .saved && model.snapshot.login == .usable { Note(text: T.keyOverLogin) }
       ActionBar {

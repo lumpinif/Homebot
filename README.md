@@ -10,7 +10,7 @@ Homebot is a Mac app. It runs on a Mac at home, on the same Wi-Fi as your iPhone
 
 - A **Mac** with **macOS 15 (Sequoia) or later**, Apple silicon or Intel, that stays on and awake at home, on the same Wi-Fi as your iPhone.
 - An **iPhone** with Siri turned on. A **HomePod** is optional; it uses the Shortcuts on your iPhone. For HomePod, **Siri** must also be on in **iCloud** on the iPhone (Settings › your name › iCloud).
-- A **Grok Bot** you already use. If Grok Bot is already signed in on this Mac, Homebot uses that login; otherwise you paste an **API key from your Cursor dashboard** *(unverified: the exact dashboard menu names, and whether a brand-new account's key can use Grok Bot)*.
+- A **Grok Bot** you already use. You paste an **API key from your Cursor dashboard** (signing in to the Grok Bot app is not enough; Homebot can use only a login made with `bdk login`) *(unverified: the exact dashboard menu names, and whether a brand-new account's key can use Grok Bot)*.
 
 ## Install
 
@@ -24,7 +24,7 @@ Homebot isn't notarized by Apple (its developer has no paid Apple developer acco
 
 Four steps: **Account → Bot → Shortcut → Install.**
 
-1. **Account.** Homebot uses a Grok Bot login it finds on this Mac. If there is none, paste a key from your Cursor dashboard and click **Save** (with a login found, **Use an API key instead** opens the same form). The key stays in a private file on this Mac and is never shown again.
+1. **Account.** Paste a key from your Cursor dashboard and click **Save**. If you made a login with `bdk login`, Homebot finds it and you can skip this (**Use an API key instead** opens the same form). The Grok Bot app's sign-in is not such a login. If the step says **Rejected**, Grok Bot refused the key: make a new one and click **Replace key**. The key stays in a private file on this Mac and is never shown again.
 2. **Bot.** Type each bot's **exact name**, twice. A typo would make Grok Bot create a new, empty bot; Homebot notices and doesn't add it.
 3. **Shortcut.** Pick a bot (or **All my bots**: one phrase, Siri asks which bot *(unverified on a HomePod)*), its Siri language (the HomePod's: Home app › your HomePod › Settings › Language) and the phrase. English defaults: **"Grok Bot"**, then "My Grok Bot", "Our Grok Bot". Click **Sign with Apple and make** (iOS adds only signed Shortcuts; the line under the button says what goes to Apple). After that first time the button is just **Make Shortcut**. Optional, for one-bot Shortcuts: **Keep listening after each answer** (conversation mode).
 4. **Install.** "Does your iPhone use the same Apple Account as this Mac?"
@@ -108,7 +108,7 @@ Steps:
    (ask before replacing an older copy).
 2. ME: open Homebot. macOS says "Homebot.app" Not Opened: I click Done, then System Settings ›
    Privacy & Security › Open Anyway. Picture guide: docs/INSTALL.md in the repository.
-3. ME, Account: if Homebot found a Grok Bot login, skip. Otherwise I paste a key from my
+3. ME, Account: if Homebot found a bdk login, skip (the Grok Bot app's sign-in is not one). Otherwise I paste a key from my
    Cursor dashboard into Homebot's Account step and click Save.
 4. ME, Bot: I type my bot's exact name twice and click Add.
 5. ME, Shortcut: pick the bot, the Siri language (my HomePod's), the phrase (English default

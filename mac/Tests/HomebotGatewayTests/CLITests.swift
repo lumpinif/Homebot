@@ -335,9 +335,13 @@ struct CLITests {
     let rejected = await h.cli("account", "set-key")
     #expect(rejected.code == 1)
     #expect(rejected.text.contains("rejected the key (401)") && !rejected.text.contains("another-not-a-secret"))
+    #expect(rejected.text.contains("Make a new key in the Cursor dashboard"), "a rejected key says what to do")
     #expect((FileUtil.mode(h.home.apiKey) ?? 0) & 0o777 == 0o600)
-    #expect(await h.cli("account", "remove-key").code == 0)
-    #expect((await h.cli("account", "status")).text.contains("Credential: none"))
+    let removed = await h.cli("account", "remove-key")
+    #expect(removed.code == 0)
+    #expect(removed.text.contains("No Grok Bot login on this Mac to fall back to"), "\(removed.text)")
+    let none = await h.cli("account", "status")
+    #expect(none.text.contains("Credential: none") && none.text.contains("the Grok Bot app does not make one"))
   }
 
   @Test("a key typed as an argument, or in a bot's message, is never printed (Codex S2 review 12, 13)")

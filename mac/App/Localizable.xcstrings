@@ -14201,6 +14201,77 @@
         }
       }
     },
+    "keyRejectedNote": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot refused this key. Make a new key in the Cursor dashboard, then click Replace key."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot rechazó esta clave. Crea una nueva en el panel de Cursor y haz clic en Sustituir clave."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot a refusé cette clé. Crée une nouvelle clé dans le tableau de bord Cursor, puis clique sur Remplacer la clé."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot hat diesen Schlüssel abgelehnt. Erstelle im Cursor-Dashboard einen neuen und klicke dann auf Schlüssel ersetzen."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot ha rifiutato questa chiave. Creane una nuova nella dashboard di Cursor, poi fai clic su Sostituisci chiave."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Grok Bot recusou esta chave. Crie uma nova no painel do Cursor e clique em Substituir chave."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot отклонил этот ключ. Создайте новый в панели Cursor и нажмите «Заменить ключ»."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot がこのキーを拒否しました。Cursor ダッシュボードで新しいキーを作成し、「キーを置き換え」をクリックしてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot이 이 키를 거부했습니다. Cursor 대시보드에서 새 키를 만든 뒤 키 교체를 클릭하세요."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot 拒绝了这个密钥。请在 Cursor 控制台新建一个密钥，然后点击“更换密钥”。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grok Bot 拒絕了這個金鑰。請在 Cursor 控制台新建一個金鑰，然後點擊「更換金鑰」。"
+          }
+        }
+      }
+    },
     "keyRemoved": {
       "extractionState": "manual",
       "localizations": {
@@ -15120,6 +15191,77 @@
           "stringUnit": {
             "state": "translated",
             "value": "請在「系統設定 › 一般 › 登入項目」中允許 Homebot。"
+          }
+        }
+      }
+    },
+    "loginNone": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot can’t use the Grok Bot app’s sign-in. Paste a Cursor API key."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot no puede usar la sesión de la app Grok Bot. Pega una clave API de Cursor."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot ne peut pas utiliser la connexion de l’app Grok Bot. Colle une clé API Cursor."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot kann die Anmeldung der Grok-Bot-App nicht verwenden. Füge einen Cursor-API-Schlüssel ein."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot non può usare l’accesso dell’app Grok Bot. Incolla una chiave API di Cursor."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Homebot não consegue usar o login do app Grok Bot. Cole uma chave de API do Cursor."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot не может использовать вход в приложении Grok Bot. Вставьте API-ключ Cursor."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot は Grok Bot アプリのサインインを使えません。Cursor の API キーを貼り付けてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot은 Grok Bot 앱의 로그인을 사용할 수 없습니다. Cursor API 키를 붙여 넣으세요."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot 无法使用 Grok Bot app 的登录。请粘贴一个 Cursor API 密钥。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebot 無法使用 Grok Bot app 的登入。請貼上一個 Cursor API 密鑰。"
           }
         }
       }
